@@ -11,7 +11,10 @@ jobs:
           command: mkdir /tmp/test-artifacts
       - run:
           name: Install dependencies
-          command: pip install -r requirements.txt && dev-requirements.txt
+          command: pip install -r requirements.txt
+      - run:
+          name: Install dependencies-dev
+          command: pip install -r dev-requirements.txt
       # - run:
       #     name: Running Tests
       #     command: coverage run -m unittest && coverage xml && coverage report -m
