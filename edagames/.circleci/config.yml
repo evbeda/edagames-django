@@ -1,0 +1,22 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Create test reports directory
+          command: mkdir /tmp/test-artifacts
+      - run:
+          name: Install dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: Running Tests
+          command: coverage run -m unittest && coverage xml && coverage report -m
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
