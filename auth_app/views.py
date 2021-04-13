@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 
 class Home(LoginRequiredMixin, generic.TemplateView):
     template_name = 'home.html'
-    login_url = 'login'
+    login_url = 'login.html'
 
 
 class Registration(FormView):
