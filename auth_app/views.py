@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from .forms import UserRegisterForm
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class Home(generic.TemplateView):
+class Home(LoginRequiredMixin, generic.TemplateView):
     template_name = 'home.html'
     login_url = 'login'
 
