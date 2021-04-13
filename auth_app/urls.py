@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import Home, Registration
 from django.contrib.auth import views as auth_views
+from auth_app import views as authr_views
 
 
 urlpatterns = [
