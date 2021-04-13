@@ -138,6 +138,19 @@
                     <div class="alert alert-{{ message.tags }}">
                         {{ message }}
                     </div>
+                    <!-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#msj">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Token
+                    </a>
+                    <div class="modal fade" id="msj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                    <div class="modal-body">"{{ message }}"</div>
+                            </div>
+                        </div>
+                    </div> -->
+                    
                     {% endfor %}
                 {% endif %}
 
@@ -195,6 +208,9 @@
             </div>
         </div>
     </div>
+
+
+    
 
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
