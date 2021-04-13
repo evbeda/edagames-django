@@ -1,6 +1,7 @@
 {% extends "home.html" %}
 {% load crispy_forms_tags %}
-{% block content %}
+
+{% block page_content %} 
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
@@ -14,8 +15,8 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+                {% comment %} Already Have An Account? <a class="ml-2" href="{% url 'auth_app:login' %}">Sign In</a> {% endcomment %}
             </small>
         </div>
     </div>
-{% endblock content %}
+{% endblock %}
