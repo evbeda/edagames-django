@@ -3,6 +3,8 @@ from django.views import generic
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.signals import user_logged_in
+from .signals import show_token
 
 
 class Home(LoginRequiredMixin, generic.TemplateView):
@@ -24,3 +26,6 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'auth_app/register.html', {'form': form})
+
+
+user_logged_in.connect(show_token)
