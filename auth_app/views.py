@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from .forms import UserRegisterForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 
 
 class Home(generic.TemplateView):
@@ -22,9 +21,4 @@ def register(request):
             return redirect('login')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
-
-
-@login_required
-def profile(request):
-    return render(request, 'users/profile.html')
+    return render(request, 'auth_app/register.html', {'form': form})
