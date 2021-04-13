@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
-class Home(generic.templateview):
-    template_name = 'auth/home.html'
+class Home(generic.TemplateView):
+    template_name = 'home.html'
 
 
 def register(request):
