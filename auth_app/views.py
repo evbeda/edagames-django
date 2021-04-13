@@ -6,6 +6,7 @@ from django.contrib import messages
 
 class Home(generic.TemplateView):
     template_name = 'home.html'
+    login_url = 'login'
 
 
 def register(request):
