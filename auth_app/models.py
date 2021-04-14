@@ -49,7 +49,7 @@ class Player(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'user_name'
-    REQUIRED_FIELDS = ['email', 'user_name']
+    REQUIRED_FIELDS = ['email', 'first_name']
 
     def __str__(self):
         return self.user_name
