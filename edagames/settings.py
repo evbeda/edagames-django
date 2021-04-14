@@ -47,11 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'edagames',
     'auth_app',
-<<<<<<< HEAD
-=======
-    'crispy_forms',
     'social_django',
->>>>>>> add library social-auth-app-django
 ]
 
 MIDDLEWARE = [
