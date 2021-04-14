@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.views import generic
 from .forms import UserRegisterForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,7 +9,7 @@ from django.urls import reverse_lazy
 
 class Home(LoginRequiredMixin, generic.TemplateView):
     template_name = 'home.html'
-    login_url = 'login.html'
+    login_url = 'auth:login'
 
 
 class Registration(FormView):
