@@ -47,11 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'edagames',
     'auth_app',
-<<<<<<< HEAD
-=======
-    'crispy_forms',
     'social_django',
->>>>>>> add library social-auth-app-django
 ]
 
 MIDDLEWARE = [
@@ -144,9 +140,9 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 STATICFILES_DIRS = ['static']
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 SOCIAL_AUTH_FACEBOOK_KEY = get_env_variable('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = get_env_variable('SOCIAL_AUTH_FACEBOOK_SECRET')
+AUTH_USER_MODEL = 'auth_app.Player'
