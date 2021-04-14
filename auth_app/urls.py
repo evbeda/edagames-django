@@ -8,14 +8,18 @@ urlpatterns = [
     path('', Home.as_view(), name='home'),
     path(
         'login/',
-        auth_views.LoginView.as_view(template_name='auth_app/login.html'),
-        name='login',
-    ),
+        auth_views.LoginView.as_view(
+            template_name='auth_app/login.html'),
+            name='login',
+        ),
     path(
         'logout/',
-        auth_views.LoginView.as_view(template_name='auth_app/login.html'),
-        name='logout',
-    ),
-    path('register/', authr_views.register, name='register'),
-
+        auth_views.LoginView.as_view(
+            template_name='auth_app/login.html'),
+            name='logout',
+        ),
+    path('register/', Registration.as_view(
+        template_name='auth_app/register.html'),
+        name='register'
+        ),
 ]
