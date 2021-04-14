@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.views import generic
 from .forms import UserRegisterForm
 from django.contrib.auth.mixins import LoginRequiredMixin
