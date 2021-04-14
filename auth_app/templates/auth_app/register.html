@@ -1,40 +1,10 @@
 {% extends "home.html" %}
-{% load crispy_forms_tags %}
-{% block footer %} {% endblock %}
-{% block side_bar %} {% endblock  %}
-{% block top_bar %} {% endblock %}
 {% block page_content %}    
 <div class="container">
 
-    <!-- Outer Row -->
-    <div class="row justify-content-center">
-
-        <div class="col-xl-10 col-lg-12 col-md-9">   
-            <div class="content-section">
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <!-- <div class="row"> -->
-                            <!-- <div class="col-lg-6"> -->
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <fieldset class="form-group">
-                                        <legend class="border-bottom mb-4">Join Today</legend>
-                                        {{ form|crispy }}
-                                    </fieldset>
-                                    <div class="form-group">
-                                        <button class="btn btn-outline-info" type="submit">Sign Up</button>
-                                    </div>
-                                </form>
-                                <div class="border-top pt-3">
-                                    <small class="text-muted">
-                                        Already Have An Account? <a class="ml-2" href="{% url 'auth:login' %}">Sign In</a>
-                                    </small>
-                                </div>
-                            </div>
-                        </div>         
-                    </div>
-                </div>            
-            </div>
-    </div>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Send message">
+    </form>
 </div>        
 {% endblock %}

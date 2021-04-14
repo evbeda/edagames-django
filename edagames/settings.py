@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'edagames',
     'auth_app',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -124,4 +123,3 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 STATICFILES_DIRS = ['static']
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
