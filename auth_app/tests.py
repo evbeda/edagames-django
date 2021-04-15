@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from unittest.mock import patch
-from django.contrib.messages import get_messages
+from .forms import UserRegisterForm
+from parameterized import parameterized
 
 
 class TestViewsAnonimous(TestCase):
@@ -43,7 +44,31 @@ class TestViewsAuthenticated(TestCase):
         )
 
     def test_token_message(self):
-        response = self.client.get('/')
-        message = get_messages(response)
-        print(message)
+        self.client.get('/')
         self.mock_messages.called_once()
+
+
+class TestRegisterForm(TestCase):
+
+    @parameterized.expand([
+        (
+            {
+            'username': 'Eda',
+            'email': 'edagames@evenbrite.com',
+            'password1': 'AdGjLqEtUo',
+            'password2': 'AdGjLqEtUo',
+            },
+            True,
+        ),
+        (
+            {
+            'username': 'Eda',
+            'password1': 'AdGjLqEtUo',
+            'password2': 'AdGjLqEtUo',
+            },
+            False,
+        ),
+    ])
+    def test_new_register_form_is_valid(self, form_data, expected):
+        form = UserRegisterForm(data=form_data)
+        self.assertEqual(form.is_valid(), expected)
