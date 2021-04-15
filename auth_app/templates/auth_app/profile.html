@@ -1,5 +1,22 @@
-<h1>{{ object.headline }}</h1>
-<p>{{ object.content }}</p>
-<p>username: {{ object.username }}</p>
-<p>email: {{ object.email }}</p>
-<p>Token: {{ object.token }}</p>
+{% extends 'home.html' %}
+{% block page_content %}
+{% if not object %}
+<h6 class="m-0 font-weight-bold text-primary">Error in profile </h6>
+{% else %}
+<table class="table table-striped table-hover">
+    <thead>
+        <th>email</th>
+        <th>username</th>
+        <th>token</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ object.email }}</td>
+            <td>{{ object.username }}</td>
+            <td>{{ object.token }}</td>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
