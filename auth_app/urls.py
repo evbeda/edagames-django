@@ -16,5 +16,6 @@ urlpatterns = [
         name='logout',
     ),
     path('register/', Registration.as_view(), name='register'),
+
     path('profile/<pk>', Profile.as_view(template_name='auth_app/profile.html'), name='profile'),
 ]
