@@ -1,0 +1,39 @@
+version: "2"
+checks:
+  argument-count:
+    enabled: true
+    config:
+      threshold: 10
+  complex-logic:
+    enabled: true
+    config:
+      threshold: 10
+  file-lines:
+    enabled: true
+    config:
+      threshold: 750
+  method-complexity:
+    enabled: true
+    config:
+      threshold: 8
+  method-count:
+    enabled: false
+  method-lines:
+    enabled: true
+    config:
+      threshold: 35
+  nested-control-flow:
+    enabled: true
+    config:
+      threshold: 4
+  return-statements:
+    enabled: true
+    config:
+      threshold: 4
+  similar-code:
+    enabled: false
+  identical-code:
+    enabled: false
+exclude_patterns:
+    - "**/test_*.py"
+    - "static/"
