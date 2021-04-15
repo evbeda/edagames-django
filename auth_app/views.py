@@ -4,6 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from .token import generate_token
+from django.views.generic.detail import DetailView
+from .models import User
 
 
 class Home(LoginRequiredMixin, generic.TemplateView):
@@ -20,3 +22,7 @@ class Registration(FormView):
         form.instance.token = generate_token(form.instance.username)
         form.save()
         return super().form_valid(form)
+
+
+class Profile(LoginRequiredMixin, DetailView):
+    queryset = User.objects.all()
