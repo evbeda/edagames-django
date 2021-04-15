@@ -1,15 +1,8 @@
-from django.contrib import messages
-import jwt
-import os
+from django.db.models.signals import post_save
+from django.contrib.auth import get_user_model as User
+from django.dispatch import receiver
 
 
-def show_token(user, request, **kwargs):
-    encoded = jwt.encode(
-        {"user": user.username},
-        os.environ['SECRET_KEY_JWT'],
-        algorithm="HS256",
-    )
-    messages.success(
-        request,
-        f'Token: {encoded}',
-    )
+@receiver(post_save, sender=User)
+def generate_token(sender, instance, **kwargs):
+    sender.generate_token()

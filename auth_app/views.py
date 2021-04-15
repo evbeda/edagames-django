@@ -1,8 +1,6 @@
 from django.views import generic
 from .forms import UserRegisterForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.signals import user_logged_in
-from .signals import show_token
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 
@@ -20,6 +18,3 @@ class Registration(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
-
-
-user_logged_in.connect(show_token)
