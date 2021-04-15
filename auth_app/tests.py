@@ -19,25 +19,31 @@ class TestViewsAnonimous(TestCase):
         )
 
 
-# class TestViewsAuthenticated(TestCase):
-#     def setUp(self):
-#         super().setUp()
-#         self.user = get_user_model().objects.create_user("Gabriel", "gabriel@email.com", "my_pass")
-#         self.client.force_login(self.user)
-#     def test_home_authenticated_no_tasks(self):
-#         response = self.client.get('/')
-#         self.assertEqual(
-#             response.status_code,
-#             200,
-#         )
-#         self.assertEqual(
-#             len(response.context['object_list']),
-#             0,
-#         )
-#         self.assertIn(
-#             'ahora',
-#             response.context,
-#         )
+class TestViewsAuthenticated(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = get_user_model().objects.create_user(
+            "test_user",
+            "test_user@email.com",
+            "my_pass",
+        )
+        self.client.force_login(self.user)
+
+    def test_home_authenticated_no_tasks(self):
+        response = self.client.get('/')
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+        # self.assertEqual(
+        #     len(response.context['object_list']),
+        #     0,
+        # )
+        # self.assertIn(
+        #     'ahora',
+        #     response.context,
+        # )
+
 #     def test_home_authenticated_with_tasks(self):
 #         Todo.objects.bulk_create(
 #             [
@@ -47,7 +53,11 @@ class TestViewsAnonimous(TestCase):
 #             ],
 #             3
 #         )
-#         other_user = get_user_model().objects.create_user("Pepe", "pepe@email.com", "my_pass")
+        # other_user = get_user_model().objects.create_user(
+        #     "test_user_2",
+        #     "test_user_2@email.com",
+        #     "my_pass_2",
+        # )
 #         Todo.objects.create(description='Beers', assigned_user=other_user)
 #         response = self.client.get('/')
 #         self.assertEqual(
