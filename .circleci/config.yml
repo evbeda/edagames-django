@@ -15,9 +15,23 @@ jobs:
       - run:
           name: Install dependencies-dev
           command: pip install -r dev-requirements.txt
-      # - run:
-      #     name: Running Tests
-      #     command: coverage run -m unittest && coverage xml && coverage report -m
+      - run:
+          name: Run Flake8 checks
+          command: flake8
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+              # download test reporter as a static binary
+              curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+              chmod +x ./cc-test-reporter
+              ./cc-test-reporter before-build
+      - run:
+          name: Running Tests
+          command: coverage run manage.py test && coverage xml && coverage report -m
+      - run:
+          name: Update CodeClimate coverage report
+          command: |
+              ./cc-test-reporter after-build --exit-code $?
 
 workflows:
   main:
