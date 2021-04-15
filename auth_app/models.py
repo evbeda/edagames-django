@@ -4,8 +4,6 @@ from django.contrib.auth.models import (
     PermissionsMixin)
 from django.db import models
 from django.utils import timezone
-import jwt
-import os
 
 
 class UserManager(BaseUserManager):
@@ -45,12 +43,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return "@{}".format(self.username)
-
-    def generate_token(self, **kwargs):
-        encoded = jwt.encode(
-            {"user": self.username},
-            os.environ['SECRET_KEY_JWT'],
-            algorithm="HS256",
-        )
-        self.token = encoded
-        self.save()
