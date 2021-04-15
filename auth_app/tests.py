@@ -6,6 +6,7 @@ from parameterized import parameterized
 
 
 class TestViewsAnonimous(TestCase):
+
     def test_home_no_authenticated(self):
         response = self.client.get('')
         self.assertEqual(
@@ -23,6 +24,7 @@ class TestViewsAnonimous(TestCase):
 
 
 class TestViewsAuthenticated(TestCase):
+
     def setUp(self):
         super().setUp()
         self.user = get_user_model().objects.create_user(
@@ -53,18 +55,18 @@ class TestRegisterForm(TestCase):
     @parameterized.expand([
         (
             {
-            'username': 'Eda',
-            'email': 'edagames@evenbrite.com',
-            'password1': 'AdGjLqEtUo',
-            'password2': 'AdGjLqEtUo',
+                'username': 'Eda',
+                'email': 'edagames@evenbrite.com',
+                'password1': 'AdGjLqEtUo',
+                'password2': 'AdGjLqEtUo',
             },
             True,
         ),
         (
             {
-            'username': 'Eda',
-            'password1': 'AdGjLqEtUo',
-            'password2': 'AdGjLqEtUo',
+                'username': 'Eda',
+                'password1': 'AdGjLqEtUo',
+                'password2': 'AdGjLqEtUo',
             },
             False,
         ),
