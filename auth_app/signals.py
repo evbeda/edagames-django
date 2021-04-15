@@ -3,9 +3,6 @@ import jwt
 import os
 
 
-SECRET_KEY = 'EDAGame$!2021'
-
-
 def show_token(user, request, **kwargs):
     encoded = jwt.encode(
         {"user": user.username},
