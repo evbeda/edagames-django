@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from unittest.mock import patch
 from .forms import UserRegisterForm
 from parameterized import parameterized
 
@@ -32,9 +31,6 @@ class TestViewsAuthenticated(TestCase):
             "test_user@email.com",
             "my_pass",
         )
-        self.mock_messages = patch(
-            'auth_app.signals.messages',
-            return_value='andando').start()
         self.client.force_login(self.user)
 
     def test_home_authenticated_no_tasks(self):
@@ -44,10 +40,6 @@ class TestViewsAuthenticated(TestCase):
             response.status_code,
             200,
         )
-
-    def test_token_message(self):
-        self.client.get('/')
-        self.mock_messages.called_once()
 
 
 class TestRegisterForm(TestCase):
