@@ -136,18 +136,3 @@ class TestUser(TestCase):
             str(self.user),
             '@normal',
         )
-
-    def test_label_user(self):
-        email_label = self.user._meta.get_field('email').verbose_name
-        username_label = self.user._meta.get_field('username').verbose_name
-        token_label = self.user._meta.get_field('token').verbose_name
-        date_label = self.user._meta.get_field('date_joined').verbose_name
-        active_label = self.user._meta.get_field('is_active').verbose_name
-        staff_label = self.user._meta.get_field('is_staff').verbose_name
-
-        self.assertEqual(email_label, 'Email')
-        self.assertEqual(username_label, 'username')
-        self.assertEqual(token_label, 'token')
-        self.assertEqual(date_label, 'date joined')
-        self.assertEqual(active_label, 'is active')
-        self.assertEqual(staff_label, 'is staff')
