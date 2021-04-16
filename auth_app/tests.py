@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from .forms import UserRegisterForm
 from parameterized import parameterized
+from auth_app.models import UserManager, User
+from unittest.mock import patch
 
 
 class TestViewsAnonimous(TestCase):
@@ -83,3 +85,69 @@ class TestRegisterForm(TestCase):
     def test_new_register_form_is_valid(self, form_data, expected):
         form = UserRegisterForm(data=form_data)
         self.assertEqual(form.is_valid(), expected)
+
+
+class TestUserManager(TestCase):
+
+    def setUp(self):
+        self.user_manager = UserManager()
+
+    def test_create_superuser(self):
+        super_user = get_user_model().objects.create_superuser(
+            'admin@eventbrite.com',
+            'admin',
+            '1234',
+        )
+
+        self.assertTrue(isinstance(super_user, User))
+        self.assertTrue(super_user.is_staff)
+        self.assertTrue(super_user.is_superuser)
+
+    @patch.object(UserManager, 'create_user')
+    def test_mock_create_superuser(self, mock_create_user):
+        email = 'admin@eventbrite.com'
+        name = 'admin'
+        pw = '1234'
+        get_user_model().objects.create_superuser(
+            email,
+            name,
+            pw,
+        )
+
+        mock_create_user.is_called_once_with(
+            email,
+            name,
+            pw,
+        )
+
+
+class TestUser(TestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.user = get_user_model().objects.create_user(
+            'normal@eventbrite.com',
+            'normal',
+            '1234',
+        )
+
+    def test_str_user(self):
+        self.assertEqual(
+            str(self.user),
+            '@normal',
+        )
+
+    def test_label_user(self):
+        email_label = self.user._meta.get_field('email').verbose_name
+        username_label = self.user._meta.get_field('username').verbose_name
+        token_label = self.user._meta.get_field('token').verbose_name
+        date_label = self.user._meta.get_field('date_joined').verbose_name
+        active_label = self.user._meta.get_field('is_active').verbose_name
+        staff_label = self.user._meta.get_field('is_staff').verbose_name
+
+        self.assertEqual(email_label, 'Email')
+        self.assertEqual(username_label, 'username')
+        self.assertEqual(token_label, 'token')
+        self.assertEqual(date_label, 'date joined')
+        self.assertEqual(active_label, 'is active')
+        self.assertEqual(staff_label, 'is staff')
