@@ -83,3 +83,4 @@ class TestRegisterForm(TestCase):
     def test_new_register_form_is_valid(self, form_data, expected):
         form = UserRegisterForm(data=form_data)
         self.assertEqual(form.is_valid(), expected)
+        print('una mas')
