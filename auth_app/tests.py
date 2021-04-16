@@ -41,6 +41,17 @@ class TestViewsAuthenticated(TestCase):
             200,
         )
 
+    def test_registration(self):
+        data = {
+                'username': 'Eda',
+                'email': 'edagames@evenbrite.com',
+                'password1': 'AdGjLqEtUo',
+                'password2': 'AdGjLqEtUo',
+        }
+        response = self.client.post('/register', data)
+        print(response)
+        print(get_user_model().objects.all())
+
 
 class TestRegisterForm(TestCase):
 
