@@ -42,15 +42,21 @@ class TestViewsAuthenticated(TestCase):
         )
 
     def test_registration(self):
+        self.assertEqual(len(get_user_model().objects.all()), 1)
         data = {
                 'username': 'Eda',
                 'email': 'edagames@evenbrite.com',
                 'password1': 'AdGjLqEtUo',
                 'password2': 'AdGjLqEtUo',
         }
-        response = self.client.post('/register', data)
-        print(response)
-        print(get_user_model().objects.all())
+        response = self.client.post('/register/', data)
+        self.assertEqual(
+            response.status_code,
+            302,
+        )
+        self.assertEqual(len(get_user_model().objects.all()), 2)
+        self.assertEqual(get_user_model().objects.last().username, 'Eda')
+        self.assertTrue(get_user_model().objects.last().token)
 
 
 class TestRegisterForm(TestCase):
