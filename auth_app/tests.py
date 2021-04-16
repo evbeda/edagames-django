@@ -44,10 +44,10 @@ class TestViewsAuthenticated(TestCase):
     def test_registration(self):
         self.assertEqual(len(get_user_model().objects.all()), 1)
         data = {
-                'username': 'Eda',
-                'email': 'edagames@evenbrite.com',
-                'password1': 'AdGjLqEtUo',
-                'password2': 'AdGjLqEtUo',
+            'username': 'Eda',
+            'email': 'edagames@evenbrite.com',
+            'password1': 'AdGjLqEtUo',
+            'password2': 'AdGjLqEtUo',
         }
         response = self.client.post('/register/', data)
         self.assertEqual(
