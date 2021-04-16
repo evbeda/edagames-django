@@ -4,6 +4,9 @@ source =
 omit =
     env/*
     */test*
+    */__init__.py
+    */migrations/*
+    */apps.py
 
 [report]
 exclude_lines =
