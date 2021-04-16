@@ -9,3 +9,8 @@ def generate_token(username, **kwargs):
         algorithm="HS256",
     )
     return encoded
+
+print('loco esto no esta andnado y no se porque')
+x = list(range(10))
+for i in x:
+    print(i)
