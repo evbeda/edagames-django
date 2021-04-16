@@ -79,6 +79,7 @@ class TestRegisterForm(TestCase):
             },
             False,
         ),
+        
     ])
     def test_new_register_form_is_valid(self, form_data, expected):
         form = UserRegisterForm(data=form_data)
