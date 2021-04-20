@@ -3,3 +3,4 @@ Django==2.2.20
 PyJWT==2.0.1
 social-auth-app-django==4.0.0
 social-auth-core==4.1.0
+django-bootstrap4==3.0.0
