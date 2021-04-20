@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block page_content %}    
+<div class="container">
+    <h1>My Matches</h1> 
+
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Players</th>
+                <th>Player 1 score</th>
+                <th>Player 2 score</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in object_list %}
+                <tr>
+                    <td>{{ match.player_one }} VS {{ match.player_two }}</td>
+                    <td>{{ match.score_p_one }}</td>
+                    <td>{{ match.score_p_two }}</td>
+                    <td>{{ match.date }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td>No matches found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>       
+
+
+<hr>
+{% endblock %}
+
+{% block logout_modal %}
+{% endblock logout_modal%}

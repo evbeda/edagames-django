@@ -1,4 +1,7 @@
 {% load static %}
+{# Load the tag library #}
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -58,6 +61,12 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Development:</h6> -->
                         <a class="collapse-item" href="{% url 'development:challenge' %}">Challenge</a>
+                    </div>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Development:</h6> -->
+                        <a class="collapse-item" href="{% url 'development:match_history' %}">My Matches</a>
                     </div>
                 </div>
             </li>
