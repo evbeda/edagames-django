@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'edagames',
     'auth_app',
+    'development',
     'social_django',
 ]
 
