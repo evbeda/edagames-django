@@ -9,7 +9,7 @@ from .models import User
 
 
 class Home(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'home.html'
+    template_name = 'base.html'
     login_url = 'auth:login'
 
 
