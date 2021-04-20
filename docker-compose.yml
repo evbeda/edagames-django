@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+    edagames-web:
+        build: .
+        ports:
+            - "8000:8000"
+        volumes: 
+            - .:/edagames-django
+        environment: 
+            - SECRET_KEY=${SECRET_KEY}
+            - SECRET_KEY_JWT=${SECRET_KEY_JWT}
+            - SOCIAL_AUTH_FACEBOOK_KEY=${SOCIAL_AUTH_FACEBOOK_KEY}
+            - SOCIAL_AUTH_FACEBOOK_SECRET=${SOCIAL_AUTH_FACEBOOK_SECRET}
