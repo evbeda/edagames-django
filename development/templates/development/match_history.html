@@ -16,10 +16,11 @@
         <tbody>
             {% for match in object_list %}
                 <tr>
-                    <td>{{ match.player_one }} VS {{ match.player_two }}</td>
+                    <td>{{ match.user_one.username }} ({{ match.bot_one }}) 
+                        VS {{ match.user_two.username }} ({{ match.bot_two }})</td>
                     <td>{{ match.score_p_one }}</td>
                     <td>{{ match.score_p_two }}</td>
-                    <td>{{ match.date }}</td>
+                    <td>{{ match.date_match }}</td>
                 </tr>
             {% empty %}
                 <tr>
