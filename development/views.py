@@ -10,6 +10,11 @@ class ChallengeView(FormView):
     success_url = reverse_lazy('development:challenge')
 
     def form_valid(self, form):
+        option1 = form.cleaned_data['bot1']
+        option2 = form.cleaned_data['bot2']
+        bot1 = dict(form.fields['bot1'].choices)[option1]
+        bot2 = dict(form.fields['bot2'].choices)[option2]
+        print(bot1, bot2)
         return super().form_valid(form)
 
 
