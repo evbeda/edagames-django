@@ -1,12 +1,16 @@
-# from django.views.generic.detail import DetailView
-from django.views import generic
+from django.views.generic.edit import FormView
+from development.forms import ChallengeForm
 from django.views.generic.list import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Match
+from django.urls import reverse_lazy
 
 
-class Challenge(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'development/challenge.html'
+class ChallengeView(FormView):
+    form_class = ChallengeForm
+    success_url = reverse_lazy('development:challenge')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 
 class MatchListView(ListView):

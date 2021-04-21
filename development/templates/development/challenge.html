@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
-{% block page_content %}    
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block page_content %}
 <div class="container">
-
-<h1>Challenge</h1> 
-
-</div>        
-{% endblock %}
-
-{% block logout_modal %}
-{% endblock logout_modal%}
+    <h1>Challenge</h1>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input class="btn btn-primary" type="submit" value="Create Challenge">
+</form>
+</div>
+{% endblock page_content %}
