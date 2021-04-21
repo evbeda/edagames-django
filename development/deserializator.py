@@ -16,3 +16,5 @@ def deserializing(data_server):
     # OrderedDict([])
     serializer.save()
     # <Match: Match object>
+    # Se ejecutan los metodos que cree
+    # En mi caso solo create
