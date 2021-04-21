@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'development',
     'social_django',
     'bootstrap4',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
