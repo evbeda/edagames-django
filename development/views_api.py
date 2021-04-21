@@ -1,8 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from serializer import MatchSerializer
-from models import Match
+from development.serializer import MatchSerializer
+from .models import Match
 
 
 @csrf_exempt

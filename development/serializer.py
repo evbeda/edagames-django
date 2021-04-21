@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Match
+from .models import Match
 
 
 class MatchSerializer(serializers.ModelSerializer):
