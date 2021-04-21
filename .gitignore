@@ -135,3 +135,6 @@ senku/.idea/
 .idea/
 #vsCode
 .vscode/
+
+# Docker
+commands.sh
