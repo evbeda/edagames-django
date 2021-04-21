@@ -25,6 +25,5 @@ class MatchSerializer(serializers.Serializer):
     score2 = serializers.IntegerField(max_lenght=4)
     board_id = serializers.CharField(max_length=300)
 
-
-def create(self, validated_data):
-    return Match.objects.create(**validated_data)
+    def create(self, validated_data):
+        return Match.objects.create(**validated_data)
