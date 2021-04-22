@@ -3,6 +3,7 @@ from parameterized import parameterized
 from .models import Match
 from auth_app.models import User
 from django.utils import timezone
+from .views_api import match_list
 
 
 class Tests(TestCase):
