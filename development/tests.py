@@ -42,4 +42,3 @@ class Tests(TestCase):
         self.assertEqual(match.bot_two, bot_two)
         self.assertEqual(match.score_p_one, scr1)
         self.assertEqual(match.score_p_two, scr2)
-
