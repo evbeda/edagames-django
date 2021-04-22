@@ -8,10 +8,10 @@ from .models import Match
 @csrf_exempt
 def match_list(request):
     # pendiente de definir con Nacho
-    if request.method == 'GET':
-        matchs = Match.objects.all()
-        serializer = MatchSerializer(matchs, many=True)
-        return JsonResponse(serializer.data, safe=False)
+    # if request.method == 'GET':
+       #  matchs = Match.objects.all()
+        # serializer = MatchSerializer(matchs, many=True)
+        # return JsonResponse(serializer.data, safe=False)
 
     if request.method == 'POST':
         # restore those native datatypes into a
