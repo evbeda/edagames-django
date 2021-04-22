@@ -3,7 +3,6 @@ from parameterized import parameterized
 from .models import Match
 from auth_app.models import User
 from django.utils import timezone
-from .views_api import match_list
 
 
 class Tests(TestCase):
@@ -43,3 +42,4 @@ class Tests(TestCase):
         self.assertEqual(match.bot_two, bot_two)
         self.assertEqual(match.score_p_one, scr1)
         self.assertEqual(match.score_p_two, scr2)
+
