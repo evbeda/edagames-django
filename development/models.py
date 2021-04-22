@@ -7,13 +7,13 @@ class Match(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='user_one',
-        null = True
+        null=True
     )
     user_two = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='user_two',
-        null = True
+        null=True
     )
     bot_one = models.CharField(max_length=30)
     bot_two = models.CharField(max_length=30)
