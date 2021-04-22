@@ -2,18 +2,19 @@ from django import forms
 import requests
 from rest_framework.parsers import JSONParser
 
-PLATFORM_URL = 'http://localhost:5000/users'
+
+SERVER_URL = 'http://127.0.0.1:5000'
 
 my_bots = [
-    ('1', 'brz'),
-    ('2', 'pegaso'),
+    ('0', 'brz'),
+    ('1', 'pegaso'),
 ]
 online_bots = [
-    ('1', 'brz'),
-    ('2', 'pegaso'),
-    ('3', 'sergi_pro'),
-    ('4', 'andrew'),
-    ('5', 'elenzo'),
+    'brz',
+    'pegaso',
+    'sergi_pro',
+    'andrew',
+    'elenzo',
 ]
 
 
@@ -29,8 +30,11 @@ class ChallengeForm(forms.Form):
 
 def get_online_bots():
     try:
-        bots_json = requests.get(PLATFORM_URL)
+        bots_json = requests.get(
+            '{}/users'.format(SERVER_URL),
+        )
         data = JSONParser().parse(bots_json)
         return data['users']
     except Exception:
-        return online_bots
+        botis = [(str(i), bot) for i, bot in enumerate(online_bots)]
+        return botis
