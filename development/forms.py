@@ -1,6 +1,5 @@
 from django import forms
 import requests
-from rest_framework.parsers import JSONParser
 
 
 SERVER_URL = 'http://127.0.0.1:5000'
@@ -33,7 +32,7 @@ def get_online_bots():
         bots_json = requests.get(
             '{}/users'.format(SERVER_URL),
         )
-        data = JSONParser().parse(bots_json)
+        data = bots_json.json()
         on_bots = [(str(i), bot) for i, bot in enumerate(data['users'])]
         return on_bots
     except Exception:
