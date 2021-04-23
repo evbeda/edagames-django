@@ -33,7 +33,7 @@ def get_online_bots():
         bots_json = requests.get(
             '{}/users'.format(SERVER_URL),
         )
-        data = JSONParser().parse(bots_json)
+        data = bots_json.json()
         on_bots = [(str(i), bot) for i, bot in enumerate(data['users'])]
         return on_bots
     except Exception:
