@@ -28,6 +28,8 @@ SECRET_KEY=************************************************
 SECRET_KEY_JWT=************
 SOCIAL_AUTH_FACEBOOK_KEY=******************
 SOCIAL_AUTH_FACEBOOK_SECRET=*******************************
+SERVER_URL=http://127.0.0.1
+SERVER_PORT=5000
 ```
 
 ### Execution
@@ -41,4 +43,34 @@ docker-compose up -d
 To kill a docker-compose process you must run this command:
 ```
 docker-compose down
+```
+
+### Run docker-compose for Web and Server
+Create a folder edagames which contains all repos.
+Then add this file as a `.yml`
+```
+version: "3.9"
+services:
+    server:
+        build: 
+            context: ./edagames-server
+        ports:
+            - "5000:5000"
+        environment: 
+            - TOKEN_KEY
+
+    edagames-web:
+        build: 
+            context: ./edagames-django
+        ports:
+            - "8000:8000"
+        volumes: 
+            - .:/edagames-django
+        environment: 
+            - SECRET_KEY=${SECRET_KEY}
+            - SECRET_KEY_JWT=${SECRET_KEY_JWT}
+            - SOCIAL_AUTH_FACEBOOK_KEY=${SOCIAL_AUTH_FACEBOOK_KEY}
+            - SOCIAL_AUTH_FACEBOOK_SECRET=${SOCIAL_AUTH_FACEBOOK_SECRET}
+            - SERVER_URL=server
+            - SERVER_PORT=5000
 ```

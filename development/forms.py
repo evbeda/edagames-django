@@ -1,8 +1,10 @@
 from django import forms
 import requests
+from environment import get_env_variable
 
 
-SERVER_URL = 'http://127.0.0.1:5000'
+SERVER_URL = get_env_variable('SERVER_URL')
+SERVER_PORT = get_env_variable('SERVER_PORT')
 
 my_bots = [
     ('0', 'brz'),
@@ -30,7 +32,7 @@ class ChallengeForm(forms.Form):
 def get_online_bots():
     try:
         bots_json = requests.get(
-            '{}/users'.format(SERVER_URL),
+            '{}:{}/users'.format(SERVER_URL, SERVER_PORT),
         )
         data = bots_json.json()
         on_bots = [(str(i), bot) for i, bot in enumerate(data['users'])]
