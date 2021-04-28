@@ -9,17 +9,8 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
 import os
-from django.core.exceptions import ImproperlyConfigured
-
-
-def get_env_variable(var_name):
-    try:
-        return os.environ[var_name]
-    except KeyError:
-        error_msg = "Set the %s environment variable" % var_name
-        raise ImproperlyConfigured(error_msg)
+from environment import get_env_variable
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

@@ -5,9 +5,11 @@ from .models import Match
 from django.urls import reverse_lazy
 from django.contrib import messages
 import requests
+from environment import get_env_variable
 
 
-SERVER_URL = 'http://127.0.0.1:5000'
+SERVER_URL = get_env_variable('SERVER_URL')
+SERVER_PORT = get_env_variable('SERVER_PORT')
 
 
 class ChallengeView(FormView):
@@ -26,7 +28,7 @@ class ChallengeView(FormView):
             "challenge_id": "{}".format("1234"),
         }
         response = requests.post(
-            '{}/challenge'.format(SERVER_URL),
+            '{}:{}/challenge'.format(SERVER_URL, SERVER_PORT),
             json=data,
         )
         if response.status_code == 200:
