@@ -73,4 +73,11 @@ services:
             - SOCIAL_AUTH_FACEBOOK_SECRET=${SOCIAL_AUTH_FACEBOOK_SECRET}
             - SERVER_URL=server
             - SERVER_PORT=5000
+
+    edagames-quoridor:
+        build:
+            context: ./edagames-quoridor
+        ports:
+            - "50051:50051"
+
 ```
