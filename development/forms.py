@@ -7,15 +7,7 @@ SERVER_URL = get_env_variable('SERVER_URL')
 SERVER_PORT = get_env_variable('SERVER_PORT')
 
 my_bots = [
-    ('0', 'brz'),
-    ('1', 'pegaso'),
-]
-online_bots = [
-    'brz',
-    'pegaso',
-    'sergi_pro',
-    'andrew',
-    'elenzo',
+    ('0', 'Pedro'),
 ]
 
 
@@ -38,5 +30,5 @@ def get_online_bots():
         on_bots = [(str(i), bot) for i, bot in enumerate(data['users'])]
         return on_bots
     except Exception:
-        on_bots = [(str(i), bot) for i, bot in enumerate(online_bots)]
+        on_bots = []
         return on_bots
