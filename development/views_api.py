@@ -8,7 +8,10 @@ from development.serializer import MatchSerializer
 def match_list(request):
     if request.method == 'POST':
         dic_data = JSONParser().parse(request)
-        data = convert_data(dic_data)
+        try:
+            data = convert_data(dic_data)
+        except KeyError as e:
+            return JsonResponse({'error': str(e)}, status=400)
         serializer = MatchSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
