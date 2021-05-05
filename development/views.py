@@ -1,11 +1,12 @@
 from django.views.generic.edit import FormView
 from development.forms import ChallengeForm
-from django.views.generic.list import ListView
-from .models import Match
 from django.urls import reverse_lazy
 from django.contrib import messages
 import requests
 from environment import get_env_variable
+from django_tables2 import SingleTableView
+from .models import Match
+from .tables import MatchTable
 
 
 SERVER_URL = get_env_variable('SERVER_URL')
@@ -41,6 +42,7 @@ class ChallengeView(FormView):
         return super().form_valid(form)
 
 
-class MatchListView(ListView):
-    template_name = 'development/match_history.html'
+class MatchListView(SingleTableView):
     model = Match
+    table_class = MatchTable
+    template_name = 'development/match_history.html'

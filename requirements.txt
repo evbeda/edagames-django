@@ -7,3 +7,4 @@ django-bootstrap4==3.0.0
 djangorestframework==3.12.4
 requests==2.25.1
 djangorestframework==3.12.4
+django-tables2==2.3.4

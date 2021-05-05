@@ -4,31 +4,13 @@
 <div class="container">
     <h1>My Matches</h1> 
 
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th>Players</th>
-                <th>Player 1 score</th>
-                <th>Player 2 score</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for match in object_list %}
-                <tr>
-                    <td>{{ match.user_one.username }} ({{ match.bot_one }}) 
-                        VS {{ match.user_two.username }} ({{ match.bot_two }})</td>
-                    <td>{{ match.score_p_one }}</td>
-                    <td>{{ match.score_p_two }}</td>
-                    <td>{{ match.date_match }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td>No matches found.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% load render_table from django_tables2 %}
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    </head>
+    <body>
+        {% render_table table %}
+    </body>
 </div>       
 
 

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'social_django',
     'bootstrap4',
     'rest_framework',
+    "django_tables2",
 ]
 
 MIDDLEWARE = [
