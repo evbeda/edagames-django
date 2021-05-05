@@ -12,7 +12,7 @@ class Tests(TestCase):
 
     @parameterized.expand([
         [{"game_id": "1111", "data": [('pablo', 2000), ('pedro', 1000)]}, 201],
-        [{"game_id": "1111", "data": [('pablo', 2000), ('pedro', 1000)]}, 400],
+        [{"game_id": "1111", "date": [('pablo', 2000), ('pedro', 1000)]}, 400],
     ])
     def test_match_list(self, d, s):
         request = self.factory.post('match/', json.dumps(d), content_type='application/json')
