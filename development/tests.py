@@ -31,14 +31,14 @@ class Tests(TestCase):
         match = Match.objects.create(
             user_one=usr_one,
             user_two=usr_two,
-            bot_one=bot_one,
-            bot_two=bot_two,
-            score_p_one=scr1,
-            score_p_two=scr2,
+            bot_1=bot_one,
+            bot_2=bot_two,
+            score_p_1=scr1,
+            score_p_2=scr2,
             date_match=date,
             game_id=1
         )
-        self.assertEqual(match.bot_one, bot_one)
-        self.assertEqual(match.bot_two, bot_two)
-        self.assertEqual(match.score_p_one, scr1)
-        self.assertEqual(match.score_p_two, scr2)
+        self.assertEqual(match.bot_1, bot_one)
+        self.assertEqual(match.bot_2, bot_two)
+        self.assertEqual(match.score_p_1, scr1)
+        self.assertEqual(match.score_p_2, scr2)
