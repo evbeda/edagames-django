@@ -19,5 +19,5 @@ class Match(models.Model):
     bot_two = models.CharField(max_length=30)
     score_p_one = models.IntegerField()
     score_p_two = models.IntegerField()
-    board_id = models.IntegerField()
+    game_id = models.CharField(max_length=50)
     date_match = models.DateTimeField(auto_now_add=True)
