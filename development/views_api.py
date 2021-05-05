@@ -6,13 +6,13 @@ from development.serializer import MatchSerializer
 
 @csrf_exempt
 def match_list(request):
-    # if request.method == 'GET':
-    # matchs = Match.objects.all()
-    # serializer = MatchSerializer(matchs, many=True)
-    # return JsonResponse(serializer.data, safe=False)
-
     if request.method == 'POST':
-        data = JSONParser().parse(request)
+        req_data = JSONParser().parse(request)
+        data = {}
+        data['game_id'] = req_data["game_id"]
+        for i, name, score in enumerate(req_data["data"], 1):
+            data[f'bot_{i}'] = name
+            data[f'score_p_{i}'] = score
         serializer = MatchSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
