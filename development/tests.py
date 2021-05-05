@@ -36,7 +36,7 @@ class Tests(TestCase):
             score_p_one=scr1,
             score_p_two=scr2,
             date_match=date,
-            board_id=1
+            game_id=1
         )
         self.assertEqual(match.bot_one, bot_one)
         self.assertEqual(match.bot_two, bot_two)
