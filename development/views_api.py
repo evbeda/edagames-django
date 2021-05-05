@@ -10,7 +10,7 @@ def match_list(request):
         req_data = JSONParser().parse(request)
         data = {}
         data['game_id'] = req_data["game_id"]
-        for i, name, score in enumerate(req_data["data"], 1):
+        for i, (name, score) in enumerate(req_data["data"], 1):
             data[f'bot_{i}'] = name
             data[f'score_p_{i}'] = score
         serializer = MatchSerializer(data=data)
