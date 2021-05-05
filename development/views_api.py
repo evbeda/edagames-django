@@ -7,16 +7,18 @@ from development.serializer import MatchSerializer
 @csrf_exempt
 def match_list(request):
     if request.method == 'POST':
-        req_data = JSONParser().parse(request)
-        data = {}
-        try:
-            data['game_id'] = req_data["game_id"]
-            for i, (name, score) in enumerate(req_data["data"], 1):
-                data[f'bot_{i}'] = name
-                data[f'score_p_{i}'] = score
-        except KeyError:
-            return JsonResponse({}, status=400)
+        dic_data = JSONParser().parse(request)
+        data = convert_data(dic_data)
         serializer = MatchSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
+
+
+def convert_data(self, req_data):
+    data = {}
+    data['game_id'] = req_data["game_id"]
+    for i, (name, score) in enumerate(req_data["data"], 1):
+        data[f'bot_{i}'] = name
+        data[f'score_p_{i}'] = score
+    return data
