@@ -9,12 +9,14 @@ def match_list(request):
     if request.method == 'POST':
         req_data = JSONParser().parse(request)
         data = {}
-        data['game_id'] = req_data["game_id"]
-        for i, (name, score) in enumerate(req_data["data"], 1):
-            data[f'bot_{i}'] = name
-            data[f'score_p_{i}'] = score
+        try:
+            data['game_id'] = req_data["game_id"]
+            for i, (name, score) in enumerate(req_data["data"], 1):
+                data[f'bot_{i}'] = name
+                data[f'score_p_{i}'] = score
+        except KeyError:
+            return JsonResponse({}, status=400)
         serializer = MatchSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
