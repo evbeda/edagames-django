@@ -18,7 +18,7 @@ def match_list(request):
             return JsonResponse(serializer.data, status=201)
 
 
-def convert_data(self, req_data):
+def convert_data(req_data):
     data = {}
     data['game_id'] = req_data["game_id"]
     for i, (name, score) in enumerate(req_data["data"], 1):
