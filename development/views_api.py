@@ -6,6 +6,22 @@ from development.serializer import MatchSerializer
 
 @csrf_exempt
 def match_list(request):
+    """
+    Recieve data from server and validate data for Math class
+
+    Parameters
+    -------
+    json
+        request
+    Returns
+    -------
+    json
+        response to server that contains a dic and a status
+    Raises
+    -------
+    KeyError
+        key error from convert_data when tray to generate new dict
+    """
     if request.method == 'POST':
         dic_data = JSONParser().parse(request)
         try:
@@ -19,6 +35,7 @@ def match_list(request):
 
 
 def convert_data(req_data):
+    """ Recieve a dictionary and return a new dictionary. """
     data = {}
     data['game_id'] = req_data["game_id"]
     for i, (name, score) in enumerate(req_data["data"], 1):
