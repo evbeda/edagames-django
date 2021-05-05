@@ -11,8 +11,8 @@ class Tests(TestCase):
         self.factory = APIRequestFactory(enforce_csrf_checks=False)
 
     @parameterized.expand([
-        [{"bot_one": "Andres", "bot_two": "Valentina", "score_p_one": 4, "score_p_two": 6, "game_id": "111111"}, 201],
-        [{"bot_uno": "Andres", "bot_two": "Valentina", "score_p_one": 4, "score_p_two": 6, "game_id": "111111"}, 400],
+        [{"game_id": "1111", "data": [('pablo', 2000), ('pedro', 1000)]}, 201],
+        [{"game_id": "1111", "date": [('pablo', 2000), ('pedro', 1000)]}, 400],
     ])
     def test_match_list(self, d, s):
         request = self.factory.post('match/', json.dumps(d), content_type='application/json')
