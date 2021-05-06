@@ -7,9 +7,9 @@ class MatchTable(tables.Table):
         model = Match
         template_name = "django_tables2/bootstrap.html"
         fields = (
-            'bot_one',
-            'score_p_one',
-            'bot_two',
-            'score_p_two',
+            'bot_1',
+            'score_p_1',
+            'bot_2',
+            'score_p_2',
             'date_match',
         )
