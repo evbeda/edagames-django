@@ -21,3 +21,14 @@ class Match(models.Model):
     score_p_2 = models.IntegerField(verbose_name='Score 2')
     game_id = models.CharField(max_length=50)
     date_match = models.DateTimeField(auto_now_add=True, verbose_name='Date')
+
+
+class Bot(models.Model):
+    name = models.CharField(max_length=30)
+    token = models.CharField(max_length=200, default='')
+    user_id = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='user_id',
+        null=True
+    )
