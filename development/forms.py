@@ -17,8 +17,8 @@ class ChallengeForm(forms.Form):
         self.fields['bot1'].choices = my_bots
         self.fields['bot2'].choices = get_online_bots()
 
-    bot1 = forms.ChoiceField(label='MyBots', widget=forms.RadioSelect, choices=[])
-    bot2 = forms.ChoiceField(label='Online Bots', widget=forms.RadioSelect, choices=[])
+    bot1 = forms.ChoiceField(label='MyBots', widget=forms.Select, choices=[])
+    bot2 = forms.ChoiceField(label='Online Bots', widget=forms.Select, choices=[])
 
 
 def get_online_bots():
