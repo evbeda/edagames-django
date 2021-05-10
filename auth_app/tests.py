@@ -58,7 +58,6 @@ class TestViewsAuthenticated(TestCase):
         )
         self.assertEqual(len(get_user_model().objects.all()), 2)
         self.assertEqual(get_user_model().objects.last().username, 'Eda')
-        self.assertTrue(get_user_model().objects.last().token)
 
 
 class TestRegisterForm(TestCase):
