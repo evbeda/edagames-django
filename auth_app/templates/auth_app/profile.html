@@ -3,6 +3,24 @@
 {% if not object %}
 <h6 class="m-0 font-weight-bold text-primary">Error in profile </h6>
 {% else %}
+<div class="row">
+    <div class="col-sm-12 mb-3">
+        <h4 class="text-center">Welcome {{ user.username }}</h4>
+    </div>
+    {% for ass in backends.associated %}
+      {% if ass.provider == 'linkedin-oauth2' %}
+        <!-- <div class="col-md-6 text-center">
+            <img src="{{ass.extra_data.picture_url}}" alt="" width="150" height="150" style="border-radius: 50%">
+        </div> -->
+        <div class="col-sm-12 mt-2 text-center"> 
+            <p> Signed in via:  Linkedin </p>
+            <!-- <p> Name:  {{ ass.extra_data.name }} </p> -->
+            <!-- <p> Provider url: <a href="{{ass.extra_data.profile_url}}">link</a></p> -->
+        </div>
+        {% endif %}
+    {% endfor %}
+    <br>
+    <br>
 <table class="table table-striped table-hover">
     <thead>
         <th>email</th>
@@ -18,33 +36,5 @@
         </tr>
     </tbody>
 </table>
-
-<div class="row">
-    <div class="col-sm-12 mb-3">
-        <h4 class="text-center">Welcome {{ user.username }}</h4>
-    </div>
-    {% for ass in backends.associated %}
-      {% if ass.provider == 'linkedin-oauth2' %}
-        <!-- <div class="col-md-6 text-center">
-            <img src="{{ass.extra_data.picture_url}}" alt="" width="150" height="150" style="border-radius: 50%">
-        </div> -->
-        <div class="col-sm-12 mt-2 text-center"> 
-            <p> Signed in via:  Linkedin </p>
-            <!-- <p> Name:  {{ ass.extra_data.name }} </p> -->
-            <!-- <p> Provider url: <a href="{{ass.extra_data.profile_url}}">link</a></p> -->
-        </div>
-      {% endif %}
-      <!-- End here -->
-    {% endfor %}
-    <a class="btn btn-primary" href="{% url 'auth:logout' %}">Logout</a>
-    <div class="col-sm-12 mt-2 text-center">
-        <a class="btn btn-primary" href="{% url 'auth:logout' %}">Logout</a>
-        <button class="btn btn-primary"></button>
-        <!-- <button class="btn btn-danger"> -->
-            <a href="#">Logout</a>
-        </button>
-    </div>
-    <!-- End here -->
-</div> -->
 {% endif %}
 {% endblock %}
