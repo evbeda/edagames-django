@@ -26,8 +26,8 @@ Also you need to create an `.env` file in your local repository to add all envir
 ```
 SECRET_KEY=************************************************
 SECRET_KEY_JWT=************
-SOCIAL_AUTH_FACEBOOK_KEY=******************
-SOCIAL_AUTH_FACEBOOK_SECRET=*******************************
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY=******************
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET=*******************************
 SERVER_URL=http://127.0.0.1
 SERVER_PORT=5000
 ```
@@ -69,8 +69,8 @@ services:
         environment: 
             - SECRET_KEY=${SECRET_KEY}
             - SECRET_KEY_JWT=${SECRET_KEY_JWT}
-            - SOCIAL_AUTH_FACEBOOK_KEY=${SOCIAL_AUTH_FACEBOOK_KEY}
-            - SOCIAL_AUTH_FACEBOOK_SECRET=${SOCIAL_AUTH_FACEBOOK_SECRET}
+            - SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY=${SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY}
+            - SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET=${SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET}
             - SERVER_URL=server
             - SERVER_PORT=5000
 
