@@ -40,6 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return "@{}".format(self.username)
 
+
 @receiver(post_save, sender=User)
 def after_user_signed_up(sender, instance, **kwargs):
     if Bot.objects.filter(user=instance,).count() == 0:
