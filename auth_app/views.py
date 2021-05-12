@@ -1,10 +1,12 @@
-from django.views import generic
-from .forms import UserRegisterForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import FormView
-from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic
+from django.dispatch import receiver
+from django.urls import reverse_lazy
+
 from .models import User
+from .forms import UserRegisterForm
 
 
 class Home(LoginRequiredMixin, generic.TemplateView):
