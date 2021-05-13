@@ -2,8 +2,14 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from .forms import UserRegisterForm
 from parameterized import parameterized
-from auth_app.models import UserManager, User
 from unittest.mock import patch
+
+from auth_app.pipeline import create_bot
+from auth_app.models import (
+    Bot,
+    User,
+    UserManager,
+)
 
 
 class TestViewsAnonimous(TestCase):
@@ -134,4 +140,25 @@ class TestUser(TestCase):
         self.assertEqual(
             str(self.user),
             '@normal',
+        )
+
+
+class TestBot(TestCase):
+    def test_create_bot_when_a_user_is_created(self):
+        strategy = ''
+        user = get_user_model().objects.create_user(
+            'normal@eventbrite.com',
+            'normal',
+            '1234',
+        )
+        response = ''
+        return_value = create_bot(strategy, user, response)
+        self.assertTrue(Bot.objects.filter(user=user,).exists())
+        expected_value = {
+            'is_new': False,
+            'user': user,
+        }
+        self.assertEqual(
+            return_value,
+            expected_value
         )
