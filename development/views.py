@@ -19,15 +19,16 @@ class ChallengeView(FormView):
 
     def get_form(self, form_class=None):
         if self.request.method == 'POST':
-            form = ChallengeForm(data=self.request.POST, user=self.request.user)
+            form = ChallengeForm(data=self.request.POST)
         else:
-            form = ChallengeForm(user=self.request.user)
+            form = ChallengeForm()
+        form.setup_bots_choices(self.request.user)
 
         return form
 
     def form_valid(self, form):
-        option1 = form.cleaned_data['bot1']
-        option2 = form.cleaned_data['bot2']
+        option1 = int(form.cleaned_data['bot1'])
+        option2 = int(form.cleaned_data['bot2'])
         bot1 = dict(form.fields['bot1'].choices)[option1]
         bot2 = dict(form.fields['bot2'].choices)[option2]
 
