@@ -1,8 +1,16 @@
-from django.test import TestCase
 from parameterized import parameterized
-from .models import Match
-from auth_app.models import User
+from django.test import TestCase
 from django.utils import timezone
+
+from .forms import (
+    get_my_bots,
+    get_online_bots,
+)
+from .models import Match
+from auth_app.models import (
+    Bot,
+    User,
+)
 
 
 class Tests(TestCase):
@@ -42,3 +50,34 @@ class Tests(TestCase):
         self.assertEqual(match.bot_2, bot_two)
         self.assertEqual(match.score_p_1, scr1)
         self.assertEqual(match.score_p_2, scr2)
+
+
+class TestForms(TestCase):
+    def test_get_online_bots(self):
+        users = ['Pedro', 'Pablo', 'Gabi']
+        self.assertEqual(
+            list(get_online_bots(users)),
+            [
+                (0, 'Pedro'),
+                (1, 'Pablo'),
+                (2, 'Gabi'),
+            ],
+        )
+
+    def test_get_my_bots(self):
+        user = User.objects.create(
+            email='email',
+            username='username'
+        )
+        Bot.objects.create(
+            name='bot_name',
+            token='asd123',
+            user=user,
+        )
+        online_bots = ['Pedro', 'bot_name', 'Pablo']
+        self.assertEqual(
+            list(get_my_bots(user, online_bots)),
+            [
+                (0, 'bot_name')
+            ],
+        )
