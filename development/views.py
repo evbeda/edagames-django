@@ -17,6 +17,14 @@ class ChallengeView(FormView):
     form_class = ChallengeForm
     success_url = reverse_lazy('development:challenge')
 
+    def get_form(self, form_class=None):
+        if self.request.method == 'POST':
+            form = ChallengeForm(data=self.request.POST, user=self.request.user)
+        else:
+            form = ChallengeForm(user=self.request.user)
+
+        return form
+
     def form_valid(self, form):
         option1 = form.cleaned_data['bot1']
         option2 = form.cleaned_data['bot2']
