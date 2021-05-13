@@ -2,12 +2,8 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin)
-from django.dispatch import receiver
 from django.db import models
-from django.db.models.signals import post_save
 from django.utils import timezone
-
-from development.token import generate_token
 
 
 class UserManager(BaseUserManager):
@@ -39,16 +35,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return "@{}".format(self.username)
-
-
-@receiver(post_save, sender=User)
-def after_user_signed_up(sender, instance, **kwargs):
-    if Bot.objects.filter(user=instance,).count() == 0:
-        Bot.objects.create(
-            name=instance.username,
-            token=generate_token(instance.username),
-            user=instance,
-        )
 
 
 class Bot(models.Model):
