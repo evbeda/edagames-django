@@ -14,11 +14,9 @@ def get_users_data():
             '{}:{}/users'.format(SERVER_URL, SERVER_PORT),
         )
         data = bots_json.json()
-        users = data['users']
+        return data['users']
     except Exception:
-        users = []
-
-    return users
+        return []
 
 
 def get_online_bots(users):
