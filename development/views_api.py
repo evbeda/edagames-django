@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from development.serializer import MatchSerializer
+from auth_app.models import Bot
 
 
 @csrf_exempt
@@ -26,6 +27,8 @@ def match_list(request):
         dic_data = JSONParser().parse(request)
         try:
             data = convert_data(dic_data)
+            data['user_one'] = Bot.objects.filter(name=data['bot_1']).user
+            data['user_two'] = Bot.objects.filter(name=data['bot_2']).user
         except KeyError as e:
             return JsonResponse({'error': str(e)}, status=400)
         serializer = MatchSerializer(data=data)
