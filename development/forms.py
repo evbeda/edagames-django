@@ -1,6 +1,6 @@
 from django import forms
 from .bot_handler import (
-    get_data_users,
+    get_users_data,
     get_online_bots,
     get_my_bots,
 )
@@ -8,7 +8,7 @@ from .bot_handler import (
 
 class ChallengeForm(forms.Form):
     def setup_bots_choices(self, user):
-        users = get_data_users()
+        users = get_users_data()
         online_bots = get_online_bots(users)
         my_bots = get_my_bots(
             user,
