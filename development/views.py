@@ -55,3 +55,6 @@ class MatchListView(SingleTableView):
     model = Match
     table_class = MatchTable
     template_name = 'development/match_history.html'
+
+    def get_queryset(self):
+        return Match.objects.filter(user_one=self.request.user) | Match.objects.filter(user_two=self.request.user)
