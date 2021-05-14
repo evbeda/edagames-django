@@ -4,7 +4,7 @@ from django.utils import timezone
 from unittest.mock import patch
 
 from .forms import (
-    get_data_users,
+    get_users_data,
     get_my_bots,
     get_online_bots,
 )
@@ -78,9 +78,9 @@ class TestBotHandler(TestCase):
             data=['Pedro', 'Pablo', 'Juan'],
         ),
     )
-    def test_get_data_users_correct_key(self, mock_get):
+    def test_get_users_data_correct_key(self, mock_get):
         self.assertEqual(
-            get_data_users(),
+            get_users_data(),
             ['Pedro', 'Pablo', 'Juan'],
         )
 
@@ -91,12 +91,12 @@ class TestBotHandler(TestCase):
             data=[],
         ),
     )
-    def test_get_data_users_wrong_key(
+    def test_get_users_data_wrong_key(
         self,
         mock_get,
     ):
         self.assertEqual(
-            get_data_users(),
+            get_users_data(),
             [],
         )
 

@@ -8,7 +8,7 @@ SERVER_URL = get_env_variable('SERVER_URL')
 SERVER_PORT = get_env_variable('SERVER_PORT')
 
 
-def get_data_users():
+def get_users_data():
     try:
         bots_json = requests.get(
             '{}:{}/users'.format(SERVER_URL, SERVER_PORT),
