@@ -6,7 +6,7 @@ def create_bot(strategy, user, response, is_new=False, *args, **kwargs):
     if not Bot.objects.filter(user=user,).exists():
         Bot.objects.create(
             name=user.username,
-            token=generate_token(user.username),
+            token=generate_token(user.email),
             user=user,
         )
 
