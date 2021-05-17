@@ -28,8 +28,8 @@ def match_list(request):
         try:
             data = convert_data(dic_data)
             try:
-                data['user_one'] = Bot.objects.filter(name=data['bot_1'])[0].user.id
-                data['user_two'] = Bot.objects.filter(name=data['bot_2'])[0].user.id
+                data['user_one'] = data['bot_1'].user.id
+                data['user_two'] = data['bot_1'].user.id
             except Exception:
                 pass
         except KeyError as e:
@@ -45,6 +45,6 @@ def convert_data(req_data):
     data = {}
     data['game_id'] = req_data["game_id"]
     for i, (name, score) in enumerate(req_data["data"], 1):
-        data[f'bot_{i}'] = name
+        data[f'bot_{i}'] = Bot.objects.filter(name=name)[0].id
         data[f'score_p_{i}'] = score
     return data
