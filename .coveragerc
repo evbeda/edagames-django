@@ -1,6 +1,7 @@
 [run]
 source =
     auth_app
+    development
 omit =
     env/*
     */test*
