@@ -5,40 +5,55 @@ from .views_api import match_list
 from parameterized import parameterized
 from .views_api import convert_data
 from unittest.mock import patch
+from auth_app.models import User
+from auth_app.models import Bot
 
 
 class Tests(TestCase):
 
     def setUp(self):
         self.factory = APIRequestFactory(enforce_csrf_checks=False)
+        self.user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
+        self.bot1 = Bot.objects.create(name='bot1', user=self.user1)
+        self.user2 = User.objects.create(email='test2@gmail.com', username='UsuarioTest2')
+        self.bot2 = Bot.objects.create(name='bot2', user=self.user2)
+
+    # @parameterized.expand([
+    #     [{'game_id': '1111', 'bot_1': 'bot1', 'score_p_1': 2000, 'bot_2': 'bot2', 'score_p_2': 1000},
+    #      201],
+    #     [None, 400],
+    # ])
+    # @patch('development.views_api.convert_data')
+    # def test_match_list(self, return_mock, status, mock):
+    #     if return_mock is not None:
+    #         mock.return_value = return_mock
+    #     else:
+    #         mock.side_effect = KeyError
+    #     request = self.factory.post('match/', json.dumps({}), content_type='application/json')
+    #     responde = match_list(request)
+    #     r = responde.status_code
+    #     self.assertEqual(status, r)
 
     @parameterized.expand([
-        [{'game_id': '1111', 'bot_1': 'pablo', 'score_p_1': 2000, 'bot_2': 'pedro', 'score_p_2': 1000},
-         201],
-        [None, 400],
+         [{'game_id': '1111', 'data': [('bot1', 2000), ('bot2', 1000)]}],
     ])
-    @patch('development.views_api.convert_data')
-    def test_match_list(self, return_mock, status, mock):
-        if return_mock is not None:
-            mock.return_value = return_mock
-        else:
-            mock.side_effect = KeyError
-        request = self.factory.post('match/', json.dumps({}), content_type='application/json')
-        responde = match_list(request)
-        r = responde.status_code
-        self.assertEqual(status, r)
+    def test_convert_data_ok(self, data):
+        dic1 = {
+            'game_id': '1111',
+            'bot_1': self.bot1.id,
+            'score_p_1': 2000,
+            'user_1': self.user1.id,
+            'bot_2': self.bot2.id,
+            'score_p_2': 1000,
+            'user_2': self.user2.id
+        }
+        dic2 = convert_data(data)
+
+        self.assertEqual(dic1, dic2)
 
     @parameterized.expand([
-        [{'game_id': '1111', 'data': [('pablo', 2000), ('pedro', 1000)]},
-         {'game_id': '1111', 'bot_1': 'pablo', 'score_p_1': 2000, 'bot_2': 'pedro', 'score_p_2': 1000},
-         True],
-        [{'game_id': '1111', 'date': [('pablo', 2000), ('pedro', 1000)]},
-         None,
-         False],
+         [{'game_id': '1111', 'date': [('bot1', 2000), ('bot2', 1000)]}],
     ])
-    def test_convert_data(self, data, expected, flag):
-        if flag:
-            self.assertEqual(convert_data(data), expected)
-        else:
-            with self.assertRaises(KeyError):
-                convert_data(data)
+    def test_convert_data_wrong(self, data):
+        with self.assertRaises(KeyError):
+            convert_data(data)
