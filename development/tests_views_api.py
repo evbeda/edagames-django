@@ -18,21 +18,32 @@ class Tests(TestCase):
         self.user2 = User.objects.create(email='test2@gmail.com', username='UsuarioTest2')
         self.bot2 = Bot.objects.create(name='bot2', user=self.user2)
 
-    # @parameterized.expand([
-    #     [{'game_id': '1111', 'bot_1': 'bot1', 'score_p_1': 2000, 'bot_2': 'bot2', 'score_p_2': 1000},
-    #      201],
-    #     [None, 400],
-    # ])
-    # @patch('development.views_api.convert_data')
-    # def test_match_list(self, return_mock, status, mock):
-    #     if return_mock is not None:
-    #         mock.return_value = return_mock
-    #     else:
-    #         mock.side_effect = KeyError
-    #     request = self.factory.post('match/', json.dumps({}), content_type='application/json')
-    #     responde = match_list(request)
-    #     r = responde.status_code
-    #     self.assertEqual(status, r)
+    @patch('development.views_api.convert_data')
+    def test_match_list_ok(self, mock):
+        status = 201
+        return_mock = {
+            'game_id': '1111',
+            'bot_1': self.bot1.id,
+            'score_p_1': 2000,
+            'user_1': self.user1.id,
+            'bot_2': self.bot2.id,
+            'score_p_2': 1000,
+            'user_2': self.user2.id
+        }
+        mock.return_value = return_mock
+        request = self.factory.post('match/', json.dumps({}), content_type='application/json')
+        responde = match_list(request)
+        r = responde.status_code
+        self.assertEqual(status, r)
+
+    @patch('development.views_api.convert_data')
+    def test_match_list_wrong(self, mock):
+        status = 400
+        mock.side_effect = KeyError
+        request = self.factory.post('match/', json.dumps({}), content_type='application/json')
+        responde = match_list(request)
+        r = responde.status_code
+        self.assertEqual(status, r)
 
     @parameterized.expand([
          [{'game_id': '1111', 'data': [('bot1', 2000), ('bot2', 1000)]}],
