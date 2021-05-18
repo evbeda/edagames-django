@@ -27,11 +27,11 @@ def match_list(request):
         dic_data = JSONParser().parse(request)
         try:
             data = convert_data(dic_data)
-            try:
-                data['user_one'] = data['bot_1'].user.id
-                data['user_two'] = data['bot_1'].user.id
-            except Exception:
-                pass
+        #     try:
+        #         data['user_one'] = data['bot_1'].user.id
+        #         data['user_two'] = data['bot_1'].user.id
+        #     except Exception:
+        #         pass
         except KeyError as e:
             return JsonResponse({'error': str(e)}, status=400)
         serializer = MatchSerializer(data=data)
@@ -47,4 +47,5 @@ def convert_data(req_data):
     for i, (name, score) in enumerate(req_data["data"], 1):
         data[f'bot_{i}'] = Bot.objects.filter(name=name)[0].id
         data[f'score_p_{i}'] = score
+        data[f'user_{i}'] = data[f'bot_{i}'].user.id
     return data
