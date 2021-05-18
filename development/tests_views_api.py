@@ -46,7 +46,7 @@ class Tests(TestCase):
         self.assertEqual(status, r)
 
     @parameterized.expand([
-         [{'game_id': '1111', 'data': [('bot1', 2000), ('bot2', 1000)]}],
+        [{'game_id': '1111', 'data': [('bot1', 2000), ('bot2', 1000)]}],
     ])
     def test_convert_data_ok(self, data):
         dic1 = {
@@ -63,7 +63,7 @@ class Tests(TestCase):
         self.assertEqual(dic1, dic2)
 
     @parameterized.expand([
-         [{'game_id': '1111', 'date': [('bot1', 2000), ('bot2', 1000)]}],
+        [{'game_id': '1111', 'date': [('bot1', 2000), ('bot2', 1000)]}],
     ])
     def test_convert_data_wrong(self, data):
         with self.assertRaises(KeyError):
