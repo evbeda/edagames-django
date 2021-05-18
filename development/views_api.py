@@ -27,11 +27,6 @@ def match_list(request):
         dic_data = JSONParser().parse(request)
         try:
             data = convert_data(dic_data)
-        #     try:
-        #         data['user_one'] = data['bot_1'].user.id
-        #         data['user_two'] = data['bot_1'].user.id
-        #     except Exception:
-        #         pass
         except KeyError as e:
             return JsonResponse({'error': str(e)}, status=400)
         serializer = MatchSerializer(data=data)
