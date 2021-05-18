@@ -45,7 +45,8 @@ def convert_data(req_data):
     data = {}
     data['game_id'] = req_data["game_id"]
     for i, (name, score) in enumerate(req_data["data"], 1):
-        data[f'bot_{i}'] = Bot.objects.filter(name=name)[0].id
+        bot = Bot.objects.filter(name=name)[0]
+        data[f'bot_{i}'] = bot.id
         data[f'score_p_{i}'] = score
-        data[f'user_{i}'] = data[f'bot_{i}'].user.id
+        data[f'user_{i}'] = bot.user.id
     return data
