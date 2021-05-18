@@ -4,13 +4,13 @@ from auth_app.models import Bot
 
 
 class Match(models.Model):
-    user_one = models.ForeignKey(
+    user_1 = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='user_one',
         null=True
     )
-    user_two = models.ForeignKey(
+    user_2 = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='user_two',
