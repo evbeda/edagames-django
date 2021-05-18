@@ -6,8 +6,8 @@ class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = [
-            'user_one',
-            'user_two',
+            'user_1',
+            'user_2',
             'bot_1',
             'bot_2',
             'score_p_1',
