@@ -1,9 +1,9 @@
 import json
 from rest_framework.test import APIRequestFactory
 from django.test import TestCase
-from .views_api import match_list
+from ..views_api import match_list
 from parameterized import parameterized
-from .views_api import convert_data
+from ..views_api import convert_data
 from unittest.mock import patch
 from auth_app.models import User
 from auth_app.models import Bot

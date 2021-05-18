@@ -1,17 +1,17 @@
 from django.test import TestCase
 from unittest.mock import patch
 
-from .forms import (
+from ..forms import (
     get_users_data,
     get_my_bots,
     get_online_bots,
 )
-from .models import Match
+from ..models import Match
 from auth_app.models import (
     Bot,
     User,
 )
-from .serializer import MatchSerializer
+from ..serializer import MatchSerializer
 
 
 class Tests(TestCase):
