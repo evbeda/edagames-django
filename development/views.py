@@ -16,6 +16,7 @@ SERVER_PORT = get_env_variable('SERVER_PORT')
 class ChallengeView(FormView):
     form_class = ChallengeForm
     success_url = reverse_lazy('development:challenge')
+    template_name = 'development/challenge.html'
 
     def get_form(self, form_class=None):
         if self.request.method == 'POST':
