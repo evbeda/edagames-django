@@ -32,8 +32,27 @@ jobs:
           name: Update CodeClimate coverage report
           command: |
               ./cc-test-reporter after-build --exit-code $?
+  trigger-main-repo-update:
+    docker:
+      - image: curlimages/curl
+    steps:
+      - run:
+          name: Update main repo
+          command: |
+            curl \
+            -X POST \
+            -H "Authorization: token $ACCESS_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/evbeda/edagames/dispatches \
+            -d '{"event_type":"update_django"}'
 
 workflows:
   main:
     jobs:
       - build-and-test
+      - trigger-main-repo-update:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: main
