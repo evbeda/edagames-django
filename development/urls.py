@@ -8,7 +8,7 @@ app_name = 'development'
 urlpatterns = [
     path(
         'challenge',
-        ChallengeView.as_view(template_name='development/challenge.html'),
+        ChallengeView.as_view(),
         name='challenge',
     ),
     path(
