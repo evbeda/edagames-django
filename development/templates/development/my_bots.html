@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block page_content %}    
+<div class="container">
+    <h1>My Bots</h1> 
+
+    {% load render_table from django_tables2 %}
+    <body>
+        {% render_table table %}
+    </body>
+</div>       
+
+
+<hr>
+{% endblock %}
+
+{% block logout_modal %}
+{% endblock logout_modal%}
