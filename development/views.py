@@ -7,6 +7,8 @@ from environment import get_env_variable
 from django_tables2 import SingleTableView
 from .models import Match
 from .tables import MatchTable
+from auth_app.models import Bot
+from .tables import BotTable
 
 
 SERVER_URL = get_env_variable('SERVER_URL')
@@ -59,3 +61,12 @@ class MatchListView(SingleTableView):
 
     def get_queryset(self):
         return Match.objects.filter(user_1=self.request.user) | Match.objects.filter(user_2=self.request.user)
+
+
+class MyBotsView(SingleTableView):
+    model = Bot
+    table_class = BotTable
+    template_name = 'development/my_bots.html'
+
+    def get_queryset(self):
+        return Bot.objects.filter(user=self.request.user)
