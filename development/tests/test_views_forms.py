@@ -1,12 +1,12 @@
 from auth_app.models import User, Bot
 from django.test import RequestFactory, TestCase
-from ..views import ChallengeView, MatchListView
+from ..views import ChallengeView, MatchListView, MyBotsView
 from ..forms import ChallengeForm
 from unittest.mock import patch
 from django.http import HttpResponse
 
 
-class TestChallengeView(TestCase):
+class TestView(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
@@ -26,12 +26,6 @@ class TestChallengeView(TestCase):
         response = ChallengeView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
-    def test_get_queryset(self):
-        request = self.factory.get('development:match_history')
-        request.user = self.user1
-        response = MatchListView.as_view()(request)
-        self.assertEqual(response.status_code, 200)
-
     @patch('development.views.messages')
     @patch('requests.post')
     def test_form_valid(self, post_patched, messages_patched):
@@ -44,3 +38,15 @@ class TestChallengeView(TestCase):
         view.request = self.factory.post('development:challenge')
         view.form_valid(form)
         post_patched.assert_called()
+
+    def test_get_queryset_match_history(self):
+        request = self.factory.get('development:match_history')
+        request.user = self.user1
+        response = MatchListView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_queryset_my_bots(self):
+        request = self.factory.get('development:my_bots')
+        request.user = self.user1
+        response = MyBotsView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
