@@ -98,11 +98,25 @@ class AddBotView(FormView):
         if self.request.method == 'POST':
             form = BotForm(data=self.request.POST)
             if form.is_valid():
-                post = form.save(commit=False)
-                post.user = self.request.user
-                post.token = generate_token(self.request.user.email)
-                # post.published_date = timezone.now()
-                post.save()
+                new_bot = form.save(commit=False)
+                new_bot.user = self.request.user
+                new_bot.token = generate_token(new_bot.name)
+                if not Bot.objects.filter(name=new_bot.name,).exists():
+                    new_bot.save()
+                    messages.add_message(
+                        self.request,
+                        messages.INFO,
+                        'Bot '
+                        '{} añadido exitosamente'.format(new_bot.name)
+                    )
+                else:
+                    messages.add_message(
+                        self.request,
+                        messages.INFO,
+                        'No es posible crear este registro ,ya existe un bot con el nombre '
+                        '{}. Intente con un nombre diferente'.format(new_bot.name)
+                    )
+
         else:
             form = BotForm()
         return form
