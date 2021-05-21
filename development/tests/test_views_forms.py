@@ -51,8 +51,22 @@ class TestView(TestCase):
         response = MyBotsView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
-    def test_get_form_add_bot_post(self):
-        request = self.factory.post('development:addbot')
+    def test_get_form_add_bot_get(self):
+        request = self.factory.get('development:addbot')
         request.user = self.user1
         response = AddBotView.as_view()(request)
         self.assertEqual(response.status_code, 200)
+
+    @patch('development.views.messages')
+    def test_get_form_add_bot_post_ok(self, patched_message):
+        request = self.factory.post('development:addbot', {'name': 'botty'})
+        request.user = self.user1
+        response = AddBotView.as_view()(request)
+        self.assertEqual(response.status_code, 302)
+
+    @patch('development.views.messages')
+    def test_get_form_add_bot_post_wrong(self, patched_message):
+        request = self.factory.post('development:addbot', {'name': 'bot2'})
+        request.user = self.user1
+        response = AddBotView.as_view()(request)
+        self.assertEqual(response.status_code, 302)
