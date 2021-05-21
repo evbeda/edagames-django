@@ -4,7 +4,7 @@ from .bot_handler import (
     get_online_bots,
     get_my_bots,
 )
-from auth.models import Bot
+from auth_app.models import Bot
 
 
 class ChallengeForm(forms.Form):
@@ -25,4 +25,4 @@ class ChallengeForm(forms.Form):
 class BotForm(forms.ModelForm):
     class Meta:
         model = Bot
-        fields = ('name')
+        fields = ('name',)
