@@ -1,6 +1,6 @@
 from auth_app.models import User, Bot
 from django.test import RequestFactory, TestCase
-from ..views import ChallengeView, MatchListView, MyBotsView
+from ..views import ChallengeView, MatchListView, MyBotsView, AddBotView
 from ..forms import ChallengeForm
 from unittest.mock import patch
 from django.http import HttpResponse
@@ -49,4 +49,10 @@ class TestView(TestCase):
         request = self.factory.get('development:my_bots')
         request.user = self.user1
         response = MyBotsView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_form_add_bot_post(self):
+        request = self.factory.post('development:addbot')
+        request.user = self.user1
+        response = AddBotView.as_view()(request)
         self.assertEqual(response.status_code, 200)
