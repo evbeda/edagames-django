@@ -73,20 +73,6 @@ class MyBotsView(SingleTableView):
         return Bot.objects.filter(user=self.request.user)
 
 
-# def add_bot(request):
-#     if request.method == "POST":
-#         form = BotForm(request.POST)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.author = request.user
-#             # post.published_date = timezone.now()
-#             post.save()
-#             return redirect('addbot', pk=post.pk)
-#     else:
-#         form = BotForm()
-#     return render(request, 'development/add_bot.html', {'form': form})
-
-
 class AddBotView(FormView):
     form_class = BotForm
     success_url = reverse_lazy('development:mybots')

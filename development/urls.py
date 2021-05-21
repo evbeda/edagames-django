@@ -24,7 +24,6 @@ urlpatterns = [
         name='mybots',
     ),
     path('match', views_api.match_list),
-    # path('addbot', views.add_bot, name='addbot'),
     path(
         'addbot',
         AddBotView.as_view(),
