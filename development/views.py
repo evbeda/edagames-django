@@ -6,7 +6,10 @@ import requests
 from environment import get_env_variable
 from django_tables2 import SingleTableView
 from .models import Match
-from .tables import MatchTable, BotTable
+from .tables import (
+    BotTable,
+    MatchTable,
+)
 from auth_app.models import Bot
 from .forms import BotForm
 from .token import generate_token
@@ -95,13 +98,13 @@ class AddBotView(FormView):
                 self.request,
                 messages.INFO,
                 'Bot '
-                '{} añadido exitosamente'.format(new_bot.name)
+                '{} successfully added'.format(new_bot.name)
             )
         else:
             messages.add_message(
                 self.request,
                 messages.INFO,
-                'No es posible crear este registro ,ya existe un bot con el nombre '
-                '{}. Intente con un nombre diferente'.format(new_bot.name)
+                'It is not possible to create this record, a bot already exists with the name '
+                '{}. Try a new name'.format(new_bot.name)
             )
         return super().form_valid(form)
