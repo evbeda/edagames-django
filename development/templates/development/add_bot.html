@@ -3,9 +3,11 @@
 {% load bootstrap4 %}
 {% bootstrap_css %}
 {% block page_content %}
+<div class="container">
     <h2>New Bot</h2>
     <form method="POST" class="post-form">{% csrf_token %}
         {% bootstrap_form form %}
-    <input class="btn btn-primary" type="submit" value="Create Challenge">
+    <input class="btn btn-primary" type="submit" value="Create">
 </form>
+</div> 
 {% endblock page_content %}
