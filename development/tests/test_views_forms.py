@@ -1,6 +1,11 @@
 from auth_app.models import User, Bot
 from django.test import RequestFactory, TestCase
-from ..views import ChallengeView, MatchListView, MyBotsView, AddBotView
+from ..views import (
+    AddBotView,
+    ChallengeView,
+    MatchListView,
+    MyBotsView,
+)
 from ..forms import ChallengeForm
 from unittest.mock import patch
 from django.http import HttpResponse
@@ -59,14 +64,22 @@ class TestView(TestCase):
 
     @patch('development.views.messages')
     def test_get_form_add_bot_post_ok(self, patched_message):
+        prev_cant = Bot.objects.filter(name='botty').count()
         request = self.factory.post('development:addbot', {'name': 'botty'})
         request.user = self.user1
         response = AddBotView.as_view()(request)
+        post_cant = Bot.objects.filter(name='botty').count()
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(prev_cant, 0)
+        self.assertEqual(post_cant, 1)
 
     @patch('development.views.messages')
     def test_get_form_add_bot_post_wrong(self, patched_message):
+        prev_cant = Bot.objects.filter(name='bot2').count()
         request = self.factory.post('development:addbot', {'name': 'bot2'})
         request.user = self.user1
+        post_cant = Bot.objects.filter(name='bot2').count()
         response = AddBotView.as_view()(request)
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(prev_cant, 1)
+        self.assertEqual(post_cant, 1)

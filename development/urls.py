@@ -1,9 +1,11 @@
 from django.urls import path
-from development.views import ChallengeView
-from development.views import MatchListView
-from development.views import MyBotsView, AddBotView
+from development.views import (
+    AddBotView,
+    ChallengeView,
+    MatchListView,
+    MyBotsView,
+)
 from development import views_api
-# from development import views
 
 
 app_name = 'development'
