@@ -6,11 +6,9 @@ import requests
 from environment import get_env_variable
 from django_tables2 import SingleTableView
 from .models import Match
-from .tables import MatchTable
+from .tables import MatchTable, BotTable
 from auth_app.models import Bot
-from .tables import BotTable
 from .forms import BotForm
-from django.shortcuts import render, redirect
 from .token import generate_token
 
 
@@ -97,26 +95,27 @@ class AddBotView(FormView):
     def get_form(self, form_class=None):
         if self.request.method == 'POST':
             form = BotForm(data=self.request.POST)
-            if form.is_valid():
-                new_bot = form.save(commit=False)
-                new_bot.user = self.request.user
-                new_bot.token = generate_token(new_bot.name)
-                if not Bot.objects.filter(name=new_bot.name,).exists():
-                    new_bot.save()
-                    messages.add_message(
-                        self.request,
-                        messages.INFO,
-                        'Bot '
-                        '{} añadido exitosamente'.format(new_bot.name)
-                    )
-                else:
-                    messages.add_message(
-                        self.request,
-                        messages.INFO,
-                        'No es posible crear este registro ,ya existe un bot con el nombre '
-                        '{}. Intente con un nombre diferente'.format(new_bot.name)
-                    )
-
         else:
             form = BotForm()
         return form
+
+    def form_valid(self, form):
+        new_bot = form.save(commit=False)
+        new_bot.user = self.request.user
+        new_bot.token = generate_token(new_bot.name)
+        if not Bot.objects.filter(name=new_bot.name,).exists():
+            new_bot.save()
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                'Bot '
+                '{} añadido exitosamente'.format(new_bot.name)
+            )
+        else:
+            messages.add_message(
+                self.request,
+                messages.INFO,
+                'No es posible crear este registro ,ya existe un bot con el nombre '
+                '{}. Intente con un nombre diferente'.format(new_bot.name)
+            )
+        return super().form_valid(form)
