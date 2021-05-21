@@ -9,6 +9,9 @@ from .models import Match
 from .tables import MatchTable
 from auth_app.models import Bot
 from .tables import BotTable
+from .forms import BotForm
+from django.shortcuts import render, redirect
+from .token import generate_token
 
 
 SERVER_URL = get_env_variable('SERVER_URL')
@@ -70,3 +73,36 @@ class MyBotsView(SingleTableView):
 
     def get_queryset(self):
         return Bot.objects.filter(user=self.request.user)
+
+
+# def add_bot(request):
+#     if request.method == "POST":
+#         form = BotForm(request.POST)
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.author = request.user
+#             # post.published_date = timezone.now()
+#             post.save()
+#             return redirect('addbot', pk=post.pk)
+#     else:
+#         form = BotForm()
+#     return render(request, 'development/add_bot.html', {'form': form})
+
+
+class AddBotView(FormView):
+    form_class = BotForm
+    success_url = reverse_lazy('development:mybots')
+    template_name = 'development/add_bot.html'
+
+    def get_form(self, form_class=None):
+        if self.request.method == 'POST':
+            form = BotForm(data=self.request.POST)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.user = self.request.user
+                post.token = generate_token(self.request.user.email)
+                # post.published_date = timezone.now()
+                post.save()
+        else:
+            form = BotForm()
+        return form
