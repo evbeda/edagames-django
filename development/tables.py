@@ -19,7 +19,7 @@ class MatchTable(tables.Table):
 class BotTable(tables.Table):
     class Meta:
         model = Bot
-        template_name = "django_tables2/bootstrap.html"
+        template_name = "django_tables2/bootstrap-responsive.html"
         fields = (
             'name',
             'token',
