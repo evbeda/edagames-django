@@ -1,9 +1,16 @@
 from django.db import models
 from auth_app.models import User
 from auth_app.models import Bot
+from tournaments.models import Tournament
 
 
 class Match(models.Model):
+    tournament_id = models.ForeignKey(
+        Tournament,
+        on_delete=models.CASCADE,
+        related_name='tournament_id',
+        null=True
+    )
     user_1 = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
