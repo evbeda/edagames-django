@@ -5,7 +5,5 @@ from .models import (
 )
 
 
-admin.site.register(
-    User,
-    Bot,
-)
+admin.site.register(User)
+admin.site.register(Bot)
