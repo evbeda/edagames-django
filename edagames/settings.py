@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'edagames',
     'auth_app',
     'development',
+    'tournaments',
     'social_django',
     'bootstrap4',
     'rest_framework',
