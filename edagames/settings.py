@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import os
 from environment import get_env_variable
+from django.contrib.messages import constants as message_constants
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -171,3 +172,6 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
     ('formatted-name', 'username'),
     ('emailAddress', 'email_address'),
 ]
+
+# Message TAG
+MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
