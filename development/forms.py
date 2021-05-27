@@ -5,6 +5,7 @@ from .bot_handler import (
     get_my_bots,
 )
 from auth_app.models import Bot
+import re
 
 
 class ChallengeForm(forms.Form):
@@ -23,6 +24,14 @@ class ChallengeForm(forms.Form):
 
 
 class BotForm(forms.ModelForm):
+    name = forms.CharField(required=True)
+
     class Meta:
         model = Bot
         fields = ('name',)
+
+    def clean_name(self, *args, **kwargs):
+        name = self.cleaned_data.get('name')
+        if not re.match("[A-Za-z0-9]*$", name):
+            raise forms.ValidationError('Name cannot contains symbols or spaces')
+        return name
