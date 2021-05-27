@@ -2,9 +2,9 @@ import jwt
 import os
 
 
-def generate_token(email, **kwargs):
+def encode_data(*args, **kwargs):
     encoded = jwt.encode(
-        {"user": email},
+        {kwargs['key']: kwargs['value']},
         os.environ['SECRET_KEY_JWT'],
         algorithm="HS256",
     )
