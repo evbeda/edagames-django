@@ -12,7 +12,7 @@ from .tables import (
 )
 from auth_app.models import Bot
 from .forms import BotForm
-from .token import generate_token
+from .encode_jwt import encode_data
 from development.challenge_request import send_challenge
 
 
@@ -90,7 +90,10 @@ class AddBotView(FormView):
     def form_valid(self, form):
         new_bot = form.save(commit=False)
         new_bot.user = self.request.user
-        new_bot.token = generate_token(new_bot.name)
+        new_bot.token = encode_data(
+            key='user',
+            value=new_bot.name,
+        )
         if not Bot.objects.filter(name=new_bot.name,).exists():
             new_bot.save()
             messages.add_message(
