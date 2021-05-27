@@ -102,14 +102,14 @@ class AddBotView(FormView):
             new_bot.save()
             messages.add_message(
                 self.request,
-                messages.INFO,
+                messages.SUCCESS,
                 'Bot '
                 '{} successfully added'.format(new_bot.name)
             )
         else:
             messages.add_message(
                 self.request,
-                messages.INFO,
+                messages.ERROR,
                 'It is not possible to create this record, a bot already exists with the name '
                 '{}. Try a new name'.format(new_bot.name)
             )
