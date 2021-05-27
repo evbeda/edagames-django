@@ -4,7 +4,6 @@ from development.forms import ChallengeForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 import requests
-from environment import get_env_variable
 from django_tables2 import SingleTableView
 from .models import Match
 from .tables import (
@@ -14,10 +13,7 @@ from .tables import (
 from auth_app.models import Bot
 from .forms import BotForm
 from .token import generate_token
-
-
-SERVER_URL = get_env_variable('SERVER_URL')
-SERVER_PORT = get_env_variable('SERVER_PORT')
+from development.challenge_request import send_challenge
 
 
 class ChallengeView(FormView):
@@ -40,14 +36,11 @@ class ChallengeView(FormView):
         bot1 = dict(form.fields['bot1'].choices)[option1]
         bot2 = dict(form.fields['bot2'].choices)[option2]
 
-        data = {
-            "challenger": "{}".format(bot1),
-            "challenged": "{}".format(bot2),
-            "challenge_id": "{}".format("1234"),
-        }
-        response = requests.post(
-            '{}:{}/challenge'.format(SERVER_URL, SERVER_PORT),
-            json=data,
+        response = send_challenge(
+            requests=requests,
+            challenger="{}".format(bot1),
+            challenged="{}".format(bot2),
+            tournament_id="",
         )
         if response.status_code == 200:
             messages.add_message(
