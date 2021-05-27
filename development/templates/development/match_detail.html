@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block page_content %}    
+<div class="container">
+    <h1>Match detail</h1>
+    <p>{{ object.bot_1}} ( {{object.score_p_1}} )
+         vs 
+        {{ object.bot_2}} ( {{object.score_p_2}} )</p>
+</div>     
+
+
+<hr>
+{% endblock %}
+
+{% block logout_modal %}
+{% endblock logout_modal%}
