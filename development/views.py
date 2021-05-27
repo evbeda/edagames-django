@@ -1,4 +1,5 @@
 from django.views.generic.edit import FormView
+from django.views.generic.detail import DetailView
 from development.forms import ChallengeForm
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -65,6 +66,11 @@ class MatchListView(SingleTableView):
 
     def get_queryset(self):
         return Match.objects.filter(user_1=self.request.user) | Match.objects.filter(user_2=self.request.user)
+
+
+class MatchDetailView(DetailView):
+    model = Match
+    template_name = 'development/match_detail.html'
 
 
 class MyBotsView(SingleTableView):
