@@ -25,7 +25,8 @@ class Tests(TestCase):
             'user_1': self.user1.id,
             'bot_2': self.bot2.id,
             'score_p_2': 1000,
-            'user_2': self.user2.id
+            'user_2': self.user2.id,
+            'tournament_id': '',
         }
         self.dict['data_not_found'] = None
 
@@ -44,18 +45,30 @@ class Tests(TestCase):
         r = responde.status_code
         self.assertEqual(status, r)
 
-    @parameterized.expand([
-        [{'game_id': '1111', 'data': [('bot1', 2000), ('bot2', 1000)]}],
-    ])
-    def test_convert_data_ok(self, data):
+    def test_convert_data_ok(self):
         dic1 = self.dict['correct_response']
-        dic2 = convert_data(data)
+        dic2 = convert_data(
+            {
+                'game_id': '1111',
+                'data': [
+                    ('bot1', 2000),
+                    ('bot2', 1000)
+                ],
+                'tournament_id': '',
+            }
+        )
 
         self.assertEqual(dic1, dic2)
 
-    @parameterized.expand([
-        [{'game_id': '1111', 'date': [('bot1', 2000), ('bot2', 1000)]}],
-    ])
-    def test_convert_data_wrong(self, data):
+    def test_convert_data_wrong(self):
         with self.assertRaises(KeyError):
-            convert_data(data)
+            convert_data(
+                {
+                    'game_id': '1111',
+                    'date': [
+                        ('bot1', 2000),
+                        ('bot2', 1000)
+                    ],
+                    'tournament_id': '',
+                },
+            )

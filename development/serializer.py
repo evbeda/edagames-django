@@ -12,7 +12,8 @@ class MatchSerializer(serializers.ModelSerializer):
             'bot_2',
             'score_p_1',
             'score_p_2',
-            'game_id'
+            'game_id',
+            'tournament_id',
         ]
 
     def create(self, validated_data):
