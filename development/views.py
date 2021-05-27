@@ -113,4 +113,5 @@ class AddBotView(FormView):
                 'It is not possible to create this record, a bot already exists with the name '
                 '{}. Try a new name'.format(new_bot.name)
             )
+            self.success_url = reverse_lazy('development:addbot')
         return super().form_valid(form)
