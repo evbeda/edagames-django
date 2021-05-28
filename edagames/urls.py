@@ -23,4 +23,5 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')),
     path('', include(('development.urls', 'auth'), namespace='development')),
     path('', include('development.urls', namespace='api')),
+    path('', include(('tournaments.urls'), namespace='tournaments')),
 ]
