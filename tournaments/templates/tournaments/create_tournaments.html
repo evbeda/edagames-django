@@ -3,12 +3,15 @@
 {% bootstrap_css %}
 {% block page_content %}
 <div class="container">
-    <h2>New Bot</h2>
+    <h2>New Tournament</h2>
     <form method="POST" class="post-form">{% csrf_token %}
         {% bootstrap_form form %}
         <div class="form-row">
             <div class="form-group col-md-4">
                 <select class="form-control" name="animals" id="animals">
+                    {% for bot in bots %}
+                        <option value="bot">{{ bots.name }}</option>
+                    {% endfor %}
                     <option value="dog">Dog</option>
                     <option value="cat">Cat</option>
                     <option value="kangaroo">Kangaroo</option>
