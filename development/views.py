@@ -61,33 +61,66 @@ class MatchListView(SingleTableView):
         return Match.objects.filter(user_1=self.request.user) | Match.objects.filter(user_2=self.request.user)
 
 
-DETAILS1 = [
-    {'player': 'P1', 'from_row': 3, 'to_row': 2},
-    {'player': 'P2', 'from_row': 1, 'to_row': 3},
-    {'player': 'P1', 'from_row': 2, 'to_row': 1},
-    {'player': 'P2', 'from_row': 3, 'to_row': 4},
-]
-
-DETAILS2 = [
-    {'player': 'P1', 'from_row': 3, 'to_row': 2},
-    {'player': 'P2', 'from_row': 1, 'to_row': 3},
-    {'player': 'P1', 'from_row': 2, 'to_row': 1},
-    {'player': 'P2', 'from_row': 3, 'to_row': 4},
-]
+DETAILS = {
+    1: [
+        {'player': 'P1', 'from_row': 1, 'to_row': 1},
+        {'player': 'P2', 'from_row': 1, 'to_row': 1},
+        {'player': 'P1', 'from_row': 1, 'to_row': 1},
+        {'player': 'P2', 'from_row': 1, 'to_row': 1},
+    ],
+    2: [
+        {'player': 'P1', 'from_row': 2, 'to_row': 2},
+        {'player': 'P2', 'from_row': 2, 'to_row': 2},
+        {'player': 'P1', 'from_row': 2, 'to_row': 2},
+        {'player': 'P2', 'from_row': 2, 'to_row': 2},
+    ],
+    3: [
+        {'player': 'P1', 'from_row': 3, 'to_row': 3},
+        {'player': 'P2', 'from_row': 3, 'to_row': 3},
+        {'player': 'P1', 'from_row': 3, 'to_row': 3},
+        {'player': 'P2', 'from_row': 3, 'to_row': 3},
+    ],
+}
 
 
 class MatchDetailView(DetailView):
     template_name = 'development/match_detail.html'
 
-    def get_queryset(self):
-        return Bot.objects.filter(user=self.request.user)
+    def __init__(self, *args, **kwargs):
+        super(MatchDetailView, self).__init__(*args, **kwargs)
+        self.current_page = 1
+        self.prev_page = 1
+        self.next_page = 2
+        self.pages = {
+            1: '',
+            2: '',
+            3: '',
+        }
+
+    def get_queryset(self, *args, **kwargs):
+        return Match.objects.filter(id=self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
+        page = int(self.request.GET.get('page', '1'))
+        if page in self.pages.keys():
+            self.current_page = page
+            self.prev_page = (
+                page - 1
+                if (page - 1) > 1
+                else 1
+            )
+            self.next_page = page + 1
+
+        # request logs server, if page=2 -> pages[2]
+
         context = super(
             MatchDetailView,
             self,
         ).get_context_data(**kwargs)
-        context['data'] = DETAILS1
+        context['data'] = DETAILS[int(page)]
+        context['current_page'] = self.current_page
+        context['prev_page'] = self.prev_page
+        context['next_page'] = self.next_page
         return context
 
 
