@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block page_content %}
+<div class="container">
+    <h2>New Bot</h2>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <select class="form-control" name="animals" id="animals">
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                    <option value="kangaroo">Kangaroo</option>
+                    <option value="dolphin">Dolphin</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <input class="btn" onclick="copyValue()" type="button" value="Copy">
+            </div>
+            <div class="form-group col-md-4">
+                <select class="form-control" name="clonedAnimals" id="clonedAnimals">
+                </select>
+            </div>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Create">
+    </form>
+</div>
+{% endblock page_content %}
