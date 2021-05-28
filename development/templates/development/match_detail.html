@@ -2,10 +2,25 @@
 
 {% block page_content %}    
 <div class="container">
-    <h1>Match detail</h1>
-    <p>{{ object.bot_1}} ( {{object.score_p_1}} )
-         vs 
-        {{ object.bot_2}} ( {{object.score_p_2}} )</p>
+    <h1>Match details</h1>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for log in data %}
+            <tr>
+                <td>{{ log }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-primary"><<</button>
+        <button type="submit" class="btn btn-primary">>></button>
+    </div>
 </div>     
 
 

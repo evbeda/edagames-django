@@ -61,9 +61,34 @@ class MatchListView(SingleTableView):
         return Match.objects.filter(user_1=self.request.user) | Match.objects.filter(user_2=self.request.user)
 
 
+DETAILS1 = [
+    {'player': 'P1', 'from_row': 3, 'to_row': 2},
+    {'player': 'P2', 'from_row': 1, 'to_row': 3},
+    {'player': 'P1', 'from_row': 2, 'to_row': 1},
+    {'player': 'P2', 'from_row': 3, 'to_row': 4},
+]
+
+DETAILS2 = [
+    {'player': 'P1', 'from_row': 3, 'to_row': 2},
+    {'player': 'P2', 'from_row': 1, 'to_row': 3},
+    {'player': 'P1', 'from_row': 2, 'to_row': 1},
+    {'player': 'P2', 'from_row': 3, 'to_row': 4},
+]
+
+
 class MatchDetailView(DetailView):
-    model = Match
     template_name = 'development/match_detail.html'
+
+    def get_queryset(self):
+        return Bot.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            MatchDetailView,
+            self,
+        ).get_context_data(**kwargs)
+        context['data'] = DETAILS1
+        return context
 
 
 class MyBotsView(SingleTableView):
