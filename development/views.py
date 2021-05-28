@@ -39,7 +39,7 @@ class ChallengeView(FormView):
         response = send_challenge(
             requests=requests,
             challenger="{}".format(bot1),
-            challenged="{}".format(bot2),
+            challenged=["{}".format(bot2)],
             tournament_id="",
         )
         if response.status_code == 200:

@@ -7,9 +7,9 @@ SERVER_PORT = get_env_variable('SERVER_PORT')
 
 def send_challenge(*args, **kwargs):
     data = {
-        "challenger": "{}".format(kwargs['challenger']),
-        "challenged": "{}".format(kwargs['challenged']),
-        "challenge_id": "{}".format(kwargs['tournament_id']),
+        "challenger": kwargs['challenger'],
+        "challenged": kwargs['challenged'],
+        "tournament_id": kwargs['tournament_id'],
     }
     return kwargs['requests'].post(
         '{}:{}/challenge'.format(SERVER_URL, SERVER_PORT),
