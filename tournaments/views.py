@@ -1,5 +1,4 @@
 from django.views.generic.edit import FormView
-from auth_app.models import Bot
 from .models import Tournament
 from .forms import TournamentForm
 from django.urls import reverse_lazy
@@ -9,7 +8,6 @@ from development.bot_handler import (
     get_users_data,
     get_online_bots,
 )
-from django.shortcuts import render
 
 
 class AddBotView(FormView):
@@ -19,25 +17,11 @@ class AddBotView(FormView):
     success_url = reverse_lazy('tournaments:tournament')
     template_name = 'tournaments/create_tournaments.html'
 
-    # def search(request):
-    #     objs = Bot.objects.all()
-    #     if request.method == 'POST':
-    #         form = TournamentForm(request.POST)
-    #     else:
-    #         form = TournamentForm()
-    #     return render(request, 'SpotMe/search.html', {'form' : form, 'objs': objs})
-    # def get_context_data(self, **kwargs):
-    #     context = super(InventoryListView, self).get_context_data(**kwargs)
-    #     context['form'] = InventoryForm()
-    #     return context
     def get_form(self, form_class=None):
         if self.request.method == 'POST':
             form = TournamentForm(data=self.request.POST)
         else:
             form = TournamentForm()
-        # context = super(AddBotView, self).get_context_data()
-        # context['form'] = TournamentForm()
-        # return context
         return form
 
     def form_valid(self, form):
