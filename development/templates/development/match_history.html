@@ -1,13 +1,37 @@
 {% extends "base.html" %}
 
-{% block page_content %}    
-<div class="container">
-    <h1>My Matches</h1> 
 
-    {% load render_table from django_tables2 %}
-    <body>
-        {% render_table table %}
-    </body>
+{% block page_content %}
+<div class="container">
+  <h1>My Matches</h1> 
+  <div class="pre-scrollable">
+    <table class="table table-striped table-bordered table-sm">
+      <thead>
+        <tr class="bg-primary text-white" style="
+        position: sticky;
+        top: 0;">
+          <th scope="col">Bot 1</th>
+          <th scope="col">Score 1</th>
+          <th scope="col">Bot 2</th>
+          <th scope="col">Score 2</th>
+          <th class="th-sm">Date</th>
+          <th scope="col">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for match in object_list %}
+        <tr>
+          <td>{{ match.bot_1.name }}</td>
+          <td>{{ match.score_p_1 }}</td>
+          <td>{{ match.bot_2.name }}</td>
+          <td>{{ match.score_p_2 }}</td>
+          <td>{{ match.date_match }}</td>
+          <td><a href="{% url 'development:match_details' pk=match.id %}?page=1">view</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>       
 
 
