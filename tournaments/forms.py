@@ -1,21 +1,12 @@
 from django import forms
-from .models import Tournament
-# from development.bot_handler import (
-#     get_users_data,
-#     get_online_bots,
-# )
+from auth_app.models import Bot
 
 
-class TournamentForm(forms.ModelForm):
-    class Meta:
-        model = Tournament
-        fields = ('name',)
+class TournamentForm(forms.Form):
+    tournament = forms.CharField(label='name')
+    bots_selected = forms.CharField(label='botsSelected', widget=forms.HiddenInput(), required=False)
+    bots = forms.ChoiceField(label='Bots', widget=forms.HiddenInput(), choices=[], required=False)
 
-
-# class OnlineBotsForm(forms.Form):
-#     def setup_bots_choices(self):
-#         users = get_users_data()
-#         online_bots = get_online_bots(users)
-#         self.fields['bot2'].choices = online_bots
-
-#     bot2 = forms.ChoiceField(label='Online Bots', widget=forms.Select, choices=[])
+    def setup_bots_choices(self):
+        bots = Bot.objects.all()
+        self.fields['bots'].choices = enumerate([bot.name for bot in bots])
