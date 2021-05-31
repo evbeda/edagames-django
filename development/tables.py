@@ -11,9 +11,9 @@ class MatchTable(tables.Table):
         model = Match
         template_name = "django_tables2/bootstrap.html"
         fields = (
-            'bot_1',
+            'bot_1.name',
             'score_p_1',
-            'bot_2',
+            'bot_2.name',
             'score_p_2',
             'date_match',
         )
