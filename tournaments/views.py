@@ -12,9 +12,9 @@ class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         return self.request.user.is_staff
 
 
-class AddBotView(StaffRequiredMixin, FormView):
+class CreateTournamentView(StaffRequiredMixin, FormView):
     form_class = TournamentForm
-    success_url = reverse_lazy('tournaments:tournament')
+    success_url = reverse_lazy('tournaments:create_tournament')
     template_name = 'tournaments/create_tournaments.html'
 
     def get_form(self, form_class=None):
@@ -44,7 +44,7 @@ class AddBotView(StaffRequiredMixin, FormView):
                 'It is not possible to create this record, a tournament already exists with the name '
                 '{}. Try a new name'.format(data[0])
             )
-            self.success_url = reverse_lazy('tournaments:tournament')
+            self.success_url = reverse_lazy('tournaments:create_tournament')
         return super().form_valid(form)
 
     def validation_data(self, form):

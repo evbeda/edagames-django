@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import AddBotView
+from .views import CreateTournamentView
 
 
 app_name = 'tournaments'
 urlpatterns = [
     path(
-        'tournament',
-        AddBotView.as_view(),
-        name='tournament',
+        'create_tournament',
+        CreateTournamentView.as_view(),
+        name='create_tournament',
     ),
 ]
