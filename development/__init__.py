@@ -1,1 +1,5 @@
-ACTIONS = '''<a href="{% url 'development:match_detail' pk=1 %}?page=1">view</a>'''
+from environment import get_env_variable
+
+
+SERVER_URL = get_env_variable('SERVER_URL')
+SERVER_PORT = get_env_variable('SERVER_PORT')
