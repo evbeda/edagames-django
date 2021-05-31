@@ -22,9 +22,9 @@ urlpatterns = [
         name='match_history',
     ),
     path(
-        'match_detail/<int:pk>',
+        'match_details/<int:pk>',
         MatchDetailView.as_view(),
-        name='match_detail',
+        name='match_details',
     ),
     path(
         'mybots',
