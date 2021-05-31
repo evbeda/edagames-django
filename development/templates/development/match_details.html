@@ -6,21 +6,25 @@
     <table class="table">
         <thead>
           <tr>
+            <th scope="col">State</th>
+            <th scope="col">Turn</th>
             <th scope="col">Data</th>
           </tr>
         </thead>
         <tbody>
         {% for log in data %}
             <tr>
-                <td>{{ log }}</td>
+                <td>{{ log.data.state }}</td>
+                <td>{{ log.turn }}</td>
+                <td>{{ log.data }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
     <div class="form-row">
         <span class="mx-auto">
-            <a class="btn btn-primary" href="{% url 'development:match_detail' pk=object.id %}?page={{prev_page}}" role="button"><<</a>
-            <a class="btn btn-primary" href="{% url 'development:match_detail' pk=object.id %}?page={{next_page}}" role="button">>></a>
+            <a class="btn btn-primary" href="{% url 'development:match_details' pk=object.id %}?page={{prev_page}}" role="button"><<</a>
+            <a class="btn btn-primary" href="{% url 'development:match_details' pk=object.id %}?page={{next_page}}" role="button">>></a>
         </span>
     </div>
 </div>     
