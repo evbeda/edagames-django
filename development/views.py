@@ -1,5 +1,6 @@
 from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from development.forms import ChallengeForm
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -8,12 +9,15 @@ from django_tables2 import SingleTableView
 from .models import Match
 from .tables import (
     BotTable,
-    MatchTable,
 )
 from auth_app.models import Bot
 from .forms import BotForm
 from .encode_jwt import encode_data
-from development.challenge_request import send_challenge
+from development.server_requests import (
+    get_logs,
+    send_challenge,
+)
+from django.db.models import Q
 
 
 class ChallengeView(FormView):
@@ -52,39 +56,19 @@ class ChallengeView(FormView):
         return super().form_valid(form)
 
 
-class MatchListView(SingleTableView):
+class MatchListView(ListView):
     model = Match
-    table_class = MatchTable
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
-        return Match.objects.filter(user_1=self.request.user) | Match.objects.filter(user_2=self.request.user)
-
-
-DETAILS = {
-    1: [
-        {'player': 'P1', 'from_row': 1, 'to_row': 1},
-        {'player': 'P2', 'from_row': 1, 'to_row': 1},
-        {'player': 'P1', 'from_row': 1, 'to_row': 1},
-        {'player': 'P2', 'from_row': 1, 'to_row': 1},
-    ],
-    2: [
-        {'player': 'P1', 'from_row': 2, 'to_row': 2},
-        {'player': 'P2', 'from_row': 2, 'to_row': 2},
-        {'player': 'P1', 'from_row': 2, 'to_row': 2},
-        {'player': 'P2', 'from_row': 2, 'to_row': 2},
-    ],
-    3: [
-        {'player': 'P1', 'from_row': 3, 'to_row': 3},
-        {'player': 'P2', 'from_row': 3, 'to_row': 3},
-        {'player': 'P1', 'from_row': 3, 'to_row': 3},
-        {'player': 'P2', 'from_row': 3, 'to_row': 3},
-    ],
-}
+        return Match.objects.filter(
+            Q(user_1=self.request.user)
+            | Q(user_2=self.request.user)
+        ).order_by("-date_match")
 
 
 class MatchDetailView(DetailView):
-    template_name = 'development/match_detail.html'
+    template_name = 'development/match_details.html'
 
     def __init__(self, *args, **kwargs):
         super(MatchDetailView, self).__init__(*args, **kwargs)
@@ -111,13 +95,19 @@ class MatchDetailView(DetailView):
             )
             self.next_page = page + 1
 
-        # request logs server, if page=2 -> pages[2]
+        response = get_logs(
+            requests=requests,
+            game_id=self.object.game_id,
+            page_token=None,
+        )
 
         context = super(
             MatchDetailView,
             self,
         ).get_context_data(**kwargs)
-        context['data'] = DETAILS[int(page)]
+
+        response = response.json()
+        context['data'] = response['details']
         context['current_page'] = self.current_page
         context['prev_page'] = self.prev_page
         context['next_page'] = self.next_page
