@@ -1,19 +1,19 @@
 from django.views.generic.edit import FormView
-from .models import Tournament
-from .forms import TournamentForm
 from django.urls import reverse_lazy
 from django.contrib import messages
-from development.encode_jwt import encode_data
-from development.bot_handler import (
-    get_users_data,
-    get_online_bots,
-)
+from .models import Tournament
+from .forms import TournamentForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-class AddBotView(FormView):
+class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class AddBotView(StaffRequiredMixin, FormView):
     form_class = TournamentForm
-    users = get_users_data()
-    online_bots = get_online_bots(users)
     success_url = reverse_lazy('tournaments:tournament')
     template_name = 'tournaments/create_tournaments.html'
 
@@ -22,29 +22,34 @@ class AddBotView(FormView):
             form = TournamentForm(data=self.request.POST)
         else:
             form = TournamentForm()
+        form.setup_bots_choices()
         return form
 
     def form_valid(self, form):
-        new_tournament = form.save(commit=False)
-        new_tournament.user = self.request.user
-        new_tournament.token = encode_data(
-            key='user',
-            value=new_tournament.name,
-        )
-        if not Tournament.objects.filter(name=new_tournament.name,).exists():
-            new_tournament.save()
+        data = []
+        if form.is_valid():
+            data = self.validation_data(form)
+        if not Tournament.objects.filter(name=data[0]).exists():
+            Tournament.objects.create(name=data[0])
             messages.add_message(
                 self.request,
                 messages.SUCCESS,
                 'Tournament '
-                '{} successfully added'.format(new_tournament.name)
+                '{} successfully added'.format(data[0])
             )
         else:
             messages.add_message(
                 self.request,
                 messages.ERROR,
                 'It is not possible to create this record, a tournament already exists with the name '
-                '{}. Try a new name'.format(new_tournament.name)
+                '{}. Try a new name'.format(data[0])
             )
             self.success_url = reverse_lazy('tournaments:tournament')
         return super().form_valid(form)
+
+    def validation_data(self, form):
+        data = []
+        data.append(form.cleaned_data['tournament'])
+        data.append(form.cleaned_data['bots_selected'])
+        data.append(form.cleaned_data['bots'])
+        return(data)
