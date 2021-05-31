@@ -2,6 +2,7 @@
 source =
     auth_app
     development
+    tournaments
 omit =
     env/*
     */test*
