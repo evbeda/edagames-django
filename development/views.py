@@ -63,11 +63,12 @@ class MatchListView(ListView):
         return matches_1.union(matches_2).order_by("-date_match")
 
 
-class MatchDetailView(DetailView):
+class MatchDetailsView(DetailView):
     template_name = 'development/match_details.html'
 
     def __init__(self, *args, **kwargs):
-        super(MatchDetailView, self).__init__(*args, **kwargs)
+        super(MatchDetailsView, self).__init__(*args, **kwargs)
+        # TODO
         self.current_page = 1
         self.prev_page = 1
         self.next_page = 2
@@ -97,7 +98,7 @@ class MatchDetailView(DetailView):
         )
 
         context = super(
-            MatchDetailView,
+            MatchDetailsView,
             self,
         ).get_context_data(**kwargs)
 

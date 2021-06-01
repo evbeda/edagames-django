@@ -2,7 +2,7 @@ from django.urls import path
 from development.views import (
     AddBotView,
     ChallengeView,
-    MatchDetailView,
+    MatchDetailsView,
     MatchListView,
     MyBotsView,
 )
@@ -23,7 +23,7 @@ urlpatterns = [
     ),
     path(
         'match_details/<int:pk>',
-        MatchDetailView.as_view(),
+        MatchDetailsView.as_view(),
         name='match_details',
     ),
     path(
