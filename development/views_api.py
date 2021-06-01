@@ -36,7 +36,8 @@ def match_list(request):
 
 
 def convert_data(req_data):
-    """ Recieve a dictionary and return a new dictionary. """
+    """ Recieve the result of a match from server and creates a dictionary 
+    with the necessary data to store a match in database. """
     data = {}
     data['game_id'] = req_data["game_id"]
     data['tournament_id'] = req_data.get('tournament_id', '')
