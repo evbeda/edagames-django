@@ -175,3 +175,7 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
 
 # Message TAG
 MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
+
+# Server
+SERVER_URL = get_env_variable('SERVER_URL')
+SERVER_PORT = get_env_variable('SERVER_PORT')
