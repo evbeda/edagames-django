@@ -4,37 +4,49 @@ from development.server_requests import (
     get_logs,
     send_challenge,
 )
-
-
-def mocked_requests_get(*args, **kwargs):
-    data = dict()
-    for key, value in zip(kwargs['keys'], kwargs['values']):
-        data[key] = value
-
-    class MockResponse:
-        def __init__(self, json_data, status_code):
-            self.json_data = json_data
-            self.status_code = status_code
-
-        def json(self):
-            return self.json_data
-
-    return MockResponse(data, 200)
+import json
+from unittest.mock import MagicMock
 
 
 class TestServerRequests(TestCase):
 
-    @patch(
-        'requests.get',
-        side_effect=lambda x: mocked_requests_get(
-        ),
-    )
     def test_send_challenge(self):
-        self.assertEqual(
+        test_player1 = 'test_player1'
+        test_player2 = ['test_player2']
+        mocked_response = MagicMock(json=lambda x: json.loads(x), spec=["json"])
+        with patch(
+            'requests.post',
+            return_value=mocked_response,
+        ) as request_get_mocked:
             send_challenge(
-                challenger="test_challenger",
-                challenged=["test_challenged"],
-                tournament_id="",
-            ).status_code,
-            200,
-        )
+                test_player1,
+                test_player2,
+            )
+            request_get_mocked.assert_called_once_with(
+                'http://127.0.0.1:5000/challenge',
+                json={
+                    'challenger': test_player1,
+                    'challenged': test_player2,
+                    'tournament_id': '',
+                }
+            )
+
+    def test_get_logs(self):
+        game_id = 'test_game_id'
+        page_token = None
+        mocked_response = MagicMock(json=lambda x: json.loads(x), spec=["json"])
+        with patch(
+            'requests.get',
+            return_value=mocked_response,
+        ) as request_get_mocked:
+            get_logs(
+                game_id,
+                page_token,
+            )
+            request_get_mocked.assert_called_once_with(
+                'http://127.0.0.1:5000/match_details',
+                params={
+                    'game_id': game_id,
+                    'page_token': page_token,
+                }
+            )
