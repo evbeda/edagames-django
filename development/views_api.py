@@ -39,7 +39,7 @@ def convert_data(req_data):
     """ Recieve a dictionary and return a new dictionary. """
     data = {}
     data['game_id'] = req_data["game_id"]
-    data['tournament_id'] = req_data['tournament_id']
+    data['tournament_id'] = req_data.get('tournament_id', '')
     for i, (name, score) in enumerate(req_data["data"], 1):
         bot = Bot.objects.filter(name=name)[0]
         data[f'bot_{i}'] = bot.id
