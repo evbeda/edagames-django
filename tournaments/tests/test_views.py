@@ -1,32 +1,14 @@
 from auth_app.models import User
 from django.test import RequestFactory, TestCase
-from ..views import CreateTournamentView, StaffRequiredMixin
 from ..views import CreateTournamentView
-from ..forms import TournamentForm
-from unittest.mock import patch
-from django.http import HttpResponse
-from django.contrib.auth import get_user_model
 
 
 class TestCreateTournamentView(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.user1 = User.objects.create_superuser(username='username', password='password', email='email')
+        self.user1 = User.objects.create_superuser(username='username1', password='password1', email='email1')
         self.user1.is_staff = True
-        # self.user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
-        # self.bot1 = Bot.objects.create(name='bot1', user=self.user1)
-        self.user2 = get_user_model().objects.create_superuser(
-            'admin@eventbrite.com',
-            'admin',
-            '1234',
-        )
-        # self.bot2 = Bot.objects.create(name='bot2', user=self.user2)
-
-    def get_form_get_403(self):
-        request = self.factory.get('tournaments:create_tournament')
-        request.user = self.user2
-        response = CreateTournamentView.as_view()(request)
-        self.assertEqual(response.status_code, 403)
+        self.user2 = User.objects.create(username='username2', password='password2', email='email2')
 
     def test_get_form_get(self):
         request = self.factory.get('tournaments:create_tournament')
