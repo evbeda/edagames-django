@@ -1,6 +1,14 @@
-from auth_app.models import User
-from django.test import RequestFactory, TestCase
+from ..models import Tournament
 from ..views import CreateTournamentView
+from ..forms import TournamentForm
+from auth_app.models import User
+from django.test import (
+    RequestFactory,
+    TestCase,
+)
+from unittest.mock import patch
+from parameterized import parameterized
+from django.http import HttpResponse
 
 
 class TestCreateTournamentView(TestCase):
@@ -9,6 +17,7 @@ class TestCreateTournamentView(TestCase):
         self.user1 = User.objects.create_superuser(username='username1', password='password1', email='email1')
         self.user1.is_staff = True
         self.user2 = User.objects.create(username='username2', password='password2', email='email2')
+        self.tournament = CreateTournamentView()
 
     def test_get_form_get(self):
         request = self.factory.get('tournaments:create_tournament')
@@ -22,63 +31,29 @@ class TestCreateTournamentView(TestCase):
         response = CreateTournamentView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
-    # @patch('tournaments.views.messages')
-    # @patch('requests.post')
-    # def test_form_valid(self, post_patched, messages_patched):
-    #     post_patched.return_value = HttpResponse(status=200)
-    #     form = ChallengeForm({'bot1': '0', 'bot2': '1'})
-    #     form.fields['bot1'].choices = [(0, 'bot1')]
-    #     form.fields['bot2'].choices = [(0, 'bot1'), (1, 'bot2')]
-    #     form.is_valid()
-    #     view = ChallengeView()
-    #     view.request = self.factory.post('development:challenge')
-    #     view.form_valid(form)
-    #     post_patched.assert_called()
+    @parameterized.expand([
+        ['torneo1', 200, True],
+        ['torneo2', 300, False],
+    ])
+    @patch('tournaments.views.messages')
+    @patch('requests.post')
+    def test_form_valid(self, tourn_name, code, expected, post_patched, messages_patched):
+        post_patched.return_value = HttpResponse(status=code)
+        form = TournamentForm({'tournament': 'torneo1', 'bots_selected': ['botito0', 'botito1'], 'bots': '2'})
+        form.fields['bots'].choices = [(0, 'botito0'), (1, 'botito1'), (2, 'botito2')]
+        form.is_valid()
+        view = CreateTournamentView()
+        view.request = self.factory.post('tournaments:create_tournament')
+        view.form_valid(form)
+        tour_test = Tournament.objects.filter(name=tourn_name).count()
+        if expected is True:
+            self.assertEqual(tour_test, 1)
+        else:
+            self.assertNotEqual(tour_test, 1)
 
-    # def test_get_queryset_match_history(self):
-    #     request = self.factory.get('development:match_history')
-    #     request.user = self.user1
-    #     response = MatchListView.as_view()(request)
-    #     self.assertEqual(response.status_code, 200)
-
-    # def test_get_queryset_my_bots(self):
-    #     request = self.factory.get('development:my_bots')
-    #     request.user = self.user1
-    #     response = MyBotsView.as_view()(request)
-    #     self.assertEqual(response.status_code, 200)
-
-    # def test_get_form_add_bot_get(self):
-    #     request = self.factory.get('development:addbot')
-    #     request.user = self.user1
-    #     response = AddBotView.as_view()(request)
-    #     self.assertEqual(response.status_code, 200)
-
-
-
-
-
-
-
-
-
-    # @patch('development.views.messages')
-    # def test_get_form_add_bot_post_ok(self, patched_message):
-    #     prev_cant = Bot.objects.filter(name='botty').count()
-    #     request = self.factory.post('development:addbot', {'name': 'botty'})
-    #     request.user = self.user1
-    #     response = AddBotView.as_view()(request)
-    #     post_cant = Bot.objects.filter(name='botty').count()
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertEqual(prev_cant, 0)
-    #     self.assertEqual(post_cant, 1)
-
-    # @patch('development.views.messages')
-    # def test_get_form_add_bot_post_wrong(self, patched_message):
-    #     prev_cant = Bot.objects.filter(name='bot2').count()
-    #     request = self.factory.post('development:addbot', {'name': 'bot2'})
-    #     request.user = self.user1
-    #     post_cant = Bot.objects.filter(name='bot2').count()
-    #     response = AddBotView.as_view()(request)
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertEqual(prev_cant, 1)
-    #     self.assertEqual(post_cant, 1)
+    def test_validation_data(self):
+        form_data = {'tournament': '1', 'bots_selected': '1', 'bots': ''}
+        form = TournamentForm(data=form_data)
+        form.is_valid()
+        data = self.tournament.validation_data(form)
+        self.assertEqual(data, ['1', '1', ''])
