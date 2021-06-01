@@ -47,7 +47,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
                 'It is not possible to create this record, a tournament already exists with the name '
                 '{}. Try a new name'.format(data[0])
             )
-            self.success_url = reverse_lazy('tournaments:create_tournament')
+            self.success_url
         return super().form_valid(form)
 
     def validation_data(self, form):
