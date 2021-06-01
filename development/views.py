@@ -4,7 +4,6 @@ from django.views.generic.list import ListView
 from development.forms import ChallengeForm
 from django.urls import reverse_lazy
 from django.contrib import messages
-import requests
 from django_tables2 import SingleTableView
 from .models import Match
 from .tables import (
@@ -41,9 +40,8 @@ class ChallengeView(FormView):
         bot2 = dict(form.fields['bot2'].choices)[option2]
 
         response = send_challenge(
-            requests=requests,
-            challenger="{}".format(bot1),
-            challenged=["{}".format(bot2)],
+            challenger=f"{bot1}",
+            challenged=[f"{bot2}"],
             tournament_id="",
         )
         if response.status_code == 200:
@@ -51,7 +49,7 @@ class ChallengeView(FormView):
                 self.request,
                 messages.INFO,
                 'Challenge sent: '
-                '{} VS {}'.format(bot1, bot2)
+                f'{bot1} VS {bot2}',
             )
         return super().form_valid(form)
 
@@ -61,10 +59,9 @@ class MatchListView(ListView):
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
-        return Match.objects.filter(
-            Q(user_1=self.request.user)
-            | Q(user_2=self.request.user)
-        ).order_by("-date_match")
+        matches_1 = Match.objects.filter(user_1=self.request.user)
+        matches_2 = Match.objects.filter(user_2=self.request.user)
+        return matches_1.union(matches_2).order_by("-date_match")
 
 
 class MatchDetailView(DetailView):
@@ -96,7 +93,6 @@ class MatchDetailView(DetailView):
             self.next_page = page + 1
 
         response = get_logs(
-            requests=requests,
             game_id=self.object.game_id,
             page_token=None,
         )
