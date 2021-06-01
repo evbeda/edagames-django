@@ -1,9 +1,12 @@
+from .models import Tournament
+from .forms import TournamentForm
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .models import Tournament
-from .forms import TournamentForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
