@@ -1,27 +1,33 @@
-from development import (
-    SERVER_PORT,
-    SERVER_URL,
-)
+from edagames import settings
+import requests
+from typing import List
 
 
-def send_challenge(*args, **kwargs):
+def send_challenge(
+    challenger: str,
+    challenged: List[str],
+    tournament_id: str = '',
+):
     data = {
-        "challenger": kwargs['challenger'],
-        "challenged": kwargs['challenged'],
-        "tournament_id": kwargs['tournament_id'],
+        "challenger": challenger,
+        "challenged": challenged,
+        "tournament_id": tournament_id,
     }
-    return kwargs['requests'].post(
-        '{}:{}/challenge'.format(SERVER_URL, SERVER_PORT),
+    return requests.post(
+        f'{settings.SERVER_URL}:{settings.SERVER_PORT}/challenge',
         json=data,
     )
 
 
-def get_logs(*args, **kwargs):
+def get_logs(
+    game_id: str,
+    page_token: str
+):
     data = {
-        "game_id": kwargs['game_id'],
-        "page_token": kwargs['page_token'],
+        "game_id": game_id,
+        "page_token": page_token,
     }
-    return kwargs['requests'].get(
-        '{}:{}/match_details'.format(SERVER_URL, SERVER_PORT),
+    return requests.get(
+        f'{settings.SERVER_URL}:{settings.SERVER_PORT}/match_details',
         params=data,
     )
