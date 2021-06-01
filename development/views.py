@@ -16,7 +16,6 @@ from development.server_requests import (
     get_logs,
     send_challenge,
 )
-from django.db.models import Q
 
 
 class ChallengeView(FormView):
