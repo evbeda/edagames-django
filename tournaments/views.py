@@ -30,8 +30,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
 
     def form_valid(self, form):
         data = []
-        if form.is_valid():
-            data = self.validation_data(form)
+        data = self.validation_data(form)
         if not Tournament.objects.filter(name=data[0]).exists():
             Tournament.objects.create(name=data[0])
             messages.add_message(
