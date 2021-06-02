@@ -23,6 +23,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
+    <script src="{% static 'js/create_tournament.js' %}"></script>
 </head>
 
 <body id="page-top" class="bg-gradient-primary">
@@ -53,15 +54,14 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Development</span>
+                    <span>MENU</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Development:</h6> -->
                         <a class="collapse-item" href="{% url 'development:mybots' %}">My Bots</a>
                         <a class="collapse-item" href="{% url 'development:challenge' %}">Challenge</a>
                         <a class="collapse-item" href="{% url 'development:match_history' %}">My Matches</a>
+                        <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tornament</a>
                     </div>
                 </div>
             </li>

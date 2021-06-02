@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block page_content %}
+
+<div class="container">
+    <h2>New Tournament</h2>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <select class="form-control" name="bots" id="bots">
+                    {% for bot in form.bots.field.choices %}
+                        <option value="{{ bot.0 }}">{{ bot.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <input class="btn" onclick="copyValue()" type="button" value="Select">
+            </div>
+            <div class="form-group col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item" name="clonedBots" id="clonedBots"></li>
+                </ul>
+            </div>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Create Tournament">
+    </form>
+</div>
+{% endblock page_content %}
