@@ -96,9 +96,16 @@ WSGI_APPLICATION = 'edagames.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'NAME': 'edagames-web',
+        'ENGINE': 'mysql.connector.django',
+        'USER': 'edagames',
+        'PASSWORD': 'asd',
+        'OPTIONS': {
+            'autocommit': True,
+        },
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
 }
 
 
