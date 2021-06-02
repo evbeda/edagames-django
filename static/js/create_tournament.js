@@ -1,5 +1,5 @@
-var list = [];
-var listArray = [];
+var innerTextValues = [];
+var botObjectsSelected = [];
 
 function copyValue() {
     var srcList = document.getElementById("bots");
@@ -10,8 +10,8 @@ function copyValue() {
     if (clonedIndex !== -1) {
       var selectedBot = srcList[srcList.selectedIndex];
       dstList.appendChild(selectedBot);
-      listArray.push(selectedBot.innerText)
+      botObjectsSelected.push(selectedBot.innerText)
     }
-    list = dstList.innerText;
-    botsList.value = listArray.join(',')
+    innerTextValues = dstList.innerText;
+    botsList.value = botObjectsSelected.join(',')
   }
