@@ -1,8 +1,10 @@
 from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.views.decorators.http import require_http_methods
 from development.forms import ChallengeForm
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from django.contrib import messages
 from .models import Match
 from .tables import (
@@ -136,3 +138,14 @@ class AddBotView(FormView):
             )
             self.success_url = reverse_lazy('development:addbot')
         return super().form_valid(form)
+
+
+@require_http_methods(["GET"])
+def delete_bot(request, pk):
+    Bot.objects.get(id=pk).delete()
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        'Bot successfully removed'
+    )
+    return redirect('development:mybots')
