@@ -93,7 +93,3 @@ class TestMatchDetailsView(TestCase):
             response.context_data['data'],
             'testing'
         )
-
-
-# def json():
-#     return js.dumps('testing')
