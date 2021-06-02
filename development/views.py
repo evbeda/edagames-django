@@ -69,14 +69,8 @@ class MatchDetailsView(DetailView):
     def __init__(self, *args, **kwargs):
         super(MatchDetailsView, self).__init__(*args, **kwargs)
         # TODO
-        self.current_page = 1
         self.prev_page = 1
         self.next_page = 2
-        self.pages = {
-            1: '',
-            2: '',
-            3: '',
-        }
 
     def get_queryset(self, *args, **kwargs):
         return Match.objects.filter(id=self.kwargs.get('pk'))
@@ -86,15 +80,12 @@ class MatchDetailsView(DetailView):
             game_id=self.object.game_id,
             page_token=None,
         )
-
         context = super(
             MatchDetailsView,
             self,
         ).get_context_data(**kwargs)
-
         response = response.json()
         context['data'] = response['details']
-        context['current_page'] = self.current_page
         context['prev_page'] = self.prev_page
         context['next_page'] = self.next_page
         return context
