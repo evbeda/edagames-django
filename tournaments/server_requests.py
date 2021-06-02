@@ -5,12 +5,12 @@ from itertools import combinations
 
 
 def generate_combination(
-    bot_list: List[str],
     tournament_id: int,
+    bot_list: List[str],
 ):
     data = {
-        'id': tournament_id,
-        'challenges': list(combinations(bot_list, 2)),
+        'tournament_id': tournament_id,
+        'challenges': list(combinations(bot_list.split(sep=','), 2)),
     }
     return requests.post(
         f'{settings.SERVER_URL}:{settings.SERVER_PORT}/tournament',
