@@ -2,6 +2,7 @@ from django.urls import path
 from development.views import (
     AddBotView,
     ChallengeView,
+    delete_bot,
     MatchDetailsView,
     MatchListView,
     MyBotsView,
@@ -30,6 +31,11 @@ urlpatterns = [
         'mybots',
         MyBotsView.as_view(),
         name='mybots',
+    ),
+    path(
+        'bots/<int:pk>/delete',
+        delete_bot,
+        name='delete_bot',
     ),
     path('match', views_api.match_list),
     path(
