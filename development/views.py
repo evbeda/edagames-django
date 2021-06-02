@@ -4,7 +4,6 @@ from django.views.generic.list import ListView
 from development.forms import ChallengeForm
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django_tables2 import SingleTableView
 from .models import Match
 from .tables import (
     BotTable,
@@ -90,10 +89,12 @@ class MatchDetailsView(DetailView):
         return context
 
 
-class MyBotsView(SingleTableView):
-    model = Bot
+class MyBotsView(ListView):
     table_class = BotTable
     template_name = 'development/my_bots.html'
+
+    def __init__(self, *args, **kwargs):
+        super(MyBotsView, self).__init__(*args, **kwargs)
 
     def get_queryset(self):
         return Bot.objects.filter(user=self.request.user)
