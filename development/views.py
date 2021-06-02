@@ -54,7 +54,6 @@ class ChallengeView(FormView):
 
 
 class MatchListView(ListView):
-    # model = Match
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
