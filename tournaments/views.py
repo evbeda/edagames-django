@@ -1,5 +1,5 @@
 from .models import Tournament
-from .create_tournament_request import generate_combination
+from .server_requests import generate_combination
 from .forms import TournamentForm
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
@@ -34,7 +34,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         data = self.validation_data(form)
         if not Tournament.objects.filter(name=data[0]).exists():
             Tournament.objects.create(name=data[0])
-            response = generate_combination(data[1])
+            response = generate_combination(data[0], data[1])
 
             if response.status_code == 200:
                 messages.add_message(
