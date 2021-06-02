@@ -54,7 +54,7 @@ class ChallengeView(FormView):
 
 
 class MatchListView(ListView):
-    model = Match
+    # model = Match
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
@@ -82,16 +82,6 @@ class MatchDetailsView(DetailView):
         return Match.objects.filter(id=self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
-        page = int(self.request.GET.get('page', '1'))
-        if page in self.pages.keys():
-            self.current_page = page
-            self.prev_page = (
-                page - 1
-                if (page - 1) > 1
-                else 1
-            )
-            self.next_page = page + 1
-
         response = get_logs(
             game_id=self.object.game_id,
             page_token=None,
