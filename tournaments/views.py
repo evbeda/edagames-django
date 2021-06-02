@@ -44,11 +44,15 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
                     '{} successfully added'.format(data[0])
                 )
             else:
+                Tournament.objects.filter(name=data[0]).delete()
                 messages.add_message(
                     self.request,
                     messages.ERROR,
-                    'Server is not recieven tourmanets '
-                    'Please try again'
+                    'Tournament {} was not created. '
+                    'Server is not receiving tournaments, '
+                    'or maybe can not create them at this moment. '
+                    'Please verify everything is working '
+                    'and try again. '.format(data[0])
                 )
                 self.success_url
 
@@ -67,4 +71,5 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         data.append(form.cleaned_data['tournament'])
         data.append(form.cleaned_data['bots_selected'])
         data.append(form.cleaned_data['bots'])
+        print(data)
         return(data)
