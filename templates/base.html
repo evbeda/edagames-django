@@ -54,13 +54,21 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <span>MENU</span>
+                    <span>Player Menu</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{% url 'development:mybots' %}">My Bots</a>
                         <a class="collapse-item" href="{% url 'development:challenge' %}">Challenge</a>
                         <a class="collapse-item" href="{% url 'development:match_history' %}">My Matches</a>
+                    </div>
+                </div>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <span>Tournament Menu</span>
+                </a>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tornament</a>
                     </div>
                 </div>
