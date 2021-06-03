@@ -94,17 +94,23 @@ WSGI_APPLICATION = 'edagames.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+DJANGO_DB_HOST = get_env_variable('DJANGO_DB_HOST')
+DJANGO_DB_PORT = get_env_variable('DJANGO_DB_PORT')
+DJANGO_DB_NAME = get_env_variable('DJANGO_DB_NAME')
+DJANGO_DB_USER = get_env_variable('DJANGO_DB_USER')
+DJANGO_DB_PASSWORD = get_env_variable('DJANGO_DB_PASSWORD')
+
 DATABASES = {
     'default': {
-        'NAME': 'edagames-web',
-        'ENGINE': 'mysql.connector.django',
-        'USER': 'edagames',
-        'PASSWORD': 'asd',
+        'NAME': DJANGO_DB_NAME,
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': DJANGO_DB_USER,
+        'PASSWORD': DJANGO_DB_PASSWORD,
         'OPTIONS': {
             'autocommit': True,
         },
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'HOST': DJANGO_DB_HOST,
+        'PORT': DJANGO_DB_PORT,
     },
 }
 
