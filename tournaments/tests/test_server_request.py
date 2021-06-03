@@ -1,4 +1,8 @@
 from ..models import Tournament
+from edagames.settings import (
+    SERVER_PORT,
+    SERVER_URL,
+)
 from django.test import TestCase
 from unittest.mock import patch
 from tournaments.server_requests import generate_combination
@@ -22,7 +26,7 @@ class TestServerRequests(TestCase):
                 bots_chosen,
             )
             request_get_mocked.assert_called_once_with(
-                'http://localhost:5000/tournament',
+                f'{SERVER_URL}:{SERVER_PORT}/tournament',
                 json={
                     'tournament_id': str(Tournament.objects.only('id').get(name=tourn_name).id),
                     'challenges': [
