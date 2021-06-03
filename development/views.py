@@ -140,7 +140,7 @@ class AddBotView(FormView):
         return super().form_valid(form)
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["POST"])
 def delete_bot(request, pk):
     Bot.objects.get(id=pk).delete()
     messages.add_message(
