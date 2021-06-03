@@ -20,7 +20,7 @@ class TestDeleteBot(TestCase):
             name='test_bot1',
             user=self.user,
         )
-        response = self.client.get('/bots/1/delete')
+        response = self.client.post('/bots/1/delete')
         self.assertEqual(
             response.status_code,
             302,
@@ -39,7 +39,7 @@ class TestDeleteBot(TestCase):
             len(Bot.objects.filter(id=self.user.id)),
             1,
         )
-        self.client.get('/bots/1/delete')
+        self.client.post('/bots/1/delete')
         self.assertEqual(
             len(Bot.objects.filter(id=self.user.id)),
             0,
