@@ -6,6 +6,7 @@ from django.test import (
     RequestFactory,
     TestCase,
 )
+from django.http import HttpResponse
 from unittest.mock import patch
 from parameterized import parameterized
 
@@ -31,26 +32,45 @@ class TestCreateTournamentView(TestCase):
         self.assertEqual(response.status_code, 200)
 
     @parameterized.expand([
-        ['torneo1', True],
-        ['torneo2', False],
+        ['torneo1', 200, True, True, True],
+        ['torneo2', 000, False, False, False],
+        ['torneo3', 422, True, True, False],
+        ['torneo3', 500, True, True, False],
     ])
     @patch('tournaments.views.messages')
-    def test_form_valid(self, tourn_name, expected, messages_patched):
-        tour_test = Tournament.objects.filter(name=tourn_name).count()
-        form = TournamentForm({'tournament': tourn_name, 'bots_selected': ['botito0', 'botito1'], 'bots': '2'})
+    @patch('requests.post')
+    def test_form_valid(
+        self,
+        tourn_name,
+        code,
+        can_make_post,
+        expected_tourn_not_exist,
+        expected_post_response,
+        post_patched,
+        messages_patched,
+    ):
+        if can_make_post is True:
+            post_patched.return_value = HttpResponse(status=code)
+        tourn_before = Tournament.objects.filter(name=tourn_name).count()
+        form = TournamentForm({'tournament': tourn_name, 'bots_selected': 'botito0,botito1', 'bots': '2'})
         form.fields['bots'].choices = [(0, 'botito0'), (1, 'botito1'), (2, 'botito2')]
         form.is_valid()
         view = CreateTournamentView()
         view.request = self.factory.post('tournaments:create_tournament')
         view.form_valid(form)
-        if expected is True:
-            self.assertEqual(tour_test, 0)
+        if expected_tourn_not_exist is True:
+            self.assertEqual(tourn_before, 0)
+            tourn_after = Tournament.objects.filter(name=tourn_name).count()
+            if expected_post_response is True:
+                self.assertEqual(tourn_after, 1)
+            else:
+                self.assertEqual(tourn_after, 0)
         else:
-            self.assertEqual(tour_test, 1)
+            self.assertEqual(tourn_before, 1)
 
     def test_validation_data(self):
-        form_data = {'tournament': '1', 'bots_selected': '1', 'bots': ''}
+        form_data = {'tournament': '1', 'bots_selected': 'botito1,botito2', 'bots': ''}
         form = TournamentForm(data=form_data)
         form.is_valid()
         data = self.tournament.validation_data(form)
-        self.assertEqual(data, ['1', '1', ''])
+        self.assertEqual(data, ['1', 'botito1,botito2', ''])
