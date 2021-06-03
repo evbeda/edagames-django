@@ -1672,6 +1672,11 @@ pre code {
   color: #858796;
 }
 
+.head-top {
+  position: sticky;
+  top: 0;
+}
+
 .table th,
 .table td {
   padding: 0.75rem;
