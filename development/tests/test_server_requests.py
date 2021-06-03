@@ -23,7 +23,7 @@ class TestServerRequests(TestCase):
                 test_player2,
             )
             request_get_mocked.assert_called_once_with(
-                'http://127.0.0.1:5000/challenge',
+                'http://localhost:5000/challenge',
                 json={
                     'challenger': test_player1,
                     'challenged': test_player2,
@@ -44,7 +44,7 @@ class TestServerRequests(TestCase):
                 page_token,
             )
             request_get_mocked.assert_called_once_with(
-                'http://127.0.0.1:5000/match_details',
+                'http://localhost:5000/match_details',
                 params={
                     'game_id': game_id,
                     'page_token': page_token,
