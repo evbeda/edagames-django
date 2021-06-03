@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block page_content %}    
+<div class="container">
+    <h1>Torunament name</h1>
+    <div class="pre-scrollable">
+    <table 
+        class="table table-bordered table-sm text-center"
+        style="width: 100%">
+        <thead>
+        <tr class="bg-primary text-white head-top ">
+            <th scope="col">#</th>
+            <th scope="col">Player</th>
+            <th scope="col">Pts</th>
+            <th scope="col">P</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">Total Score</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for player in players %}
+            {% if player.pos == 1 or player.pos == 2 or player.pos == 3 %}
+                <tr class="bg-success text-white">
+                    <td width="5%">{{ player.pos }}</td>
+                    <td width="55%">{{ player.name }}</td>
+                    <td width="15%">{{ player.points }}</td>
+                    <td width="5%">{{ player.matches_played }}</td>
+                    <td width="5%">{{ player.matches_win }}</td>
+                    <td width="5%">{{ player.matches_lose }}</td>
+                    <td width="10%">{{ player.score_in_favor }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td width="5%">{{ player.pos }}</td>
+                    <td width="55%">{{ player.name }}</td>
+                    <td width="5%">{{ player.points }}</td>
+                    <td width="5%">{{ player.matches_played }}</td>
+                    <td width="5%">{{ player.matches_win }}</td>
+                    <td width="5%">{{ player.matches_lose }}</td>
+                    <td width="20%">{{ player.score_in_favor }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>     
+
+
+<hr>
+{% endblock %}
