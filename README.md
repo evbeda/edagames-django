@@ -6,6 +6,9 @@
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/40a2e96df1f2056ea2c4/test_coverage)](https://codeclimate.com/github/evbeda/edagames-django/test_coverage)
 
+## CLASS DIAGRAM
+![alternative text](http://www.plantuml.com/plantuml/png/TP7FIWCn4CRlUOe5BthehL3eGKeBugMUz5ocoRIDJJAIJBo8x-wcSIVThIuip9_VzqqoMIM6oDaxbSusV404tsqSfFH4WJVaA7QGcJomrLFa6S5WN8C-7oFbO2f-Dv_Ff-GDSxXyLzWDiLWibD95tBqbZ5_AccLd0wlSPm4yBhl4KQ47wsfeW77tJZPWJvP4sRG3pVQpP_T4hkI9uN3uJR-70MlYvj-ycSuOQbY6xWP2T5jWVTgYtsDCpI1fYbZ3FR6eV84bkvwTDYTm3iCHZRYCf7hetyf5EbQAefsQAL_s5lYVYpI7OuyLIDPQe-OmDEzVAE13ytaLuezz5gmyPJURFPPhg_ulyMYDKXplHSfIKcDWqhosR3Dg-PAtaofHJHih32PxzmC0)
+
 ## DOCKER
 ### Requirements
 First you need to install Docker for Mac in your computer by doing [click here](https://www.docker.com/products/docker-desktop).
