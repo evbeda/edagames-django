@@ -9,7 +9,7 @@ from .forms import UserRegisterForm
 
 
 class Home(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'base.html'
+    template_name = 'home.html'
     login_url = 'auth:login'
 
 
