@@ -1,0 +1,63 @@
+@startuml
+skinparam ClassFontColor automatic
+skinparam ClassHeaderBackgroundColor #444
+skinparam ClassBackgroundColor #ffffff
+skinparam BackgroundColor #777
+
+class User{
+id: int
+username: str
+email: str
+date_joied: date
+is_active: bool
+is_staff: bool
+}
+
+class Bot{
+id: int
+name: str
+token: str
+user_id: int
+}
+
+class Bots_in_match{
+id: int
+score: int
+bot_id: int
+match_id: int
+}
+
+class Bots_challenged{
+id: int
+bot_id: int
+tournament_id: int
+}
+
+class Challenge{
+id: int
+bot_challenger_id: int
+tournament_id: int
+}
+
+class Match{
+id: int
+game_id: str
+date: str
+tournament_id: str(None)
+}
+
+class Tournament{
+id: int
+name: str
+matches_num: int
+}
+
+User --> Bot
+Bot --> Bots_in_match
+Bot --> Bots_challenged
+Bot --> Challenge
+Bots_challenged --> Challenge
+Bots_in_match --> Match
+Match --> Tournament
+Challenge --> Tournament
+@enduml
