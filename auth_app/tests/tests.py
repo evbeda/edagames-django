@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from .forms import UserRegisterForm
+from auth_app.forms import UserRegisterForm
 from parameterized import parameterized
 from unittest.mock import patch
 
