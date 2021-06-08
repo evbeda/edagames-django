@@ -69,7 +69,9 @@
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        {% if user.is_staff %}
                         <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tornament</a>
+                        {% endif %}
                     </div>
                 </div>
             </li>
