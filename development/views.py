@@ -6,7 +6,10 @@ from development.forms import ChallengeForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib import messages
-from .models import Match
+from .models import (
+    Match,
+    MatchMembers,
+)
 from .tables import (
     BotTable,
 )
@@ -58,10 +61,9 @@ class MatchListView(ListView):
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
-        import ipdb; ipdb.set_trace()
-        matches_1 = Match.objects.filter(user_1=self.request.user)
-        matches_2 = Match.objects.filter(user_2=self.request.user)
-        return matches_1.union(matches_2).order_by("-date_match")
+        bots = Bot.objects.filter(user=self.request.user).values_list('id', flat=True)
+        match_ids = MatchMembers.objects.filter(bot__in=bots).values_list('match_id', flat=True).distinct()
+        return Match.objects.filter(id__in=match_ids)
 
 
 class MatchDetailsView(DetailView):
