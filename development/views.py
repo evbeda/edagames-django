@@ -58,6 +58,7 @@ class MatchListView(ListView):
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
+        import ipdb; ipdb.set_trace()
         matches_1 = Match.objects.filter(user_1=self.request.user)
         matches_2 = Match.objects.filter(user_2=self.request.user)
         return matches_1.union(matches_2).order_by("-date_match")

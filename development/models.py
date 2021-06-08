@@ -8,28 +8,31 @@ class Challenge(models.Model):
         Bot,
         on_delete=models.CASCADE,
         related_name='%(app_label)s_%(class)s_related',
-        null=True
+        blank=True,
+        null=True,
     )
     bots_challenged = models.ManyToManyField(Bot)
     tournament = models.ForeignKey(
         Tournament,
         on_delete=models.CASCADE,
         related_name='%(app_label)s_%(class)s_related',
-        null=True
+        blank=True,
+        null=True,
     )
 
 
 class Match(models.Model):
     game_id = models.CharField(max_length=50)
     date_match = models.DateTimeField(auto_now_add=True, verbose_name='Date')
-    players = models.ManyToManyField(
+    match_members = models.ManyToManyField(
         Bot,
         through='MatchMembers',
     )
     tournament = models.ForeignKey(
         Tournament,
         on_delete=models.CASCADE,
-        null=True
+        blank=True,
+        null=True,
     )
 
 
