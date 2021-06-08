@@ -12011,3 +12011,23 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+.card-header {
+    background-color: rgb(245,245,245,0.3)!important;
+  border-radius:0!important;
+}
+
+.card{
+border-radius:0!important;
+}
+
+.card > .card-header a::before {
+    font-family: fontawesome;
+    content: "\f067 ";
+    color: #282425;
+    float: right;
+    margin-right: 15px;
+    font-weight: 400;
+    position: absolute;
+    right: 0;
+}
