@@ -1,8 +1,15 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from development.serializer import MatchSerializer
+from development.serializer import (
+    MatchSerializer,
+)
 from auth_app.models import Bot
+from development.models import (
+    Match,
+    MatchMembers,
+)
+from django.db import transaction
 
 
 @csrf_exempt
@@ -21,29 +28,36 @@ def match_list(request):
     Raises
     -------
     KeyError
-        key error from convert_data when tray to generate new dict
+        key error from convert_data_for_match when tray to generate new dict
     """
     if request.method == 'POST':
         dic_data = JSONParser().parse(request)
+        if 'tournament_id' not in dic_data:
+            dic_data['tournament_id'] = None
         try:
-            data = convert_data(dic_data)
+            serializer_match = MatchSerializer(data=dic_data)
         except KeyError as e:
             return JsonResponse({'error': str(e)}, status=400)
-        serializer = MatchSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
+        if serializer_match.is_valid():
+            save_match(serializer_match.validated_data)
+            return JsonResponse(
+                serializer_match.data,
+                status=201,
+            )
 
 
-def convert_data(req_data):
-    """ Recieve the result of a match from server and creates a dictionary
-    with the necessary data to store a match in database. """
-    data = {}
-    data['game_id'] = req_data["game_id"]
-    data['tournament_id'] = req_data.get('tournament_id', '')
-    for i, (name, score) in enumerate(req_data["data"], 1):
-        bot = Bot.objects.filter(name=name)[0]
-        data[f'bot_{i}'] = bot.id
-        data[f'score_p_{i}'] = score
-        data[f'user_{i}'] = bot.user.id
-    return data
+@transaction.atomic
+def save_match(match_info):
+    match = Match.objects.create(
+        game_id=match_info['game_id'],
+        tournament_id=match_info['tournament_id'],
+    )
+    match_members = [
+        MatchMembers(
+            bot=Bot.objects.get(name=name),
+            score=score,
+            match=match,
+        )
+        for name, score in match_info['data']
+    ]
+    MatchMembers.objects.bulk_create(match_members)
