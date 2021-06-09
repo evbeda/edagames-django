@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin,
 )
+from django.views.generic.list import ListView
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -72,3 +73,10 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         data.append(form.cleaned_data['bots_selected'])
         data.append(form.cleaned_data['bots'])
         return(data)
+
+
+class TournamentListView(ListView):
+    template_name = 'tournaments/tournaments_history.html'
+
+    def get_queryset(self):
+        return Tournament.objects.all().order_by("-date_tournament")
