@@ -65,13 +65,14 @@
                 </div>
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <span>Tournament Menu</span>
+                    <span>Tournaments Menu</span>
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {% if user.is_staff %}
-                        <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tornament</a>
+                        <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tournament</a>
                         {% endif %}
+                        <a class="collapse-item" href="{% url 'tournaments:tournaments_history' %}">Tournaments History</a>
                     </div>
                 </div>
                 <a class="nav-link" href="{% url 'auth:faq' %}">
