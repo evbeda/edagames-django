@@ -1,9 +1,11 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from development.models import Match
+from development.models import (
+    Match,
+    MatchMembers,
+)
 from development.views import MatchDetailsView
 from auth_app.models import Bot
-from tournaments.models import Tournament
 from unittest.mock import patch
 from unittest.mock import MagicMock
 import json
@@ -19,9 +21,6 @@ class TestMatchDetailsView(TestCase):
             "my_pass",
         )
         self.client.force_login(self.user1)
-        self.tournament = Tournament.objects.create(
-            name='test_tournament',
-        )
         self.user2 = get_user_model().objects.create_user(
             "test_user2",
             "test_user2@email.com",
@@ -36,15 +35,22 @@ class TestMatchDetailsView(TestCase):
             user=self.user2,
         )
         self.match = Match.objects.create(
-            tournament_id=self.tournament,
-            user_1=self.user1,
-            user_2=self.user2,
-            bot_1=self.bot1,
-            bot_2=self.bot2,
-            score_p_1=100,
-            score_p_2=200,
-            game_id='test_game_id'
+            tournament_id=None,
+            game_id='test_game_id',
         )
+        match_members = [
+            MatchMembers(
+                bot=self.bot1,
+                score=500,
+                match=self.match,
+            ),
+            MatchMembers(
+                bot=self.bot2,
+                score=1000,
+                match=self.match,
+            )
+        ]
+        MatchMembers.objects.bulk_create(match_members)
 
     @patch('development.views.get_logs')
     def test_should_return_200_when_user1_makes_a_request_for_one_of_his_matches(
