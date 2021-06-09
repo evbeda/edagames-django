@@ -3,10 +3,16 @@ from rest_framework.test import APIRequestFactory
 from django.test import TestCase
 from ..views_api import match_list
 from parameterized import parameterized
-from ..views_api import convert_data
 from unittest.mock import patch
-from auth_app.models import User
-from auth_app.models import Bot
+from auth_app.models import (
+    Bot,
+    User,
+)
+from development.models import (
+    Match,
+    MatchMembers,
+)
+from development.views_api import save_match
 
 
 class Tests(TestCase):
@@ -14,61 +20,131 @@ class Tests(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory(enforce_csrf_checks=False)
         self.user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
-        self.bot1 = Bot.objects.create(name='bot1', user=self.user1)
+        self.bot1 = Bot.objects.create(name='bot_1', user=self.user1)
         self.user2 = User.objects.create(email='test2@gmail.com', username='UsuarioTest2')
-        self.bot2 = Bot.objects.create(name='bot2', user=self.user2)
-        self.dict = dict()
-        self.dict['correct_response'] = {
-            'game_id': '1111',
-            'bot_1': self.bot1.id,
-            'score_p_1': 2000,
-            'user_1': self.user1.id,
-            'bot_2': self.bot2.id,
-            'score_p_2': 1000,
-            'user_2': self.user2.id,
-            'tournament_id': '',
-        }
-        self.dict['data_not_found'] = None
+        self.bot2 = Bot.objects.create(name='bot_2', user=self.user2)
 
     @parameterized.expand([
-        ('correct_response', 201),
-        ('data_not_found', 400),
-
-    ])
-    @patch('development.views_api.convert_data')
-    def test_match_list(self, response, status, mock):
-        mock.return_value = self.dict[response]
-        if response == 'data_not_found':
-            mock.side_effect = KeyError
-        request = self.factory.post('match/', json.dumps({}), content_type='application/json')
-        responde = match_list(request)
-        r = responde.status_code
-        self.assertEqual(status, r)
-
-    def test_convert_data_ok(self):
-        dic1 = self.dict['correct_response']
-        dic2 = convert_data(
+        (
+            '2players',
             {
                 'game_id': '1111',
+                'tournament_id': None,
                 'data': [
-                    ('bot1', 2000),
-                    ('bot2', 1000)
-                ],
+                    ['bot_1', 2000],
+                    ['bot_2', 123],
+                ]
+            },
+        ),
+        (
+            '4players',
+            {
+                'game_id': '1111',
                 'tournament_id': '',
-            }
+                'data': [
+                    ['bot_1', 2000],
+                    ['bot_2', 123],
+                    ['bot_3', 432],
+                    ['bot_4', 999],
+                ]
+            },
+        ),
+    ])
+    @patch('development.views_api.save_match')
+    def test_match_list_should_call_save_match_when_validated_data_is_OK(
+        self,
+        _test_name,
+        match_info,
+        mock_save_match,
+    ):
+        request = self.factory.post('match/', json.dumps(match_info), content_type='application/json')
+        match_list(request)
+        mock_save_match.assert_called_once_with(match_info)
+
+    @patch('development.views_api.save_match')
+    def test_match_list_should_NOT_call_save_match_when_validated_data_is_WRONG(
+        self,
+        mock_save_match,
+    ):
+        match_info = {
+            'games_id': '2222',
+            'tournament_id': '',
+            'data': [
+                ['bot_1', 555],
+                ['bot_2', 123],
+            ]
+        }
+        request = self.factory.post('match/', json.dumps(match_info), content_type='application/json')
+        match_list(request)
+        mock_save_match.assert_not_called()
+
+    def test_save_match_should_store_a_match_and_associate_members_to_it(self):
+        match_info = {
+            'game_id': '2222',
+            'tournament_id': '',
+            'data': [
+                ['bot_1', 555],
+                ['bot_2', 123],
+            ]
+        }
+        save_match(match_info)
+        match = Match.objects.get(game_id=match_info['game_id'])
+        match_members = list(MatchMembers.objects.filter(match=match))
+        self.assertTrue(match)
+        match_members_expected = [
+            MatchMembers(
+                id=1,
+                score=2000,
+                bot=self.bot1,
+                match=match,
+            ),
+            MatchMembers(
+                id=2,
+                score=123,
+                bot=self.bot2,
+                match=match,
+            ),
+        ]
+        self.assertEqual(
+            match_members,
+            match_members_expected,
         )
 
-        self.assertEqual(dic1, dic2)
-
-    def test_convert_data_wrong(self):
-        with self.assertRaises(KeyError):
-            convert_data(
-                {
-                    'game_id': '1111',
-                    'date': [
-                        ('bot1', 2000),
-                        ('bot2', 1000)
-                    ],
-                    'tournament_id': '',
-                },
-            )
+    @parameterized.expand([
+        (
+            'data_ok',
+            {
+                'game_id': '2222',
+                'tournament_id': '',
+                'data': [
+                    ['bot_1', 555],
+                    ['bot_2', 123],
+                ]
+            },
+            201,
+        ),
+        (
+            'data_wrong',
+            {
+                'asdasd': '2222',
+                'tournament_id': '',
+                'data': [
+                    ['bot_1', 555],
+                    ['bot_2', 123],
+                ]
+            },
+            400,
+        ),
+    ])
+    def test_should_return_status_expected_when_data_from_server_is_received(
+        self,
+        _test_name,
+        match_info,
+        status_expected,
+    ):
+        request = self.factory.post('match/', json.dumps(match_info), content_type='application/json')
+        response = match_list(request)
+        self.assertEqual(
+            response.status_code,
+            status_expected,
+        )

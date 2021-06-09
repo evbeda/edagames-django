@@ -32,17 +32,17 @@ def match_list(request):
     """
     if request.method == 'POST':
         dic_data = JSONParser().parse(request)
-        if 'tournament_id' not in dic_data:
-            dic_data['tournament_id'] = None
-        try:
-            serializer_match = MatchSerializer(data=dic_data)
-        except KeyError as e:
-            return JsonResponse({'error': str(e)}, status=400)
+        serializer_match = MatchSerializer(data=dic_data)
         if serializer_match.is_valid():
             save_match(serializer_match.validated_data)
             return JsonResponse(
                 serializer_match.data,
                 status=201,
+            )
+        else:
+            return JsonResponse(
+                {'Error': 'The Server has created a wrong data key'},
+                status=400,
             )
 
 
