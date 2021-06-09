@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Home, Registration, Profile
+from .views import Home, Registration, Profile, FAQ
 from django.contrib.auth import views as auth_views
 
 
@@ -21,5 +21,6 @@ urlpatterns = [
     ),
     path('register/', Registration.as_view(), name='register'),
 
-    path('profile/<pk>', Profile.as_view(template_name='auth_app/profile.html'), name='profile'),
+    path('profile/<pk>/', Profile.as_view(template_name='auth_app/profile.html'), name='profile'),
+    path('faq/', FAQ.as_view(template_name='auth_app/faq.html'), name='faq'),
 ]
