@@ -25,3 +25,7 @@ class Registration(FormView):
 
 class Profile(LoginRequiredMixin, DetailView):
     queryset = User.objects.all()
+
+
+class FAQ(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'auth_app/faq.html'

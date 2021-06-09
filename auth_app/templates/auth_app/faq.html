@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+
+{% block page_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="text-center">Frequently Asked Questions</h1>
+        </div>
+	</div>
+    <div class="row"><p></p></div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="card" id="FaqBar" >
+                <!-- Question 1 -->
+                <a class="card-header" href="#" data-toggle="collapse" data-target="#answerOne"
+                    aria-expanded="true" aria-controls="answerOne">
+                    <span>What knowledge do I need to complete the challenge?</span>
+                </a>
+                <div id="answerOne" class="collapse" aria-labelledby="headingTwo" data-parent="#FaqBar">
+                    <div class="bg-white py-2 collapse-inner rounded ml-3">
+                        <a class="collapse-item">
+                            Programming (any lenguage o paradigm) and WebSockets.
+                        </a>
+                    </div>
+                </div>
+                <!-- Question 2 -->
+                <a class="card-header" href="#" data-toggle="collapse" data-target="#answerTwo"
+                    aria-expanded="true" aria-controls="answerTwo">
+                    <span>May I use any language?</span>
+                </a>
+                <div id="answerTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#FaqBar">
+                    <div class="bg-white py-2 collapse-inner rounded ml-3">
+                        <a class="collapse-item">
+                            <strong>Yes.</strong> You can use any programming language that a WebScockets client can manage.
+                        </a>
+                    </div>
+                </div>
+                <!-- Question 3 -->
+                <a class="card-header" href="#" data-toggle="collapse" data-target="#answerThree"
+                    aria-expanded="true" aria-controls="answerThree">
+                    <span>Do I have to implement all game rules and piece movements?</span>
+                </a>
+                <div id="answerThree" class="collapse" aria-labelledby="headingTwo" data-parent="#FaqBar">
+                    <div class="bg-white py-2 collapse-inner rounded ml-3">
+                        <p class="collapse-item">
+                            <strong>No.</strong> You only have to apply the movements that you consider necessary.<br>
+                            Keep in mind that as many features you implement, you will increase your 
+                            chances of getting better results in tournaments.<br>
+                            However, we want you to focus on the quality of the code.
+                        </p>
+                    </div>
+                </div>
+                <!-- Question 4 -->
+                <a class="card-header" href="#" data-toggle="collapse" data-target="#answerFour"
+                    aria-expanded="true" aria-controls="answerFour">
+                    <span>Can I play more than one match at the same time?</span>
+                </a>
+                <div id="answerFour" class="collapse" aria-labelledby="headingTwo" data-parent="#FaqBar">
+                    <div class="bg-white py-2 collapse-inner rounded ml-3">
+                        <a class="collapse-item">
+                            <strong>Yes.</strong> During a tournament, players can be playing in more than one match at a time.<br>
+                            Each one will have an individual board. So that, an asynchronous code will be required.
+                        </a>
+                    </div>
+                </div>
+                <!-- Question 5 -->
+                <a class="card-header" href="#" data-toggle="collapse" data-target="#answerFive"
+                    aria-expanded="true" aria-controls="answerFive">
+                    <span>As regards EDA selection: If I win the competition, will you hire me? And if I lose, won’t you hire me?</span>
+                </a>
+                <div id="answerFive" class="collapse" aria-labelledby="headingTwo" data-parent="#FaqBar">
+                    <div class="bg-white py-2 collapse-inner rounded ml-3">
+                        <a class="collapse-item">
+                            The competition result has no relationship with the EDA selection.
+                        </a>
+                    </div>
+                </div>
+                <!-- Question 6 -->
+                <a class="card-header" href="#" data-toggle="collapse" data-target="#answerSix"
+                    aria-expanded="true" aria-controls="answerSix">
+                    <span>As regards EDA selection: What are we looking for</span>
+                </a>
+                <div id="answerSix" class="collapse" aria-labelledby="headingTwo" data-parent="#FaqBar">
+                    <div class="bg-white py-2 collapse-inner rounded ml-3">
+                        <a class="collapse-item">
+                            We are looking for efficient object-oriented or functional code.<br>
+                            Coding Tips:<br>
+                            <li>Tests</li>
+                            <li>Patterns</li>
+                            <li>Continuous integration</li>
+
+                        </a>
+                    </div>
+                </div>
+                <!-- Question 7 -->
+                <a class="card-header" href="#" data-toggle="collapse" data-target="#answerSeven"
+                    aria-expanded="true" aria-controls="answerSeven">
+                    <span>As regards EDA selection: If I use Python, will I improve my chances of being selected</span>
+                </a>
+                <div id="answerSeven" class="collapse" aria-labelledby="headingTwo" data-parent="#FaqBar">
+                    <div class="bg-white py-2 collapse-inner rounded ml-3">
+                        <p class="collapse-item">
+                            <strong>No.</strong> You can use the language you like most.<br>
+                            If you are finally hired, the EDA training includes Python.<br>
+                            We will evaluate your code or your solution no matter what language you have used.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- card-->
+    </div><!-- accordion-->
+</div><!-- tab content-->
+
+{% endblock %}
