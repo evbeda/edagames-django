@@ -48,3 +48,4 @@ class MatchMembers(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+    winner = models.BooleanField(default=False)

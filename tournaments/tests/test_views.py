@@ -1,7 +1,14 @@
 from ..models import Tournament
-from ..views import CreateTournamentView
+from ..views import (
+    CreateTournamentView,
+    get_tournament_results,
+)
 from ..forms import TournamentForm
-from auth_app.models import User
+from auth_app.models import (
+    Bot,
+    User,
+)
+from development.views_api import save_match
 from django.test import (
     RequestFactory,
     TestCase,
@@ -74,3 +81,70 @@ class TestCreateTournamentView(TestCase):
         form.is_valid()
         data = self.tournament.validation_data(form)
         self.assertEqual(data, ['1', 'botito1,botito2', ''])
+
+    def test_tournament_results_view(self):
+        tournament = Tournament.objects.create(name='test')
+        user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
+        bot1 = Bot.objects.create(name='bot_1', user=user1)
+        user2 = User.objects.create(email='test2@gmail.com', username='UsuarioTest2')
+        bot2 = Bot.objects.create(name='bot_2', user=user2)
+        user3 = User.objects.create(email='test3@gmail.com', username='UsuarioTest3')
+        bot3 = Bot.objects.create(name='bot_3', user=user3)
+        match_info = {
+            'game_id': '2222',
+            'tournament_id': tournament.id,
+            'data': [
+                [bot1.name, 555],
+                [bot2.name, 123],
+            ]
+        }
+        for _ in range(10):
+            save_match(match_info)
+        match_info = {
+            'game_id': '2222',
+            'tournament_id': tournament.id,
+            'data': [
+                [bot1.name, 555],
+                [bot3.name, 123],
+            ]
+        }
+        for _ in range(10):
+            save_match(match_info)
+        match_info = {
+            'game_id': '2222',
+            'tournament_id': tournament.id,
+            'data': [
+                [bot2.name, 355],
+                [bot3.name, 123],
+            ]
+        }
+        for _ in range(10):
+            save_match(match_info)
+        tournament_results = get_tournament_results(tournament.id)
+        self.assertEqual(
+            tournament_results[0],
+            {
+                'bot': bot1.name,
+                'total_match': 20,
+                'total_match_won': 20,
+                'total_score': 11100,
+            }
+        )
+        self.assertEqual(
+            tournament_results[1],
+            {
+                'bot': bot2.name,
+                'total_match': 20,
+                'total_match_won': 10,
+                'total_score': 4780,
+            }
+        )
+        self.assertEqual(
+            tournament_results[2],
+            {
+                'bot': bot3.name,
+                'total_match': 20,
+                'total_match_won': 0,
+                'total_score': 2460,
+            }
+        )

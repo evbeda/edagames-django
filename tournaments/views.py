@@ -84,11 +84,48 @@ class TournamentListView(ListView):
         return Tournament.objects.all().order_by("-date_tournament")
 
 
+def get_tournament_results(tournament_id):
+    results = []
+    from development.models import MatchMembers
+    tournament_match_members = MatchMembers.objects.filter(
+        match__tournament=tournament_id,
+    ).order_by('bot')
+    result_bot = None
+    total_match = 0
+    total_match_won = 0
+    total_score = 0
+    for bot_match_member in tournament_match_members:
+        if result_bot != bot_match_member.bot.name:
+            if result_bot is not None:
+                results.append({
+                    'bot': result_bot,
+                    'total_match': total_match,
+                    'total_match_won': total_match_won,
+                    'total_score': total_score,
+                })
+            total_match = 0
+            total_match_won = 0
+            total_score = 0
+            result_bot = bot_match_member.bot.name
+        total_match += 1
+        if bot_match_member.winner:
+            total_match_won += 1
+        total_score += bot_match_member.score
+    if result_bot is not None:
+        results.append({
+            'bot': result_bot,
+            'total_match': total_match,
+            'total_match_won': total_match_won,
+            'total_score': total_score,
+        })
+    return results
+
+
 class TournamentResultsView(ListView):
     template_name = 'tournaments/tournament_details.html'
 
     def get_queryset(self, *args, **kwargs):
-        return Match.objects.filter(tournament_id=self.kwargs.get('pk'))
+        return get_tournament_results(self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -96,12 +133,12 @@ class TournamentResultsView(ListView):
             self,
         ).get_context_data(**kwargs)
         import ipdb; ipdb.set_trace()
-        matches = self.get_queryset()
+        matches = self.objects
         # bots_in_match = matches[0].match_members.all()
         Bot.objects.annotate(
             total_matches=Count('match'),
             score=Sum('matchmembers__score'),
         )
-        # context['results'] = 
+        # context['results'] =
         return context
 
