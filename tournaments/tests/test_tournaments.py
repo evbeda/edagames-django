@@ -90,36 +90,21 @@ class TestCreateTournamentView(TestCase):
         bot2 = Bot.objects.create(name='bot_2', user=user2)
         user3 = User.objects.create(email='test3@gmail.com', username='UsuarioTest3')
         bot3 = Bot.objects.create(name='bot_3', user=user3)
-        match_info = {
-            'game_id': '2222',
-            'tournament_id': tournament.id,
-            'data': [
-                [bot1.name, 555],
-                [bot2.name, 123],
-            ]
-        }
-        for _ in range(10):
-            save_match(match_info)
-        match_info = {
-            'game_id': '2222',
-            'tournament_id': tournament.id,
-            'data': [
-                [bot1.name, 555],
-                [bot3.name, 123],
-            ]
-        }
-        for _ in range(10):
-            save_match(match_info)
-        match_info = {
-            'game_id': '2222',
-            'tournament_id': tournament.id,
-            'data': [
-                [bot2.name, 355],
-                [bot3.name, 123],
-            ]
-        }
-        for _ in range(10):
-            save_match(match_info)
+        from itertools import combinations
+        for bot_x, bot_y in combinations(
+            [(bot1.name, 555), (bot2.name, 355), (bot3.name, 123)],
+            2,
+        ):
+            match_info = {
+                'game_id': '2222',
+                'tournament_id': tournament.id,
+                'data': [
+                    [bot_x[0], bot_x[1]],
+                    [bot_y[0], bot_y[1]],
+                ]
+            }
+            for _ in range(10):
+                save_match(match_info)
         tournament_results = get_tournament_results(tournament.id)
         self.assertEqual(
             tournament_results[0],
@@ -136,7 +121,7 @@ class TestCreateTournamentView(TestCase):
                 'bot': bot2.name,
                 'total_match': 20,
                 'total_match_won': 10,
-                'total_score': 4780,
+                'total_score': 7100,
             }
         )
         self.assertEqual(
