@@ -121,7 +121,7 @@ def get_tournament_results(tournament_id):
 
 
 class TournamentResultsView(ListView):
-    template_name = 'tournaments/tournament_details.html'
+    template_name = 'tournaments/tournament_results.html'
 
     def get_queryset(self, *args, **kwargs):
         return get_tournament_results(self.kwargs.get('pk'))

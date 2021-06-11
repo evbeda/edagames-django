@@ -19,8 +19,8 @@ urlpatterns = [
         name='tournaments_history',
     ),
     path(
-        'tournament_details/<int:pk>/',
+        'tournament_results/<int:pk>/',
         TournamentResultsView.as_view(),
-        name='tournament_details',
+        name='tournament_results',
     ),
 ]
