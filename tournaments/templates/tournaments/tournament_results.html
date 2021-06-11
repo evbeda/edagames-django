@@ -18,7 +18,7 @@
         </thead>
         <tbody>
         {% for match in object_list %}
-            {% if forloop.counter == 1 or forloop.counter == 2 or forloop.counter == 3 %}
+            {% if forloop.counter < 4 %}
                 <tr class="bg-success text-white">
                     <td>{{ forloop.counter }}</td>
                     <td>{{ match.bot }}</td>
