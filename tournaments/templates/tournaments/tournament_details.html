@@ -5,18 +5,36 @@
     <h1>Positions</h1>
     <div class="pre-scrollable">
     <table 
-        class="table table-striped table-bordered table-sm"
+        class="table table-striped table-bordered table-sm text-center"
         style="width: 100%">
         <thead>
         <tr class="bg-primary text-white head-top">
-            <th scope="col">Matches</th>
+            <th scope="col">#</th>
+            <th scope="col">Player</th>
+            <th scope="col">Total Match</th>
+            <th scope="col">Total Wins</th>
+            <th scope="col">Total Score</th>
           </tr>
         </thead>
         <tbody>
         {% for match in object_list %}
-            <tr>
-                <td>{{ match.date_match }}</td>
-            </tr>
+            {% if forloop.counter == 1 or forloop.counter == 2 or forloop.counter == 3 %}
+                <tr class="bg-success text-white">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ match.bot }}</td>
+                    <td>{{ match.total_match }}</td>
+                    <td>{{ match.total_match_won }}</td>
+                    <td>{{ match.total_score }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ match.bot }}</td>
+                    <td>{{ match.total_match }}</td>
+                    <td>{{ match.total_match_won }}</td>
+                    <td>{{ match.total_score }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>
