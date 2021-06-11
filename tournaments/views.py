@@ -1,6 +1,7 @@
 from .models import Tournament
 from .server_requests import generate_combination
 from .forms import TournamentForm
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin,
 )
 from django.views.generic.list import ListView
+from development.models import Match
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -80,3 +82,26 @@ class TournamentListView(ListView):
 
     def get_queryset(self):
         return Tournament.objects.all().order_by("-date_tournament")
+
+
+class TournamentResultsView(ListView):
+    template_name = 'tournaments/tournament_details.html'
+
+    def get_queryset(self, *args, **kwargs):
+        return Match.objects.filter(tournament_id=self.kwargs.get('pk'))
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            TournamentResultsView,
+            self,
+        ).get_context_data(**kwargs)
+        import ipdb; ipdb.set_trace()
+        matches = self.get_queryset()
+        # bots_in_match = matches[0].match_members.all()
+        Bot.objects.annotate(
+            total_matches=Count('match'),
+            score=Sum('matchmembers__score'),
+        )
+        # context['results'] = 
+        return context
+
