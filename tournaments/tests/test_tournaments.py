@@ -135,11 +135,11 @@ class TestTournament(TestCase):
             }
         )
 
-    @patch.object(TournamentResultsView, 'get_queryset')
-    def test_get_queryset_should_call_get_tournament_results_with_tournament_id(
+    def test_tournament_results_should_return_200_when_is_called_by_a_GET(
         self,
-        mocked_get_queryset,
     ):
         tournament = Tournament.objects.create(name='test')
-        self.factory.get(f'/tournament_results/{tournament.id}')
-        mocked_get_queryset.assert_called_once_with(tournament.id)
+        request = self.factory.get('tournaments:tournament_details', params={'pk': tournament.id})
+        request.user = self.user1
+        response = TournamentResultsView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
