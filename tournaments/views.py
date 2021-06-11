@@ -116,7 +116,6 @@ def get_tournament_results(tournament_id):
             'total_match_won': total_match_won,
             'total_score': total_score,
         })
-    results.sort(key=lambda x: x['total_match_won'], reverse=True)
     return results
 
 
@@ -124,4 +123,5 @@ class TournamentResultsView(ListView):
     template_name = 'tournaments/tournament_results.html'
 
     def get_queryset(self, *args, **kwargs):
-        return get_tournament_results(self.kwargs.get('pk'))
+        results = get_tournament_results(self.kwargs.get('pk')).sort(key=lambda x: x['total_match_won'], reverse=True)
+        return results
