@@ -84,10 +84,10 @@ class TournamentListView(ListView):
         return Tournament.objects.all().order_by("-date_tournament")
 
 
-def get_tournament_results(tournament_id: int) -> List(dict):
+def get_tournament_results(tournament_id: int) -> List[dict]:
     """
     This method receives a tournament id and returns a list of dictionaries for each bot
-    that has participated in the tournament. 
+    that has participated in the tournament.
     {
         'bot': the bot name,
         'total_match': the number of matches played:
@@ -130,9 +130,19 @@ def get_tournament_results(tournament_id: int) -> List(dict):
     return results
 
 
+def sort_position_table(table):
+    table.sort(
+        key=lambda x: (
+            x['total_match_won'],
+            x['total_score'],
+        ),
+        reverse=True,
+    )
+    return table
+
+
 class TournamentResultsView(ListView):
     template_name = 'tournaments/tournament_results.html'
 
     def get_queryset(self, *args, **kwargs):
-        results = get_tournament_results(self.kwargs.get('pk')).sort(key=lambda x: x['total_match_won'], reverse=True)
-        return results
+        return sort_position_table(get_tournament_results(self.kwargs.get('pk')))
