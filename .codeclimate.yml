@@ -15,7 +15,7 @@ checks:
   method-complexity:
     enabled: true
     config:
-      threshold: 8
+      threshold: 9
   method-count:
     enabled: false
   method-lines:
