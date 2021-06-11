@@ -2,6 +2,7 @@ from ..models import Tournament
 from ..views import (
     CreateTournamentView,
     get_tournament_results,
+    sort_position_table,
     TournamentResultsView,
 )
 from ..forms import TournamentForm
@@ -143,3 +144,22 @@ class TestTournament(TestCase):
         request.user = self.user1
         response = TournamentResultsView.as_view()(request)
         self.assertEqual(response.status_code, 200)
+
+    def test_sort_position_table_for_match_won_and_total_score(self):
+        table = [
+            {'bot': 'adminPro', 'total_match': 3, 'total_match_won': 0, 'total_score': -300},
+            {'bot': 'brz', 'total_match': 3, 'total_match_won': 1, 'total_score': -300},
+            {'bot': 'brzPro', 'total_match': 3, 'total_match_won': 2, 'total_score': -260},
+            {'bot': 'admin', 'total_match': 3, 'total_match_won': 3, 'total_score': -300},
+            {'bot': 'toxic', 'total_match': 3, 'total_match_won': 3, 'total_score': 400},
+        ]
+        self.assertEqual(
+            sort_position_table(table),
+            [
+                {'bot': 'toxic', 'total_match': 3, 'total_match_won': 3, 'total_score': 400},
+                {'bot': 'admin', 'total_match': 3, 'total_match_won': 3, 'total_score': -300},
+                {'bot': 'brzPro', 'total_match': 3, 'total_match_won': 2, 'total_score': -260},
+                {'bot': 'brz', 'total_match': 3, 'total_match_won': 1, 'total_score': -300},
+                {'bot': 'adminPro', 'total_match': 3, 'total_match_won': 0, 'total_score': -300},
+            ]
+        )
