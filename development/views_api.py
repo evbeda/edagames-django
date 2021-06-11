@@ -52,11 +52,13 @@ def save_match(match_info):
         game_id=match_info['game_id'],
         tournament_id=match_info['tournament_id'],
     )
+    match_info['data'].sort(key=lambda x: x[1], reverse=True)
     match_members = [
         MatchMembers(
             bot=Bot.objects.get(name=name),
             score=score,
             match=match,
+            winner=(match_info['data'][0][0] == name),
         )
         for name, score in match_info['data']
     ]
