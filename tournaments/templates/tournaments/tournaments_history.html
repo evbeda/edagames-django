@@ -8,6 +8,7 @@
     <table class="table table-striped table-bordered table-sm">
       <thead>
         <tr class="bg-primary text-white head-top">
+          <th scope="col">#</th>
           <th scope="col">Name</th>
           <th scope="col">Date</th>
           <th scope="col">Details</th>
@@ -16,9 +17,10 @@
       <tbody>
         {% for tournament in object_list %}
         <tr>
+          <td>{{ tournament.id }}</td>
           <td>{{ tournament.name }}</td>
           <td>{{ tournament.date_tournament }}</td>
-          <td><a href="#">view</a></td>
+          <td><a href="{% url 'tournaments:tournament_details' pk=tournament.id %}">view</a></td>
         </tr>
         {% endfor %}
       </tbody>
