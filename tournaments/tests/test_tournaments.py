@@ -2,6 +2,7 @@ from ..models import Tournament
 from ..views import (
     CreateTournamentView,
     get_tournament_results,
+    TournamentResultsView,
 )
 from ..forms import TournamentForm
 from auth_app.models import (
@@ -18,7 +19,7 @@ from unittest.mock import patch
 from parameterized import parameterized
 
 
-class TestCreateTournamentView(TestCase):
+class TestTournament(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user1 = User.objects.create_superuser(username='username1', password='password1', email='email1')
@@ -133,3 +134,12 @@ class TestCreateTournamentView(TestCase):
                 'total_score': 2460,
             }
         )
+
+    @patch.object(TournamentResultsView, 'get_queryset')
+    def test_get_queryset_should_call_get_tournament_results_with_tournament_id(
+        self,
+        mocked_get_queryset,
+    ):
+        tournament = Tournament.objects.create(name='test')
+        self.factory.get(f'/tournament_results/{tournament.id}')
+        mocked_get_queryset.assert_called_once_with(tournament.id)
