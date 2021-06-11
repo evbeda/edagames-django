@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import (
 )
 from django.views.generic.list import ListView
 from development.models import MatchMembers
+from typing import List
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -83,7 +84,17 @@ class TournamentListView(ListView):
         return Tournament.objects.all().order_by("-date_tournament")
 
 
-def get_tournament_results(tournament_id):
+def get_tournament_results(tournament_id: int) -> List(dict):
+    """
+    This method receives a tournament id and returns a list of dictionaries for each bot
+    that has participated in the tournament. 
+    {
+        'bot': the bot name,
+        'total_match': the number of matches played:
+        'total_match_won': the number of matches won:
+        ''total_score'': the sum of scores made in all matches:
+    }
+    """
     results = []
     tournament_match_members = MatchMembers.objects.filter(
         match__tournament=tournament_id,
