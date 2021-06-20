@@ -1,6 +1,7 @@
 from edagames import settings
 import requests
 from typing import List
+import json
 
 
 def send_challenge(
@@ -19,9 +20,9 @@ def send_challenge(
     )
 
 
-def get_logs(
+def get_one_page_logs(
     game_id: str,
-    page_token: str
+    page_token: str,
 ):
     data = {
         "game_id": game_id,
@@ -31,3 +32,20 @@ def get_logs(
         f'{settings.SERVER_URL}:{settings.SERVER_PORT}/match_details',
         params=data,
     )
+
+
+def get_all_logs(game_id: str):
+    first_page = get_one_page_logs(
+        game_id,
+        None,
+    )
+    first_page = json.loads(first_page)
+    page_token = first_page['next']
+    logs = [first_page]
+    while page_token is not None:
+        response = get_one_page_logs(
+            game_id,
+            page_token,
+        )
+        logs.append(json.loads(response))
+    return logs

@@ -17,7 +17,7 @@ from auth_app.models import Bot
 from .forms import BotForm
 from .encode_jwt import encode_data
 from development.server_requests import (
-    get_logs,
+    get_one_page_logs,
     send_challenge,
 )
 
@@ -79,7 +79,7 @@ class MatchDetailsView(DetailView):
         return Match.objects.filter(id=self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
-        response = get_logs(
+        response = get_one_page_logs(
             game_id=self.object.game_id,
             page_token=None,
         )

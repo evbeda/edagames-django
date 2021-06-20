@@ -52,7 +52,7 @@ class TestMatchDetailsView(TestCase):
         ]
         MatchMembers.objects.bulk_create(match_members)
 
-    @patch('development.views.get_logs')
+    @patch('development.views.get_one_page_logs')
     def test_should_return_200_when_user1_makes_a_request_for_one_of_his_matches(
         self,
         mocked_get_log,
@@ -63,7 +63,7 @@ class TestMatchDetailsView(TestCase):
             200,
         )
 
-    @patch('development.views.get_logs')
+    @patch('development.views.get_one_page_logs')
     def test_should_use_match_details_template_when_user_makes_a_request(
         self,
         mocked_get_log,
@@ -79,7 +79,7 @@ class TestMatchDetailsView(TestCase):
         self.assertEqual(view.prev_page, 1)
         self.assertEqual(view.next_page, 2)
 
-    @patch('development.views.get_logs')
+    @patch('development.views.get_one_page_logs')
     def test_should_shows_matches_if_connected_user_has_matches_played(
         self,
         mocked_get_log,
@@ -87,7 +87,7 @@ class TestMatchDetailsView(TestCase):
         response = self.client.get(f'/match_details/{self.user1.id}?page=1')
         self.assertEquals(response.context_data['object'].id, self.match.id)
 
-    @patch('development.views.get_logs')
+    @patch('development.views.get_one_page_logs')
     def test_should_shows_pass_data_to_template_when_it_is_received_from_server(
         self,
         mocked_get_log,
