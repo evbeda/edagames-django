@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django-bootstrap4 = "==3.0.0"
+django-tables2 = "==2.3.4"
+djangorestframework = "==3.12.4"
+requests = "==2.25.1"
+social-auth-app-django = "==4.0.0"
+social-auth-core = "==4.1.0"
+Django = "==2.2.20"
+PyJWT = "==2.0.1"
+
+[dev-packages]
+coverage = "==5.5"
+flake8 = "==3.9.0"
+ipdb = "==0.13.7"
+parameterized = "==0.8.1"
+
+[requires]
+python_version = "3.8"

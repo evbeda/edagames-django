@@ -1,10 +1,9 @@
-coverage==5.5
 Django==2.2.20
+django-bootstrap4==3.0.0
+django-tables2==2.3.4
+djangorestframework==3.12.4
 PyJWT==2.0.1
+requests==2.25.1
 social-auth-app-django==4.0.0
 social-auth-core==4.1.0
-django-bootstrap4==3.0.0
-djangorestframework==3.12.4
-requests==2.25.1
-djangorestframework==3.12.4
-django-tables2==2.3.4
+
