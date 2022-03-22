@@ -11,7 +11,7 @@ jobs:
           command: mkdir /tmp/test-artifacts
       - run:
           name: Install dependencies
-          command: pipenv sync
+          command: pipenv sync --dev
       - run:
           name: Run Flake8 checks
           command: flake8
