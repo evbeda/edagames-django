@@ -24,7 +24,7 @@ jobs:
               ./cc-test-reporter before-build
       - run:
           name: Running Tests
-          command: pipenv run coverage run manage.py test && coverage xml && coverage report -m
+          command: pipenv run coverage run manage.py test && pipenv run coverage xml && pipenv run coverage report -m
       - run:
           name: Update CodeClimate coverage report
           command: |
