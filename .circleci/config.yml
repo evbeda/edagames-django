@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8.9
     steps:
       - checkout
       - run:
@@ -11,10 +11,7 @@ jobs:
           command: mkdir /tmp/test-artifacts
       - run:
           name: Install dependencies
-          command: pip install -r requirements.txt
-      - run:
-          name: Install dependencies-dev
-          command: pip install -r requirements-dev.txt
+          command: pipenv sync
       - run:
           name: Run Flake8 checks
           command: flake8
@@ -27,7 +24,7 @@ jobs:
               ./cc-test-reporter before-build
       - run:
           name: Running Tests
-          command: coverage run manage.py test && coverage xml && coverage report -m
+          command: pipenv run coverage run manage.py test && coverage xml && coverage report -m
       - run:
           name: Update CodeClimate coverage report
           command: |
