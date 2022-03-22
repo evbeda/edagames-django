@@ -1,5 +1,0 @@
-coverage==5.5
-flake8==3.9.0
-ipdb==0.13.7
-parameterized==0.8.1
-
