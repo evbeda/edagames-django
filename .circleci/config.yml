@@ -14,7 +14,7 @@ jobs:
           command: pipenv sync --dev
       - run:
           name: Run Flake8 checks
-          command: flake8
+          command: pipenv run flake8
       - run:
           name: Setup Code Climate test-reporter
           command: |
