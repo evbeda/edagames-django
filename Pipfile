@@ -12,6 +12,7 @@ social-auth-app-django = "==4.0.0"
 social-auth-core = "==4.1.0"
 Django = "==2.2.20"
 PyJWT = "==2.0.1"
+mysqlclient = "*"
 
 [dev-packages]
 coverage = "==5.5"
