@@ -38,7 +38,7 @@ jobs:
           command: |
             curl \
             -X POST \
-            -H "Authorization: token $ACCESS_TOKEN" \
+            -H "Authorization: token $MACHINEUSER_GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/evbeda/edagames/dispatches \
             -d '{"event_type":"update_django"}'
@@ -53,3 +53,5 @@ workflows:
           filters:
             branches:
               only: main
+          context:
+            - 'edagames'
