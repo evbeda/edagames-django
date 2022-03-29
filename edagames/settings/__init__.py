@@ -1,1 +1,1 @@
-from dev import *  # noqa: F401, F403
+from settings.dev import *  # noqa: F401, F403
