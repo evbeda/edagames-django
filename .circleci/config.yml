@@ -32,8 +32,10 @@ jobs:
   build-and-upload-image:
     docker:
       - image: docker:20.10.14-git
-    environment:
-      APP_NAME: edagames-django
+    parameters:
+      app_name:
+        type: string
+        description: Name of the application to build
     steps:
       - checkout
       - setup_remote_docker
@@ -46,35 +48,35 @@ jobs:
           keys:
             - v1-{{ .Branch }}
           paths:
-            - /caches/${APP_NAME}.tar
+            - /caches/<< parameters.app_name >>.tar
       - run:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
-            docker load -i /caches/${APP_NAME}.tar | true
+            docker load -i /caches/<< parameters.app_name >>.tar | true
       - run:
           name: Build application Docker image
           command: |
-            docker build --cache-from=${APP_NAME} -t ${APP_NAME} .
+            docker build --cache-from=<< parameters.app_name >> -t << parameters.app_name >> .
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
-            docker save -o /caches/${APP_NAME}.tar ${APP_NAME}
+            docker save -o /caches/<< parameters.app_name >>.tar << parameters.app_name >>
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
-            - /caches/${APP_NAME}.tar
+            - /caches/<< parameters.app_name >>.tar
       - deploy:
           name: Push application Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
               aws ecr-public get-login-password --region us-east-1 \
                 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
-              docker tag app "${ECR_REGISTRY}/${APP_NAME}:${CIRCLE_SHA1}"
-              docker push "${ECR_REGISTRY}/${APP_NAME}:${CIRCLE_SHA1}"
-              docker tag app "${ECR_REGISTRY}/${APP_NAME}:latest"
-              docker push "${ECR_REGISTRY}/${APP_NAME}:latest"
+              docker tag app "${ECR_REGISTRY}/<< parameters.app_name >>:${CIRCLE_SHA1}"
+              docker push "${ECR_REGISTRY}/<< parameters.app_name >>:${CIRCLE_SHA1}"
+              docker tag app "${ECR_REGISTRY}/<< parameters.app_name >>:latest"
+              docker push "${ECR_REGISTRY}/<< parameters.app_name >>:latest"
             fi
   trigger-main-repo-update:
     docker:
@@ -95,6 +97,7 @@ workflows:
     jobs:
       - build-and-test
       - build-and-upload-image:
+          app_name: edagames-django
           requires:
             - build-and-test
           context:
