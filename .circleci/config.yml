@@ -73,9 +73,9 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
               aws ecr-public get-login-password --region us-east-1 \
                 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
-              docker tag app "${ECR_REGISTRY}/<< parameters.app_name >>:${CIRCLE_SHA1}"
+              docker tag << parameters.app_name >> "${ECR_REGISTRY}/<< parameters.app_name >>:${CIRCLE_SHA1}"
               docker push "${ECR_REGISTRY}/<< parameters.app_name >>:${CIRCLE_SHA1}"
-              docker tag app "${ECR_REGISTRY}/<< parameters.app_name >>:latest"
+              docker tag << parameters.app_name >> "${ECR_REGISTRY}/<< parameters.app_name >>:latest"
               docker push "${ECR_REGISTRY}/<< parameters.app_name >>:latest"
             fi
   trigger-main-repo-update:
