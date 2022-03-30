@@ -1,5 +1,7 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+from parameterized import parameterized
+
 from development.views_api import save_match
 from auth_app.models import (
     Bot,
@@ -13,7 +15,6 @@ from development.views import (
     get_matches_of_connected_user,
     get_matches_results
 )
-from parameterized import parameterized
 
 
 class TestMatchHistoryView(TestCase):
