@@ -44,7 +44,7 @@ jobs:
             pip install awscli
       - restore_cache:
           keys:
-            - v1-{{ pipeline.git.branch }}
+            - v1-{{ .Branch }}
           paths:
             - /caches/${APP_NAME}.tar
       - run:
@@ -62,7 +62,7 @@ jobs:
             mkdir -p /caches
             docker save -o /caches/${APP_NAME}.tar ${APP_NAME}
       - save_cache:
-          key: v1-{{ pipeline.git.branch }}-{{ epoch }}
+          key: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/${APP_NAME}.tar
       - deploy:
