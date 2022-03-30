@@ -39,13 +39,13 @@ def get_matches_results(matches):
         ]
     """
     match_members = MatchMembers.objects.filter(match__in=matches)
-    matches_result = list()
-    for match in matches:
-        match_result = dict()
-        match_result['match'] = match
-        match_result['players'] = get_match_players(match.id, match_members)
-        matches_result.append(match_result)
-    return matches_result
+    return [
+        {
+            'match': match,
+            'players': get_match_players(match.id, match_members)
+        }
+        for match in matches
+    ]
 
 
 def get_match_players(match_id, match_members):
