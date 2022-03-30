@@ -29,6 +29,51 @@ jobs:
           name: Update CodeClimate coverage report
           command: |
               ./cc-test-reporter after-build --exit-code $?
+  build-and-upload-image:
+    docker:
+      - image: docker:20.10.14-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache py3-pip
+            pip install awscli
+      - restore_cache:
+          keys:
+            - v1-{{ pipeline.git.branch }}
+          paths:
+            - /caches/${APP_NAME}.tar
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/${APP_NAME}.tar | true
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build --cache-from=${APP_NAME} -t ${APP_NAME} .
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/${APP_NAME}.tar ${APP_NAME}
+      - save_cache:
+          key: v1-{{ pipeline.git.branch }}-{{ epoch }}
+          paths:
+            - /caches/${APP_NAME}.tar
+      - deploy:
+          name: Push application Docker image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "main" ]; then
+              aws ecr-public get-login-password --region us-east-1 \
+                | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+              docker tag app "${ECR_REGISTRY}/${APP_NAME}:${CIRCLE_SHA1}"
+              docker push "${ECR_REGISTRY}/${APP_NAME}:${CIRCLE_SHA1}"
+              docker tag app "${ECR_REGISTRY}/${APP_NAME}:latest"
+              docker push "${ECR_REGISTRY}/${APP_NAME}:latest"
+            fi
   trigger-main-repo-update:
     docker:
       - image: curlimages/curl
@@ -47,6 +92,14 @@ workflows:
   main:
     jobs:
       - build-and-test
+      - build-and-upload-image:
+          requires:
+            - build-and-test
+          context:
+            - 'edagames-aws'
+            - 'edagames'
+          environment:
+            APP_NAME: edagames-django
       - trigger-main-repo-update:
           requires:
             - build-and-test
