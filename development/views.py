@@ -1,25 +1,25 @@
+from django.contrib import messages
+from django.views.decorators.http import require_http_methods
 from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.views.decorators.http import require_http_methods
-from development.forms import ChallengeForm
-from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.contrib import messages
-from .models import (
-    Match,
-    MatchMembers,
-)
-from .tables import (
-    BotTable,
-)
+from django.urls import reverse_lazy
+
 from auth_app.models import Bot
-from .forms import BotForm
-from .encode_jwt import encode_data
+from .common.match_utils import (
+    get_matches_of_connected_user,
+    get_matches_results,
+)
+from development.forms import ChallengeForm
 from development.server_requests import (
     get_logs,
     send_challenge,
 )
+from .encode_jwt import encode_data
+from .models import Match
+from .tables import BotTable
+from .forms import BotForm
 
 
 class ChallengeView(FormView):
@@ -61,9 +61,8 @@ class MatchListView(ListView):
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
-        bots = Bot.objects.filter(user=self.request.user).values_list('id', flat=True)
-        match_ids = MatchMembers.objects.filter(bot__in=bots).values_list('match_id', flat=True).distinct()
-        return Match.objects.filter(id__in=match_ids)
+        matches = get_matches_of_connected_user(self.request.user)
+        return get_matches_results(matches)
 
 
 class MatchDetailsView(DetailView):
