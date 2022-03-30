@@ -32,6 +32,8 @@ jobs:
   build-and-upload-image:
     docker:
       - image: docker:20.10.14-git
+    environment:
+      APP_NAME: edagames-django
     steps:
       - checkout
       - setup_remote_docker
@@ -98,8 +100,6 @@ workflows:
           context:
             - 'edagames-aws'
             - 'edagames'
-          environment:
-            APP_NAME: edagames-django
       - trigger-main-repo-update:
           requires:
             - build-and-test
