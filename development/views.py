@@ -11,6 +11,7 @@ from .common.match_utils import (
     get_matches_of_connected_user,
     get_matches_results,
 )
+from .common.challenge_utils import save_challenge
 from development.forms import ChallengeForm
 from development.server_requests import (
     get_logs,
@@ -48,13 +49,21 @@ class ChallengeView(FormView):
             tournament_id="",
         )
         if response.status_code == 200:
-            messages.add_message(
-                self.request,
-                messages.INFO,
-                'Challenge sent: '
-                f'{bot1} VS {bot2}',
-            )
+            save_challenge(
+                bot_challenger_name=bot1,
+                bots_challenged_names=[bot2],
+                tournament=None)
+            success_challenge_notification(self.request, bot1, bot2)
         return super().form_valid(form)
+
+
+def success_challenge_notification(request, bot1, bot2):
+    messages.add_message(
+        request,
+        messages.INFO,
+        'Challenge sent: '
+        f'{bot1} VS {bot2}',
+    )
 
 
 class MatchListView(ListView):
