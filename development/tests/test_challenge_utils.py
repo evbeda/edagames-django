@@ -10,8 +10,10 @@ from auth_app.models import (
     Bot,
     User,
 )
+from development.common.challenge_utils import save_challenge
 from development.models import Challenge
 from ..forms import ChallengeForm
+from tournaments.models import Tournament
 from ..views import ChallengeView
 
 
@@ -57,3 +59,20 @@ class TestChallangeUtils(TestCase):
         view.form_valid(form)
         challenge = Challenge.objects.all().first()
         self.assertIsNone(challenge.bot_challenger)
+
+    @patch('development.views.messages')
+    @patch('requests.post')
+    def test_tournament_matches_should_have_tournament_id(self, post_patched, messages_patched):
+        tournament = Tournament.objects.create(
+            name="Test Tournament",
+        )
+        save_challenge(
+            bot_challenger_name=self.bot1.name,
+            bots_challenged_names=[self.bot2.name],
+            tournament=tournament.name,
+        )
+        challenge = Challenge.objects.last()
+        self.assertEqual(
+            challenge.tournament.id,
+            tournament.id
+        )
