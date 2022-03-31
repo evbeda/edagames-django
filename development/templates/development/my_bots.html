@@ -20,7 +20,9 @@
               <td width="73%" class="text-break">{{ bot.token}}</td>
               <td>
                 <form action = "{% url 'development:delete_bot' pk=bot.id %}" method = "post">{% csrf_token %}
-                <input type="submit" class="btn btn-secondary" value="delete">
+                  {% if not forloop.first %}
+                  <input type="submit" class="btn btn-secondary" value="delete">
+                  {% endif %}
                 </form>
               </td>
             </tr>
