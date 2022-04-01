@@ -24,7 +24,8 @@ class Registration(FormView):
 
 
 class Profile(LoginRequiredMixin, DetailView):
-    queryset = User.objects.all()
+    def get_object(self):
+        return User.objects.get(id=self.request.user.id)
 
 
 class FAQ(LoginRequiredMixin, generic.TemplateView):
