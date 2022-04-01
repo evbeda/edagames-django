@@ -4,7 +4,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
 
-from .models import User
 from .forms import UserRegisterForm
 
 
@@ -25,7 +24,7 @@ class Registration(FormView):
 
 class Profile(LoginRequiredMixin, DetailView):
     def get_object(self):
-        return User.objects.get(id=self.request.user.id)
+        return self.request.user
 
 
 class FAQ(LoginRequiredMixin, generic.TemplateView):
