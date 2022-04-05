@@ -144,10 +144,25 @@ class AddBotView(FormView):
 
 @require_http_methods(["POST"])
 def delete_bot(request, pk):
-    Bot.objects.get(id=pk).delete()
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        'Bot successfully removed'
-    )
+    try:
+        bot = Bot.objects.get(id=pk)
+        if request.user.email != bot.name:
+            bot.delete()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Bot successfully removed'
+            )
+        else:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                'The official bot cannot be removed'
+            )
+    except Bot.DoesNotExist:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            'The bot does not exists'
+        )
     return redirect('development:mybots')
