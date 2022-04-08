@@ -1,25 +1,24 @@
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
 
 from auth_app.models import Bot
 from .common.match_utils import (
     get_matches_of_connected_user,
     get_matches_results,
 )
+from development.common.match_utils import get_all_logs_for_match
 from development.forms import ChallengeForm
-from development.server_requests import (
-    get_logs,
-    send_challenge,
-)
+from development.server_requests import send_challenge
 from .encode_jwt import encode_data
+from .forms import BotForm
 from .models import Match
 from .tables import BotTable
-from .forms import BotForm
 
 
 class ChallengeView(FormView):
@@ -67,6 +66,7 @@ class MatchListView(ListView):
 
 class MatchDetailsView(DetailView):
     template_name = 'development/match_details.html'
+    paginated_by = 2
 
     def __init__(self, *args, **kwargs):
         super(MatchDetailsView, self).__init__(*args, **kwargs)
@@ -78,18 +78,17 @@ class MatchDetailsView(DetailView):
         return Match.objects.filter(id=self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
-        response = get_logs(
-            game_id=self.object.game_id,
-            page_token=None,
-        )
         context = super(
             MatchDetailsView,
             self,
         ).get_context_data(**kwargs)
-        response = response.json()
-        context['data'] = response['details']
-        context['prev_page'] = self.prev_page
-        context['next_page'] = self.next_page
+        data_logs = get_all_logs_for_match(
+            game_id=self.object.game_id
+        )
+        paginator = Paginator(data_logs, 20)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
         return context
 
 

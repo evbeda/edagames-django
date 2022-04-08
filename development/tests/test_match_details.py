@@ -1,14 +1,19 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+import json
+from unittest.mock import MagicMock
+from unittest.mock import patch
+
+from auth_app.models import Bot
 from development.models import (
     Match,
     MatchMembers,
 )
 from development.views import MatchDetailsView
-from auth_app.models import Bot
-from unittest.mock import patch
-from unittest.mock import MagicMock
-import json
+
+from development.common.match_utils import (
+    get_page_logs_for_match,
+)
 
 
 class TestMatchDetailsView(TestCase):
@@ -98,4 +103,25 @@ class TestMatchDetailsView(TestCase):
         self.assertEquals(
             response.context_data['data'],
             'testing'
+        )
+
+
+class TestMatchUtils(TestCase):
+    @patch('development.server_requests.get_logs')
+    def test_should_return_first_log_page(self, mocked_get_logs):
+        mocked_get_logs.json.return_value = {
+            "details": ['log1', 'log2'],
+            "next": 'asdkj1i3182ue9wuq9ejqkw912831'
+        }
+        first_page_logs = get_page_logs_for_match(
+            game_id="klklewdhjasjd1238u1",
+            page_token=None
+        )
+
+        self.assertEqual(
+            first_page_logs,
+            {
+                "logs": ['log1', 'log2'],
+                "next_token": 'asdkj1i3182ue9wuq9ejqkw912831'
+            }
         )

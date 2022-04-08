@@ -40,6 +40,10 @@
     <div class="form-row">
         <span class="mx-auto">
             <a class="btn btn-primary" href="{% url 'development:match_details' pk=object.id %}?page={{prev_page}}" role="button"><<</a>
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
             <a class="btn btn-primary" href="{% url 'development:match_details' pk=object.id %}?page={{next_page}}" role="button">>></a>
         </span>
     </div>

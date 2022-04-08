@@ -3,6 +3,7 @@ from development.models import (
     Match,
     MatchMembers,
 )
+from development.server_requests import get_logs
 
 
 def get_matches_of_connected_user(user):
@@ -58,3 +59,26 @@ def get_match_players(match_id, match_members):
         for match_member in match_members
         if match_member.match.id == match_id
     ]
+
+
+def get_all_logs_for_match(game_id):
+    data_logs = []
+    page_logs = get_page_logs_for_match(game_id, page_token=None)
+    data_logs.append(page_logs["logs"])
+    page_token = page_logs["next_token"]
+    while page_token:
+        get_page_logs_for_match(game_id, page_token)
+    return data_logs
+
+
+def get_page_logs_for_match(game_id, page_token):
+    response = get_logs(
+        game_id=game_id,
+        page_token=page_token,
+    )
+    response_data = response.json()
+    page_token = response_data['next']
+    return {
+        "logs": response_data['details'],
+        "next_token": page_token
+    }
