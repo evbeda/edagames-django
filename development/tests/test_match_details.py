@@ -74,11 +74,6 @@ class TestMatchDetailsView(TestCase):
             'development/match_details.html',
         )
 
-    def test_shloud_instance_a_match_details_view_properly(self):
-        view = MatchDetailsView()
-        self.assertEqual(view.prev_page, 1)
-        self.assertEqual(view.next_page, 2)
-
     @patch('development.views.get_logs')
     def test_should_shows_matches_if_connected_user_has_matches_played(
         self,
@@ -92,8 +87,11 @@ class TestMatchDetailsView(TestCase):
         self,
         mocked_get_log,
     ):
-        mocked_response = MagicMock(json=lambda: json.loads('{"details": "testing"}'), spec=["json"])
-        mocked_get_log.return_value = mocked_response
+        mocked_get_log.return_value = {
+            "details": "testing",
+            "prev": None,
+            "next": "asdqweu12391823uiwjkdnsamd"
+        }
         response = self.client.get(f'/match_details/{self.user1.id}?page=1')
         self.assertEquals(
             response.context_data['data'],

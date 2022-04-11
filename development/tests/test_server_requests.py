@@ -38,11 +38,15 @@ class TestServerRequests(TestCase):
     def test_get_logs(self):
         game_id = 'test_game_id'
         page_token = None
-        mocked_response = MagicMock(json=lambda x: json.loads(x), spec=["json"])
+        mocked_response = json.dumps({
+            "details": "testing",
+            "prev": None,
+            "next": "asdqweu12391823uiwjkdnsamd"
+        })
         with patch(
             'requests.get',
-            return_value=mocked_response,
         ) as request_get_mocked:
+            request_get_mocked.json = mocked_response
             get_logs(
                 game_id,
                 page_token,

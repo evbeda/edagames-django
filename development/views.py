@@ -78,7 +78,6 @@ class MatchDetailsView(DetailView):
             MatchDetailsView,
             self,
         ).get_context_data(**kwargs)
-        response = response.json()
         context['data'] = response['details']
         context['prev_page'] = response['prev']
         context['next_page'] = response['next']
