@@ -3,7 +3,7 @@
 
 {% block page_content %}
 <div class="container">
-  <h1>My Matches</h1> 
+  <h1>My Matches</h1>
   <div class="pre-scrollable">
     <table class="table table-striped table-bordered table-sm">
       <thead>
@@ -24,7 +24,7 @@
             <td>{{ player.winner }}</td>
             {% if forloop.first %}
             <td>{{ match.match.date_match }}</td>
-            <td><a href="{% url 'development:match_details' pk=match.match.id %}?page=1">view</a></td>
+            <td><a href="{% url 'development:match_details' pk=match.match.id %}">view</a></td>
             {% endif %}
         </tr>
         {% endfor %}
