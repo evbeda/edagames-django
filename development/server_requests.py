@@ -30,4 +30,4 @@ def get_logs(
     return requests.get(
         f'{settings.SERVER_URL}:{settings.SERVER_PORT}/match_details',
         params=data,
-    )
+    ).json()
