@@ -67,20 +67,12 @@ class MatchListView(ListView):
 
 class MatchDetailsView(DetailView):
     template_name = 'development/match_details.html'
-
-    def __init__(self, *args, **kwargs):
-        super(MatchDetailsView, self).__init__(*args, **kwargs)
-        # TODO
-        self.prev_page = 1
-        self.next_page = 2
-
-    def get_queryset(self, *args, **kwargs):
-        return Match.objects.filter(id=self.kwargs.get('pk'))
+    model = Match
 
     def get_context_data(self, **kwargs):
         response = get_logs(
             game_id=self.object.game_id,
-            page_token=None,
+            page_token=self.request.GET.get('page'),
         )
         context = super(
             MatchDetailsView,
@@ -88,8 +80,8 @@ class MatchDetailsView(DetailView):
         ).get_context_data(**kwargs)
         response = response.json()
         context['data'] = response['details']
-        context['prev_page'] = self.prev_page
-        context['next_page'] = self.next_page
+        context['prev_page'] = response['prev']
+        context['next_page'] = response['next']
         return context
 
 
