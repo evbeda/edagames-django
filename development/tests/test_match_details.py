@@ -1,14 +1,13 @@
-from django.test import TestCase
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+
+from auth_app.models import Bot
 from development.models import (
     Match,
     MatchMembers,
 )
-from development.views import MatchDetailsView
-from auth_app.models import Bot
-from unittest.mock import patch
-from unittest.mock import MagicMock
-import json
 
 
 class TestMatchDetailsView(TestCase):
