@@ -98,3 +98,32 @@ class TestMatchUtils(TestCase):
         self.assertEqual(match_members[1].bot_id, 2)
         self.assertEqual(match_members[1].match_id, 1)
         self.assertEqual(match_members[1].match_result, 0)
+
+    def test_should_generate_match_members_tie_result(self):
+        user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
+        Bot.objects.create(name='bot_1', user=user1)
+        user2 = User.objects.create(email='test2@gmail.com', username='UsuarioTest2')
+        Bot.objects.create(name='bot_2', user=user2)
+        match_info = {
+            'game_id': '2222',
+            'tournament_id': '',
+            'data': [
+                ['bot_1', 555],
+                ['bot_2', 555],
+            ]
+        }
+        match_result = {
+            "winner": None,
+            "ties": ['bot_1', 'bot_2']
+        }
+        match = Match.objects.create(
+            game_id=match_info['game_id'],
+            tournament_id=match_info['tournament_id'],
+        )
+        match_members = generate_match_members(match, match_info["data"], match_result)
+        self.assertEqual(match_members[0].bot_id, 1)
+        self.assertEqual(match_members[0].match_id, 1)
+        self.assertEqual(match_members[0].match_result, 1)
+        self.assertEqual(match_members[1].bot_id, 2)
+        self.assertEqual(match_members[1].match_id, 1)
+        self.assertEqual(match_members[1].match_result, 1)
