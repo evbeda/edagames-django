@@ -117,7 +117,7 @@ def get_tournament_results(tournament_id: int) -> List[dict]:
             total_score = 0
             result_bot = bot_match_member.bot.name
         total_match += 1
-        if bot_match_member.winner:
+        if bot_match_member.match_result == 2:
             total_match_won += 1
         total_score += bot_match_member.score
     if result_bot is not None:

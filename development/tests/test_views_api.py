@@ -1,9 +1,10 @@
 import json
-from rest_framework.test import APIRequestFactory
-from django.test import TestCase
-from ..views_api import match_list
-from parameterized import parameterized
 from unittest.mock import patch
+
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory
+from parameterized import parameterized
+
 from auth_app.models import (
     Bot,
     User,
@@ -12,7 +13,8 @@ from development.models import (
     Match,
     MatchMembers,
 )
-from development.views_api import save_match
+from development.common.match_utils import save_match
+from development.views_api import match_list
 
 
 class Tests(TestCase):

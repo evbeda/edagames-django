@@ -141,15 +141,15 @@ class TestMethodsMatchHistory(TestCase):
                 {
                     'match': matches[0],
                     'players': [
-                        {'name': self.bot2.name, 'score': 2222, 'winner': True},
-                        {'name': self.bot1.name, 'score': 1111, 'winner': False},
+                        {'name': self.bot2.name, 'score': 2222, 'match_result': 2},
+                        {'name': self.bot1.name, 'score': 1111, 'match_result': 0},
                     ]
                 },
                 {
                     'match': matches[1],
                     'players': [
-                        {'name': self.bot3.name, 'score': 3333, 'winner': True},
-                        {'name': self.bot1.name, 'score': 1111, 'winner': False},
+                        {'name': self.bot3.name, 'score': 3333, 'match_result': 2},
+                        {'name': self.bot1.name, 'score': 1111, 'match_result': 0},
                     ]
                 },
             ],
