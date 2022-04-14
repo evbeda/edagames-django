@@ -13,26 +13,32 @@
             <th scope="col">Player</th>
             <th scope="col">Total Match</th>
             <th scope="col">Total Wins</th>
+            <th scope="col">Total Ties</th>
+            <th scope="col">Total Losses</th>
             <th scope="col">Total Score</th>
           </tr>
         </thead>
         <tbody>
         {% for match in object_list %}
-            {% if forloop.counter < 4 %}
+            {% if forloop.first %}
                 <tr class="bg-success text-white">
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ match.bot }}</td>
-                    <td>{{ match.total_match }}</td>
-                    <td>{{ match.total_match_won }}</td>
-                    <td>{{ match.total_score }}</td>
+                    <td>{{ match.0 }}</td>
+                    <td>{{ match.1 }}</td>
+                    <td>{{ match.2 }}</td>
+                    <td>{{ match.3 }}</td>
+                    <td>{{ match.4 }}</td>
+                    <td>{{ match.5 }}</td>
                 </tr>
             {% else %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ match.bot }}</td>
-                    <td>{{ match.total_match }}</td>
-                    <td>{{ match.total_match_won }}</td>
-                    <td>{{ match.total_score }}</td>
+                    <td>{{ match.0 }}</td>
+                    <td>{{ match.1 }}</td>
+                    <td>{{ match.2 }}</td>
+                    <td>{{ match.3 }}</td>
+                    <td>{{ match.4 }}</td>
+                    <td>{{ match.5 }}</td>
                 </tr>
             {% endif %}
         {% endfor %}

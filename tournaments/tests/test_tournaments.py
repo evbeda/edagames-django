@@ -1,27 +1,31 @@
-from ..models import (
-    TournamentRegistration,
-    Tournament,
+from unittest.mock import patch
+
+from django.http import HttpResponse
+from django.test import (
+    RequestFactory,
+    TestCase,
 )
-from ..views import (
-    CreateTournamentView,
-    get_tournament_results,
-    sort_position_table,
-    TournamentResultsView,
-    RegistrationTournamentView,
-)
-from ..forms import TournamentForm
+from parameterized import parameterized
+
 from auth_app.models import (
     Bot,
     User,
 )
 from development.views_api import save_match
-from django.test import (
-    RequestFactory,
-    TestCase,
+from tournaments.common.tournament_utils import (
+    get_tournament_results,
+    sort_position_table,
 )
-from django.http import HttpResponse
-from unittest.mock import patch
-from parameterized import parameterized
+from tournaments.forms import TournamentForm
+from tournaments.models import (
+    Tournament,
+    TournamentRegistration,
+)
+from tournaments.views import (
+    CreateTournamentView,
+    TournamentResultsView,
+    RegistrationTournamentView,
+)
 
 
 class TestTournamentReistration(TestCase):
@@ -141,29 +145,87 @@ class TestTournament(TestCase):
                 save_match(match_info)
         tournament_results = get_tournament_results(tournament.id)
         self.assertEqual(
-            tournament_results[0],
+            tournament_results[bot1.name],
             {
-                'bot': bot1.name,
                 'total_match': 20,
                 'total_match_won': 20,
+                'total_match_tied': 0,
+                'total_match_lost': 0,
                 'total_score': 11100,
             }
         )
         self.assertEqual(
-            tournament_results[1],
+            tournament_results[bot2.name],
             {
-                'bot': bot2.name,
                 'total_match': 20,
                 'total_match_won': 10,
+                'total_match_tied': 0,
+                'total_match_lost': 10,
                 'total_score': 7100,
             }
         )
         self.assertEqual(
-            tournament_results[2],
+            tournament_results[bot3.name],
             {
-                'bot': bot3.name,
                 'total_match': 20,
                 'total_match_won': 0,
+                'total_match_tied': 0,
+                'total_match_lost': 20,
+                'total_score': 2460,
+            }
+        )
+
+    def test_tournament_results_with_tie_values_view(self):
+        tournament = Tournament.objects.create(name='test')
+        user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
+        bot1 = Bot.objects.create(name='bot_1', user=user1)
+        user2 = User.objects.create(email='test2@gmail.com', username='UsuarioTest2')
+        bot2 = Bot.objects.create(name='bot_2', user=user2)
+        user3 = User.objects.create(email='test3@gmail.com', username='UsuarioTest3')
+        bot3 = Bot.objects.create(name='bot_3', user=user3)
+        from itertools import combinations
+        for bot_x, bot_y in combinations(
+            [(bot1.name, 555), (bot2.name, 555), (bot3.name, 123)],
+            2,
+        ):
+            match_info = {
+                'game_id': '2222',
+                'tournament_id': tournament.id,
+                'data': [
+                    [bot_x[0], bot_x[1]],
+                    [bot_y[0], bot_y[1]],
+                ]
+            }
+            for _ in range(10):
+                save_match(match_info)
+        tournament_results = get_tournament_results(tournament.id)
+        self.assertEqual(
+            tournament_results[bot1.name],
+            {
+                'total_match': 20,
+                'total_match_won': 10,
+                'total_match_tied': 10,
+                'total_match_lost': 0,
+                'total_score': 11100,
+            }
+        )
+        self.assertEqual(
+            tournament_results[bot2.name],
+            {
+                'total_match': 20,
+                'total_match_won': 10,
+                'total_match_tied': 10,
+                'total_match_lost': 0,
+                'total_score': 11100,
+            }
+        )
+        self.assertEqual(
+            tournament_results[bot3.name],
+            {
+                'total_match': 20,
+                'total_match_won': 0,
+                'total_match_tied': 0,
+                'total_match_lost': 20,
                 'total_score': 2460,
             }
         )
@@ -177,21 +239,116 @@ class TestTournament(TestCase):
         response = TournamentResultsView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
-    def test_sort_position_table_for_match_won_and_total_score(self):
-        table = [
-            {'bot': 'adminPro', 'total_match': 3, 'total_match_won': 0, 'total_score': -300},
-            {'bot': 'brz', 'total_match': 3, 'total_match_won': 1, 'total_score': -300},
-            {'bot': 'brzPro', 'total_match': 3, 'total_match_won': 2, 'total_score': -260},
-            {'bot': 'admin', 'total_match': 3, 'total_match_won': 3, 'total_score': -300},
-            {'bot': 'toxic', 'total_match': 3, 'total_match_won': 3, 'total_score': 400},
+    def test_simple_tournament_results_1v1(self):
+        tournament = Tournament.objects.create(name='test')
+        user1 = User.objects.create(email='test1@gmail.com', username='UsuarioTest1')
+        bot1 = Bot.objects.create(name='bot_1', user=user1)
+        user2 = User.objects.create(email='test2@gmail.com', username='UsuarioTest2')
+        bot2 = Bot.objects.create(name='bot_2', user=user2)
+        results = [
+            [bot1.name, 1000, bot2.name, 200],
+            [bot1.name, 1000, bot2.name, 100],
+            [bot1.name, 300, bot2.name, 500],
+            [bot1.name, 150, bot2.name, 150],
+            [bot1.name, 100, bot2.name, 100],
+            [bot1.name, 50, bot2.name, 5000],
         ]
+        for bot_x_name, bot_x_score, bot_y_name, bot_y_score in results:
+            match_info = {
+                'game_id': '2222',
+                'tournament_id': tournament.id,
+                'data': [
+                    [bot_x_name, bot_x_score],
+                    [bot_y_name, bot_y_score],
+                ]
+            }
+            save_match(match_info)
+        tournament_results = get_tournament_results(tournament.id)
         self.assertEqual(
-            sort_position_table(table),
+            tournament_results[bot1.name],
+            {
+                'total_match': 6,
+                'total_match_won': 2,
+                'total_match_tied': 2,
+                'total_match_lost': 2,
+                'total_score': 2600,
+            }
+        )
+        self.assertEqual(
+            tournament_results[bot2.name],
+            {
+                'total_match': 6,
+                'total_match_won': 2,
+                'total_match_tied': 2,
+                'total_match_lost': 2,
+                'total_score': 6050,
+            }
+        )
+
+    def test_sort_table_position_for_tournaments_results(self):
+        table = {
+            'tigresa': {
+                'total_match': 2,
+                'total_match_won': 0,
+                'total_match_tied': 0,
+                'total_match_lost': 2,
+                'total_score': 50
+            },
+            'awd': {
+                'total_match': 2,
+                'total_match_won': 2,
+                'total_match_tied': 0,
+                'total_match_lost': 0,
+                'total_score': 1500
+            },
+            'botocito': {
+                'total_match': 2,
+                'total_match_won': 1,
+                'total_match_tied': 0,
+                'total_match_lost': 1,
+                'total_score': 200
+            },
+        }
+        table_results = sort_position_table(table)
+        self.assertEqual(
+            table_results,
             [
-                {'bot': 'toxic', 'total_match': 3, 'total_match_won': 3, 'total_score': 400},
-                {'bot': 'admin', 'total_match': 3, 'total_match_won': 3, 'total_score': -300},
-                {'bot': 'brzPro', 'total_match': 3, 'total_match_won': 2, 'total_score': -260},
-                {'bot': 'brz', 'total_match': 3, 'total_match_won': 1, 'total_score': -300},
-                {'bot': 'adminPro', 'total_match': 3, 'total_match_won': 0, 'total_score': -300},
+                ('awd', 2, 2, 0, 0, 1500),
+                ('botocito', 2, 1, 0, 1, 200),
+                ('tigresa', 2, 0, 0, 2, 50)
+            ]
+        )
+
+    def test_sort_table_position_for_tournaments_results_winner_highest_score(self):
+        table = {
+            'tigresa': {
+                'total_match': 2,
+                'total_match_won': 0,
+                'total_match_tied': 0,
+                'total_match_lost': 2,
+                'total_score': 50
+            },
+            'awd': {
+                'total_match': 2,
+                'total_match_won': 1,
+                'total_match_tied': 1,
+                'total_match_lost': 0,
+                'total_score': 1450
+            },
+            'botocito': {
+                'total_match': 2,
+                'total_match_won': 1,
+                'total_match_tied': 1,
+                'total_match_lost': 0,
+                'total_score': 1500
+            },
+        }
+        table_results = sort_position_table(table)
+        self.assertEqual(
+            table_results,
+            [
+                ('botocito', 2, 1, 1, 0, 1500),
+                ('awd', 2, 1, 1, 0, 1450),
+                ('tigresa', 2, 0, 0, 2, 50)
             ]
         )

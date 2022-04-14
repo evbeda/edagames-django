@@ -1,18 +1,23 @@
-from .models import Tournament
-from .server_requests import generate_combination
-from .forms import TournamentForm
-from django.views.generic.edit import FormView
-from django.views.generic import TemplateView
-from django.urls import reverse_lazy
-from django.contrib import messages
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin,
 )
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-from development.models import MatchMembers
-from typing import List
-from .models import TournamentRegistration
+
+from tournaments.common.tournament_utils import (
+    get_tournament_results,
+    sort_position_table,
+)
+from tournaments.forms import TournamentForm
+from tournaments.models import (
+    Tournament,
+    TournamentRegistration,
+)
+from tournaments.server_requests import generate_combination
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -107,63 +112,6 @@ class TournamentListView(ListView):
 
     def get_queryset(self):
         return Tournament.objects.all().order_by("-date_tournament")
-
-
-def get_tournament_results(tournament_id: int) -> List[dict]:
-    """
-    This method receives a tournament id and returns a list of dictionaries for each bot
-    that has participated in the tournament.
-    {
-        'bot': the bot name,
-        'total_match': the number of matches played:
-        'total_match_won': the number of matches won:
-        ''total_score'': the sum of scores made in all matches:
-    }
-    """
-    results = []
-    tournament_match_members = MatchMembers.objects.filter(
-        match__tournament=tournament_id,
-    ).order_by('bot')
-    result_bot = None
-    total_match = 0
-    total_match_won = 0
-    total_score = 0
-    for bot_match_member in tournament_match_members:
-        if result_bot != bot_match_member.bot.name:
-            if result_bot is not None:
-                results.append({
-                    'bot': result_bot,
-                    'total_match': total_match,
-                    'total_match_won': total_match_won,
-                    'total_score': total_score,
-                })
-            total_match = 0
-            total_match_won = 0
-            total_score = 0
-            result_bot = bot_match_member.bot.name
-        total_match += 1
-        if bot_match_member.match_result == 2:
-            total_match_won += 1
-        total_score += bot_match_member.score
-    if result_bot is not None:
-        results.append({
-            'bot': result_bot,
-            'total_match': total_match,
-            'total_match_won': total_match_won,
-            'total_score': total_score,
-        })
-    return results
-
-
-def sort_position_table(table):
-    table.sort(
-        key=lambda x: (
-            x['total_match_won'],
-            x['total_score'],
-        ),
-        reverse=True,
-    )
-    return table
 
 
 class TournamentResultsView(ListView):
