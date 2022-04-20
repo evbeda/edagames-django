@@ -1,9 +1,13 @@
-from ..models import Tournament
+from ..models import (
+    TournamentRegistration,
+    Tournament,
+)
 from ..views import (
     CreateTournamentView,
     get_tournament_results,
     sort_position_table,
     TournamentResultsView,
+    RegistrationTournamentView,
 )
 from ..forms import TournamentForm
 from auth_app.models import (
@@ -18,6 +22,34 @@ from django.test import (
 from django.http import HttpResponse
 from unittest.mock import patch
 from parameterized import parameterized
+
+
+class TestTournamentReistration(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(username='username1', password='password1', email='email1')
+        self.tournament_registration = RegistrationTournamentView()
+
+    def test_registration_get(self):
+        request = self.factory.get('tournaments:tournament_registration')
+        request.user = self.user
+        response = RegistrationTournamentView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_registration_post(self):
+        request = self.factory.post('tournaments:tournament_registration')
+        request.user = self.user
+        response = RegistrationTournamentView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(TournamentRegistration.objects.filter(user=self.user).exists())
+
+    def test_unregistration_post(self):
+        TournamentRegistration.objects.create(user=self.user)
+        request = self.factory.post('tournaments:tournament_registration')
+        request.user = self.user
+        response = RegistrationTournamentView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(TournamentRegistration.objects.filter(user=self.user).exists())
 
 
 class TestTournament(TestCase):
