@@ -1,11 +1,11 @@
-from unittest.mock import patch
 from parameterized import parameterized
+from unittest.mock import patch
 
-from django.http import HttpResponse
 from django.test import (
     RequestFactory,
     TestCase,
 )
+from django.http import HttpResponse
 
 from auth_app.models import (
     Bot,
@@ -379,7 +379,10 @@ class TestTournamentGenerator(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             str([m for m in response.wsgi_request._messages][0]),
-            'It is not possible to create this record, a tournament already exists with the name Already Exists. Try a new name',
+            (
+                'It is not possible to create this record, a tournament'
+                'already exists with the name Already Exists. Try a new name'
+            ),
         )
 
     def test_generate_tournament_successfully(self):
@@ -389,6 +392,6 @@ class TestTournamentGenerator(TestCase):
             {
                 "tournament_name": tournament_name,
                 "max_players": 12
-            }, 
+            },
         )
         self.assertEqual(response.status_code, 302)
