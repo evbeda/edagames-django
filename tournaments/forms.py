@@ -10,3 +10,8 @@ class TournamentForm(forms.Form):
     def setup_bots_choices(self):
         bots = Bot.objects.all()
         self.fields['bots'].choices = enumerate([bot.name for bot in bots])
+
+
+class TournamentGeneratorForm(forms.Form):
+    tournament_name = forms.CharField(label='name', required=True)
+    max_players = forms.IntegerField(label='maxPlayers', required=True)

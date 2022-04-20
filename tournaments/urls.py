@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     CreateTournamentView,
     RegistrationTournamentView,
+    TournamentGeneratorView,
     TournamentResultsView,
     TournamentListView,
 )
@@ -13,6 +14,11 @@ urlpatterns = [
         'create_tournament/',
         CreateTournamentView.as_view(),
         name='create_tournament',
+    ),
+    path(
+        'tournament_generator/',
+        TournamentGeneratorView.as_view(),
+        name='tournament_generator',
     ),
     path(
         'tournaments_history/',
