@@ -352,3 +352,45 @@ class TestTournament(TestCase):
                 ('tigresa', 2, 0, 0, 2, 50)
             ]
         )
+
+
+class TestTournamentGenerator(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_superuser(username='username1', password='password1', email='email1')
+        self.user.is_staff = True
+        self.client.force_login(self.user)
+
+    def test_generate_tournament_get(self):
+        response = self.client.post('/tournament_generator')
+        self.assertEqual(response.status_code, 301)
+
+    def test_generate_tournament_already_exists(self):
+        tournament_name = "Already Exists"
+        Tournament.objects.create(name=tournament_name)
+        request = self.factory.post(
+            '/create_tournament',
+            {
+                "name": tournament_name,
+                "max_players": 12
+            }
+        )
+        request.user = self.user
+        response = TournamentGeneratorView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context_data['form'].is_valid())
+
+    def test_generate_tournament_successfully(self):
+        tournament_name = "New Tournament"
+        request = self.factory.post(
+            '/create_tournament',
+            {
+                "name": tournament_name,
+                "max_players": 12
+            }
+        )
+        request.user = self.user
+        response = TournamentGeneratorView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data['form'].is_valid())
