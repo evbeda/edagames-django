@@ -69,7 +69,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         data = []
         data = self.validation_data(form)
         if not Tournament.objects.filter(name=data[0]).exists():
-            Tournament.objects.create(name=data[0])
+            Tournament.objects.create(name=data[0], status=Tournament.TOURNAMENT_ACTIVE_STATUS)
             response = generate_combination(data[0], data[1])
 
             if response.status_code == 200:
@@ -90,8 +90,6 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
                     'Please verify everything is working '
                     'and try again. '.format(data[0])
                 )
-                self.success_url
-
         else:
             messages.add_message(
                 self.request,
@@ -134,7 +132,14 @@ class TournamentListView(ListView):
     template_name = 'tournaments/tournaments_history.html'
 
     def get_queryset(self):
-        return Tournament.objects.all().order_by("-date_tournament")
+        return Tournament.objects.exclude(status=Tournament.TOURNAMENT_PENDING_STATUS).order_by("-date_tournament")
+
+
+class PendingTournamentListView(LoginRequiredMixin, ListView):
+    template_name = 'tournaments/tournaments_pending.html'
+
+    def get_queryset(self):
+        return Tournament.objects.filter(status=Tournament.TOURNAMENT_PENDING_STATUS).order_by("-date_tournament")
 
 
 class TournamentResultsView(ListView):

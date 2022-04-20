@@ -73,6 +73,7 @@
                         {% if user.is_staff %}
                         <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tournament</a>
                         <a class="collapse-item" href="{% url 'tournaments:tournament_generator' %}">Generate Tournament</a>
+                        <a class="collapse-item" href="{% url 'tournaments:tournaments_pending' %}">Pending Tournaments</a>
                         {% endif %}
                         <a class="collapse-item" href="{% url 'tournaments:tournaments_history' %}">Tournaments History</a>
                     </div>
@@ -98,7 +99,7 @@
 
             <!-- Main Content -->
             <div id="content">
-                
+
                 <!-- Topbar -->
                 {% block top_bar %}
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -166,7 +167,7 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    
+
     {% block logout_modal %}
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -190,7 +191,7 @@
     {% endblock logout_modal %}
 
 
-    
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
