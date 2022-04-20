@@ -1,11 +1,11 @@
 from unittest.mock import patch
+from parameterized import parameterized
 
 from django.http import HttpResponse
 from django.test import (
     RequestFactory,
     TestCase,
 )
-from parameterized import parameterized
 
 from auth_app.models import (
     Bot,
