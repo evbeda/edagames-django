@@ -369,28 +369,26 @@ class TestTournamentGenerator(TestCase):
     def test_generate_tournament_already_exists(self):
         tournament_name = "Already Exists"
         Tournament.objects.create(name=tournament_name)
-        request = self.factory.post(
-            '/create_tournament',
+        response = self.client.post(
+            '/tournament_generator/',
             {
-                "name": tournament_name,
+                "tournament_name": tournament_name,
                 "max_players": 12
             }
         )
-        request.user = self.user
-        response = TournamentGeneratorView.as_view()(request)
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.context_data['form'].is_valid())
+        self.assertEqual(
+            str([m for m in response.wsgi_request._messages][0]),
+            'It is not possible to create this record, a tournament already exists with the name Already Exists. Try a new name',
+        )
 
     def test_generate_tournament_successfully(self):
         tournament_name = "New Tournament"
-        request = self.factory.post(
-            '/create_tournament',
+        response = self.client.post(
+            '/tournament_generator/',
             {
-                "name": tournament_name,
+                "tournament_name": tournament_name,
                 "max_players": 12
-            }
+            }, 
         )
-        request.user = self.user
-        response = TournamentGeneratorView.as_view()(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context_data['form'].is_valid())
+        self.assertEqual(response.status_code, 302)
