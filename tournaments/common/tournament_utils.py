@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List
 
 from django.db.models import (
@@ -36,23 +37,24 @@ def get_tournament_results(tournament_id: int) -> List[dict]:
 def calculate_match_results_by_player():
     match_members_results = MatchMembers.objects.values_list(
         "bot__name",
-        "match_result").filter(match__tournament=2).annotate(Count("bot_id"))
-    results = {}
+        "match_result",
+    ).filter(match__tournament=2).annotate(Count("bot_id"))
+
+    results = defaultdict(lambda: {
+        "total_match": 0,
+        "total_match_won": 0,
+        "total_match_tied": 0,
+        "total_match_lost": 0,
+        "total_score": 0,
+    })
     for bot_name, match_result, quantity in match_members_results:
-        if not results.get(bot_name):
-            results[bot_name] = {
-                "total_match": 0,
-                "total_match_won": 0,
-                "total_match_tied": 0,
-                "total_match_lost": 0,
-                "total_score": 0,
-            }
         if match_result == WIN:
-            results[bot_name]["total_match_won"] = quantity
+            total_key = "total_match_won"
         elif match_result == TIE:
-            results[bot_name]["total_match_tied"] = quantity
+            total_key = "total_match_tied"
         elif match_result == LOSS:
-            results[bot_name]["total_match_lost"] = quantity
+            total_key = "total_match_lost"
+        results[bot_name][total_key] = quantity
     return results
 
 
