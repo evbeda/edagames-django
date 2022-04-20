@@ -1,5 +1,5 @@
-from django.db import models
 from auth_app.models import User
+from django.db import models
 
 
 class Tournament(models.Model):
