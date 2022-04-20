@@ -12,12 +12,15 @@ from tournaments.common.tournament_utils import (
     get_tournament_results,
     sort_position_table,
 )
-from tournaments.forms import TournamentForm
 from tournaments.models import (
     Tournament,
     TournamentRegistration,
 )
 from tournaments.server_requests import generate_combination
+from tournaments.forms import (
+    TournamentForm,
+    TournamentGeneratorForm,
+)
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -105,6 +108,26 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         data.append(form.cleaned_data['bots_selected'])
         data.append(form.cleaned_data['bots'])
         return(data)
+
+
+class TournamentGeneratorView(StaffRequiredMixin, FormView):
+    form_class = TournamentGeneratorForm
+    success_url = reverse_lazy('tournaments:tournaments_history')
+    template_name = 'tournaments/tournament_generator.html'
+
+    def form_valid(self, form):
+        tournament_name = form.cleaned_data['tournament_name']
+        if not Tournament.objects.filter(name=tournament_name).exists():
+            Tournament.objects.create(name=tournament_name)
+        else:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'It is not possible to create this record, a tournament already exists with the name '
+                '{}. Try a new name'.format(tournament_name)
+            )
+            return super().form_invalid(form)
+        return super().form_valid(form)
 
 
 class TournamentListView(ListView):
