@@ -2,6 +2,7 @@ from .models import Tournament
 from .server_requests import generate_combination
 from .forms import TournamentForm
 from django.views.generic.edit import FormView
+from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import (
@@ -11,12 +12,36 @@ from django.contrib.auth.mixins import (
 from django.views.generic.list import ListView
 from development.models import MatchMembers
 from typing import List
+from .models import TournamentRegistration
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff
+
+
+class RegistrationTournamentView(LoginRequiredMixin, TemplateView):
+    template_name = 'tournaments/tournament_registration.html'
+
+    def registration_exists(self):
+        return TournamentRegistration.objects.filter(
+            user=self.request.user,
+        ).exists()
+
+    def post(self, request, *args, **kwargs):
+        if self.registration_exists():
+            TournamentRegistration.objects.get(user=self.request.user).delete()
+        else:
+            TournamentRegistration.objects.create(user=self.request.user)
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self):
+        already_registered = self.registration_exists()
+        context = {
+            'already_registered': already_registered,
+        }
+        return context
 
 
 class CreateTournamentView(StaffRequiredMixin, FormView):

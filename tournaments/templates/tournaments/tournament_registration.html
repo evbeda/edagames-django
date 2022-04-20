@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block page_content %}
+
+<div class="container">
+    <h2>Tournaments Registration</h2>
+    <form method="POST" class="post-form">
+    	{% csrf_token %}
+        {% if already_registered %}
+        <input class="btn btn-danger" type="submit" value="Unregister me on future tournaments">
+        {% else %}
+        <input class="btn btn-primary" type="submit" value="Register me on future tournaments">
+        {% endif %}
+    </form>
+</div>
+{% endblock page_content %}
