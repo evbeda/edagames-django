@@ -381,7 +381,7 @@ class TestTournamentGenerator(TestCase):
             str([m for m in response.wsgi_request._messages][0]),
             (
                 'It is not possible to create this record, a tournament'
-                'already exists with the name Already Exists. Try a new name'
+                ' already exists with the name Already Exists. Try a new name'
             ),
         )
 
