@@ -119,7 +119,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
 
 class TournamentGeneratorView(StaffRequiredMixin, FormView):
     form_class = TournamentGeneratorForm
-    success_url = reverse_lazy('tournaments:tournaments_history')
+    success_url = reverse_lazy('tournaments:tournaments_pending')
     template_name = 'tournaments/tournament_generator.html'
 
     def create_tournaments(self, tournament_name, max_players):
