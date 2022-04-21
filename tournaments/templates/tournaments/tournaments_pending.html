@@ -3,7 +3,7 @@
 
 {% block page_content %}
 <div class="container">
-  <h1>Pending Tournaments</h1> 
+  <h1>Pending Tournaments</h1>
   <div class="pre-scrollable">
     <table class="table table-striped table-bordered table-sm">
       <thead>
@@ -20,13 +20,18 @@
           <td>{{ tournament.id }}</td>
           <td>{{ tournament.name }}</td>
           <td>{{ tournament.date_tournament }}</td>
-          <td><a href="{% url 'tournaments:tournament_results' pk=tournament.id %}">view</a></td>
+          <td>
+          <form method="POST" action="./?tournament={{tournament.id}}" class="post-form">
+            {% csrf_token %}
+            <input class="btn btn-primary" type="submit" value="Start">
+          </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-</div>       
+</div>
 
 
 <hr>
