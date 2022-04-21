@@ -8,7 +8,7 @@
     <form method="POST" class="post-form">{% csrf_token %}
         {% bootstrap_form form %}
     <div class="form-group col-md-4">
-    	<p>Registered users</p>
+    	<p>Registered users ({{registrations_count}})</p>
         <ul class="list-group">
 			{% for registration in registrations %}
             <li class="list-group-item">{{registration.user.email}}</li>
