@@ -158,7 +158,9 @@ class TournamentGeneratorView(StaffRequiredMixin, FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['registrations'] = TournamentRegistration.objects.all()
+        registrations = TournamentRegistration.objects.all()
+        context['registrations'] = registrations
+        context['registrations_count'] = len(registrations)
         return context
 
 
