@@ -1,3 +1,6 @@
+from itertools import combinations
+from random import shuffle
+
 from django.contrib import messages
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -8,6 +11,8 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
+from auth_app.models import Bot
+from development.models import Challenge
 from tournaments.common.tournament_utils import (
     get_tournament_results,
     sort_position_table,
@@ -113,10 +118,34 @@ class TournamentGeneratorView(StaffRequiredMixin, FormView):
     success_url = reverse_lazy('tournaments:tournaments_history')
     template_name = 'tournaments/tournament_generator.html'
 
+    def create_tournaments(self, tournament_name, max_players):
+        tournament_registrations_qs = TournamentRegistration.objects.all()
+        tournament_registrations = list(tournament_registrations_qs)
+        shuffle(tournament_registrations)
+        tournament_count = len(tournament_registrations) // max_players
+        if len(tournament_registrations) % max_players > 0:
+            tournament_count += 1
+        for tournament_index in range(0, tournament_count):
+            tournament = Tournament.objects.create(name='{} #{}'.format(tournament_name, tournament_index + 1))
+            registration_index = tournament_index * max_players
+            bots = [
+                Bot.objects.get(user=tournament_registration.user, name=tournament_registration.user.email)
+                for tournament_registration
+                in tournament_registrations[registration_index: registration_index + max_players]
+            ]
+            challenges = combinations(bots, 2)
+            for bot_challenger, bots_challenged in challenges:
+                challenge = Challenge.objects.create(
+                    bot_challenger=bot_challenger,
+                    tournament=tournament,
+                )
+                challenge.bots_challenged.add(bots_challenged)
+
     def form_valid(self, form):
         tournament_name = form.cleaned_data['tournament_name']
         if not Tournament.objects.filter(name=tournament_name).exists():
-            Tournament.objects.create(name=tournament_name)
+            max_players = form.cleaned_data['max_players']
+            self.create_tournaments(tournament_name, max_players)
         else:
             messages.add_message(
                 self.request,
@@ -126,6 +155,11 @@ class TournamentGeneratorView(StaffRequiredMixin, FormView):
             )
             return super().form_invalid(form)
         return super().form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['registrations'] = TournamentRegistration.objects.all()
+        return context
 
 
 class TournamentListView(ListView):

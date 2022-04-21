@@ -1,3 +1,5 @@
+from itertools import combinations
+
 from parameterized import parameterized
 from unittest.mock import patch
 
@@ -12,6 +14,7 @@ from auth_app.models import (
     User,
 )
 from development.views_api import save_match
+from development.models import Challenge
 from tournaments.common.tournament_utils import (
     get_tournament_results,
     sort_position_table,
@@ -361,6 +364,19 @@ class TestTournamentGenerator(TestCase):
         self.user = User.objects.create_superuser(username='username1', password='password1', email='email1')
         self.user.is_staff = True
         self.client.force_login(self.user)
+        # clean all registration before create set for test
+        TournamentRegistration.objects.all().delete()
+        for index in range(20):
+            registered_user = User.objects.create_user(
+                username='username#{}'.format(index),
+                password='password1',
+                email='email{}@gmail.com'.format(index),
+            )
+            Bot.objects.create(
+                name=registered_user.email,
+                user=registered_user,
+            )
+            TournamentRegistration.objects.create(user=registered_user)
 
     def test_generate_tournament_get(self):
         response = self.client.post('/tournament_generator')
@@ -395,3 +411,34 @@ class TestTournamentGenerator(TestCase):
             },
         )
         self.assertEqual(response.status_code, 302)
+        tournament_1 = Tournament.objects.get(name__contains='New Tournament #1')
+        tournament_2 = Tournament.objects.get(name__contains='New Tournament #2')
+        self.assertEqual(
+            Challenge.objects.filter(tournament=tournament_1).count(),
+            len(list(combinations(list(range(12)), 2))),
+        )
+        self.assertEqual(
+            Challenge.objects.filter(tournament=tournament_2).count(),
+            len(list(combinations(list(range(8)), 2))),
+        )
+
+    def test_generate_tournament_successfully_exact(self):
+        tournament_name = "New Tournament"
+        response = self.client.post(
+            '/tournament_generator/',
+            {
+                "tournament_name": tournament_name,
+                "max_players": 10
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        tournament_1 = Tournament.objects.get(name__contains='New Tournament #1')
+        tournament_2 = Tournament.objects.get(name__contains='New Tournament #2')
+        self.assertEqual(
+            Challenge.objects.filter(tournament=tournament_1).count(),
+            len(list(combinations(list(range(10)), 2))),
+        )
+        self.assertEqual(
+            Challenge.objects.filter(tournament=tournament_2).count(),
+            len(list(combinations(list(range(10)), 2))),
+        )
