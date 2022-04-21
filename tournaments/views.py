@@ -47,6 +47,9 @@ class RegistrationTournamentView(LoginRequiredMixin, TemplateView):
             TournamentRegistration.objects.get(user=self.request.user).delete()
         else:
             TournamentRegistration.objects.create(user=self.request.user)
+            if not Bot.objects.filter(user=self.request.user, name=self.request.user.email).exists():
+                Bot.objects.create(user=self.request.user, name=self.request.user.email)
+
         return self.get(request, *args, **kwargs)
 
     def get_context_data(self):
