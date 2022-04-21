@@ -74,21 +74,22 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         return form
 
     def form_valid(self, form):
-        data = []
         data = self.validation_data(form)
-        if not Tournament.objects.filter(name=data[0]).exists():
-            Tournament.objects.create(name=data[0], status=Tournament.TOURNAMENT_ACTIVE_STATUS)
-            response = generate_combination(data[0], data[1])
+        tournament_name = form.cleaned_data['tournament']
+        bots_selected = form.cleaned_data['bots_selected'].split(sep=',')
+        if not Tournament.objects.filter(name=tournament_name).exists():
+            tournament = Tournament.objects.create(name=tournament_name, status=Tournament.TOURNAMENT_ACTIVE_STATUS)
+            response = generate_combination(tournament.id, bots_selected)
 
             if response.status_code == 200:
                 messages.add_message(
                     self.request,
                     messages.SUCCESS,
                     'Tournament '
-                    '{} successfully added'.format(data[0])
+                    '{} successfully added'.format(tournament_name)
                 )
             else:
-                Tournament.objects.filter(name=data[0]).delete()
+                Tournament.objects.filter(name=tournament_name).delete()
                 messages.add_message(
                     self.request,
                     messages.ERROR,
@@ -96,14 +97,14 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
                     'Server is not receiving tournaments, '
                     'or maybe can not create them at this moment. '
                     'Please verify everything is working '
-                    'and try again. '.format(data[0])
+                    'and try again. '.format(tournament_name)
                 )
         else:
             messages.add_message(
                 self.request,
                 messages.ERROR,
                 'It is not possible to create this record, a tournament already exists with the name '
-                '{}. Try a new name'.format(data[0])
+                '{}. Try a new name'.format(tournament_name)
             )
             self.success_url
         return super().form_valid(form)
@@ -179,6 +180,21 @@ class PendingTournamentListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Tournament.objects.filter(status=Tournament.TOURNAMENT_PENDING_STATUS).order_by("-date_tournament")
+
+    def post(self, *args, **kwargs):
+        if 'tournament' in self.request.GET:
+            tournament_id = int(self.request.GET['tournament'])
+            tournament = Tournament.objects.get(pk=tournament_id)
+            challenges = Challenge.objects.filter(tournament_id=tournament_id)
+            for challenge in challenges:
+                bots_selected = [challenge.bot_challenger.name]
+                for bots_challenge in challenge.bots_challenged.all():
+                    bots_selected.append(bots_challenge.name)
+                generate_combination(tournament_id, bots_selected)
+            tournament.status = Tournament.TOURNAMENT_ACTIVE_STATUS
+            tournament.save()
+
+        return self.get(*args, **kwargs)
 
 
 class TournamentResultsView(ListView):
