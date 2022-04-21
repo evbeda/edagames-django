@@ -49,6 +49,7 @@ class TestTournamentReistration(TestCase):
         response = RegistrationTournamentView.as_view()(request)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(TournamentRegistration.objects.filter(user=self.user).exists())
+        self.assertTrue(Bot.objects.filter(user=self.user, name=self.user.email).exists())
 
     def test_unregistration_post(self):
         TournamentRegistration.objects.create(user=self.user)

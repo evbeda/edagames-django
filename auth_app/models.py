@@ -1,9 +1,12 @@
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
-    PermissionsMixin)
+    PermissionsMixin,
+)
 from django.db import models
 from django.utils import timezone
+
+from development.encode_jwt import encode_data
 
 
 class UserManager(BaseUserManager):
@@ -37,6 +40,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         return "@{}".format(self.username)
 
 
+class BotManager(models.Manager):
+    def create(self, *args, **kwargs):
+        if 'name' in kwargs:
+            kwargs['token'] = encode_data(
+                key='user',
+                value=kwargs['name'],
+            )
+        return super().create(*args, **kwargs)
+
+
 class Bot(models.Model):
     name = models.CharField(max_length=30)
     token = models.CharField(max_length=200, default='')
@@ -45,3 +58,4 @@ class Bot(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+    objects = BotManager()
