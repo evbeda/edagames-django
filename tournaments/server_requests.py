@@ -1,4 +1,3 @@
-from .models import Tournament
 from edagames import settings
 import requests
 from typing import List

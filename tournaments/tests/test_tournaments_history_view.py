@@ -108,15 +108,24 @@ class TestPendingTournamentsView(TestCase):
             )
             self.assertEqual(
                 server_request_get_mocked.call_args_list[0][1]['json'],
-                {'tournament_id': str(pending_tournament.id), 'challenges': [('email0@gmail2.com', 'email1@gmail2.com')]}
+                {
+                    'tournament_id': str(pending_tournament.id),
+                    'challenges': [('email0@gmail2.com', 'email1@gmail2.com')]
+                }
             )
             self.assertEqual(
                 server_request_get_mocked.call_args_list[1][1]['json'],
-                {'tournament_id': str(pending_tournament.id), 'challenges': [('email0@gmail2.com', 'email2@gmail2.com')]}
+                {
+                    'tournament_id': str(pending_tournament.id),
+                    'challenges': [('email0@gmail2.com', 'email2@gmail2.com')]
+                }
             )
             self.assertEqual(
                 server_request_get_mocked.call_args_list[2][1]['json'],
-                {'tournament_id': str(pending_tournament.id), 'challenges': [('email1@gmail2.com', 'email2@gmail2.com')]}
+                {
+                    'tournament_id': str(pending_tournament.id),
+                    'challenges': [('email1@gmail2.com', 'email2@gmail2.com')]
+                }
             )
         self.assertEqual(
             response.status_code,

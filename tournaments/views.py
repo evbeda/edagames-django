@@ -74,7 +74,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         return form
 
     def form_valid(self, form):
-        data = self.validation_data(form)
+        self.validation_data(form)  # TODO
         tournament_name = form.cleaned_data['tournament']
         bots_selected = form.cleaned_data['bots_selected'].split(sep=',')
         if not Tournament.objects.filter(name=tournament_name).exists():
