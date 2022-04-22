@@ -93,38 +93,15 @@ class TestPendingTournamentsView(TestCase):
             'requests.post',
         ) as server_request_get_mocked:
             response = self.client.post('/tournaments_pending/?tournament={}'.format(pending_tournament.id))
-            self.assertEqual(server_request_get_mocked.call_count, 3)
-            self.assertEqual(
-                server_request_get_mocked.call_args_list[0][0][0],
-                f'{SERVER_URL}:{SERVER_PORT}/tournament'
-            )
-            self.assertEqual(
-                server_request_get_mocked.call_args_list[1][0][0],
-                f'{SERVER_URL}:{SERVER_PORT}/tournament'
-            )
-            self.assertEqual(
-                server_request_get_mocked.call_args_list[2][0][0],
-                f'{SERVER_URL}:{SERVER_PORT}/tournament'
-            )
-            self.assertEqual(
-                server_request_get_mocked.call_args_list[0][1]['json'],
-                {
+            server_request_get_mocked.assert_called_once_with(
+                f'{SERVER_URL}:{SERVER_PORT}/tournament',
+                json={
                     'tournament_id': str(pending_tournament.id),
-                    'challenges': [('email0@gmail2.com', 'email1@gmail2.com')]
-                }
-            )
-            self.assertEqual(
-                server_request_get_mocked.call_args_list[1][1]['json'],
-                {
-                    'tournament_id': str(pending_tournament.id),
-                    'challenges': [('email0@gmail2.com', 'email2@gmail2.com')]
-                }
-            )
-            self.assertEqual(
-                server_request_get_mocked.call_args_list[2][1]['json'],
-                {
-                    'tournament_id': str(pending_tournament.id),
-                    'challenges': [('email1@gmail2.com', 'email2@gmail2.com')]
+                    'challenges': [
+                        ('email0@gmail2.com', 'email1@gmail2.com'),
+                        ('email0@gmail2.com', 'email2@gmail2.com'),
+                        ('email1@gmail2.com', 'email2@gmail2.com')
+                    ]
                 }
             )
         self.assertEqual(

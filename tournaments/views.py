@@ -21,7 +21,10 @@ from tournaments.models import (
     Tournament,
     TournamentRegistration,
 )
-from tournaments.server_requests import generate_combination
+from tournaments.server_requests import (
+    generate_combination_and_start_tournament,
+    start_tournament,
+)
 from tournaments.forms import (
     TournamentForm,
     TournamentGeneratorForm,
@@ -79,7 +82,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         bots_selected = form.cleaned_data['bots_selected'].split(sep=',')
         if not Tournament.objects.filter(name=tournament_name).exists():
             tournament = Tournament.objects.create(name=tournament_name, status=Tournament.TOURNAMENT_ACTIVE_STATUS)
-            response = generate_combination(tournament.id, bots_selected)
+            response = generate_combination_and_start_tournament(tournament.id, bots_selected)
 
             if response.status_code == 200:
                 messages.add_message(
@@ -186,11 +189,13 @@ class PendingTournamentListView(LoginRequiredMixin, ListView):
             tournament_id = int(self.request.GET['tournament'])
             tournament = Tournament.objects.get(pk=tournament_id)
             challenges = Challenge.objects.filter(tournament_id=tournament_id)
+            challenges_bots = []
             for challenge in challenges:
                 bots_selected = [challenge.bot_challenger.name]
                 for bots_challenge in challenge.bots_challenged.all():
                     bots_selected.append(bots_challenge.name)
-                generate_combination(tournament_id, bots_selected)
+                challenges_bots.append(tuple(bots_selected))
+            start_tournament(tournament_id, challenges_bots)
             tournament.status = Tournament.TOURNAMENT_ACTIVE_STATUS
             tournament.save()
 
