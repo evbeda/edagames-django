@@ -7,14 +7,13 @@
     <h2>Generate Tournaments</h2>
     <form method="POST" class="post-form">{% csrf_token %}
         {% bootstrap_form form %}
-        <div class="form-group col-md-4">
             <p>Registered users ({{registrations_count}})</p>
             <ul class="list-group">
                 {% for registration in registrations %}
                 <li class="list-group-item">{{registration.user.email}}</li>
                 {% endfor %}
             </ul>
-        </div>
+        <br></br>
         <input class="btn btn-primary" type="submit" value="Generate">
     </form>
 </div>
