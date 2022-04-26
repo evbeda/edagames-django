@@ -20,6 +20,9 @@ class Tournament(models.Model):
         default=TOURNAMENT_PENDING_STATUS,
     )
 
+    def __str__(self):
+        return f'{self.name} ({self.id})'
+
 
 class TournamentRegistration(models.Model):
     user = models.ForeignKey(
@@ -27,3 +30,6 @@ class TournamentRegistration(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+
+    def __str__(self):
+        return f'{self.user.email} ({self.id})'

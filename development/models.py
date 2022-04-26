@@ -35,6 +35,10 @@ class Match(models.Model):
         null=True,
     )
 
+    def __str__(self):
+        bots = [bot.name for bot in self.match_members.all()]
+        return f'{bots} ({self.id})'
+
 
 class MatchMembers(models.Model):
     score = models.IntegerField()
