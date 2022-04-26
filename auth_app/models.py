@@ -19,10 +19,13 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, username, password=None):
+        from tournaments.models import TournamentRegistration
         user = self.create_user(email, username, password)
         user.is_staff = True
         user.is_superuser = True
         user.save()
+        TournamentRegistration.objects.create(user=user)
+        Bot.objects.create(user=user, name=user.email)
         return user
 
 

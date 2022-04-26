@@ -28,17 +28,17 @@ def get_tournament_results(tournament_id: int) -> List[dict]:
         }
     }
     """
-    results = calculate_match_results_by_player()
-    results = add_score_to_results_and_total_matches(results)
+    results = calculate_match_results_by_player(tournament_id)
+    results = add_score_to_results_and_total_matches(results, tournament_id)
 
     return results
 
 
-def calculate_match_results_by_player():
+def calculate_match_results_by_player(tournament_id):
     match_members_results = MatchMembers.objects.values_list(
         "bot__name",
         "match_result",
-    ).filter(match__tournament=2).annotate(Count("bot_id"))
+    ).filter(match__tournament=tournament_id).annotate(Count("bot_id"))
 
     results = defaultdict(lambda: {
         "total_match": 0,
@@ -58,10 +58,10 @@ def calculate_match_results_by_player():
     return results
 
 
-def add_score_to_results_and_total_matches(results):
+def add_score_to_results_and_total_matches(results, tournament_id):
     match_members_results = MatchMembers.objects.values_list(
         'bot__name',
-        Sum('score')).filter(match__tournament=2).annotate(Count('score'))
+        Sum('score')).filter(match__tournament=tournament_id).annotate(Count('score'))
     for bot_name, total_score, total_match in match_members_results:
         results[bot_name]["total_match"] = total_match
         results[bot_name]["total_score"] = total_score
