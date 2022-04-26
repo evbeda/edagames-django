@@ -10,7 +10,7 @@
             <p>Registered users ({{registrations_count}})</p>
             <ul class="list-group">
                 {% for registration in registrations %}
-                <li class="list-group-item">{{registration.user.email}}</li>
+                <li class="list-group-item">{{registration.user.username}}</li>
                 {% endfor %}
             </ul>
         <br></br>
