@@ -31,6 +31,16 @@ from tournaments.views import (
 )
 
 
+class TestTournamentRegistrationModel(TestCase):
+    def test_str(self):
+        user = User.objects.create_user(username='username1', password='password1', email='email1@gmail.com')
+        tournament_registration = TournamentRegistration.objects.create(user=user)
+        self.assertEqual(
+            str(tournament_registration),
+            f'email1@gmail.com ({tournament_registration.id})'
+        )
+
+
 class TestTournamentReistration(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -59,6 +69,14 @@ class TestTournamentReistration(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(TournamentRegistration.objects.filter(user=self.user).exists())
 
+
+class TestTournamentModel(TestCase):
+    def test_str(self):
+        tournament = Tournament.objects.create(name='My Tournament')
+        self.assertEqual(
+            str(tournament),
+            f'My Tournament ({tournament.id})'
+        )
 
 class TestTournament(TestCase):
     def setUp(self):

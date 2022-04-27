@@ -10,6 +10,7 @@ from auth_app.models import (
     User,
     UserManager,
 )
+from tournaments.models import TournamentRegistration
 
 
 class TestViewsAnonimous(TestCase):
@@ -109,7 +110,9 @@ class TestUserManager(TestCase):
         self.assertTrue(super_user.is_superuser)
 
     @patch.object(UserManager, 'create_user')
-    def test_mock_create_superuser(self, mock_create_user):
+    @patch.object(Bot.objects, 'create')
+    @patch.object(TournamentRegistration.objects, 'create')
+    def test_mock_create_superuser(self, mock_create_tournament_registration, mock_create_bot, mock_create_user):
         email = 'admin@eventbrite.com'
         name = 'admin'
         pw = '1234'
@@ -124,6 +127,8 @@ class TestUserManager(TestCase):
             name,
             pw,
         )
+        mock_create_tournament_registration.is_called_once()
+        mock_create_bot.is_called_once_with()
 
 
 class TestUser(TestCase):
