@@ -47,7 +47,7 @@ class TestMatchDetailsView(TestCase):
                 match=self.match,
             )
         ]
-        match_members_created = MatchMembers.objects.bulk_create(match_members)
+        MatchMembers.objects.bulk_create(match_members)
 
     def test_str(self):
         self.assertEqual(

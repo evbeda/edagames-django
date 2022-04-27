@@ -78,6 +78,7 @@ class TestTournamentModel(TestCase):
             f'My Tournament ({tournament.id})'
         )
 
+
 class TestTournament(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
