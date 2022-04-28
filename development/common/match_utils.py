@@ -10,7 +10,7 @@ from development.models import (
 def get_matches_of_connected_user(user):
     bots = Bot.objects.filter(user=user).values_list('id', flat=True)
     match_ids = MatchMembers.objects.filter(bot__in=bots).values_list('match_id', flat=True).distinct()
-    return Match.objects.filter(id__in=match_ids)
+    return Match.objects.filter(id__in=match_ids).order_by('-date_match')
 
 
 def get_matches_results(matches):
