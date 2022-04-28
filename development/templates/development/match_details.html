@@ -1,37 +1,21 @@
 {% extends "base.html" %}
 
 {% block page_content %}
-<div class="container">
+<div class="container-fluid">
     <h1>Match details</h1>
-    <div class="pre-scrollable">
+    <div class="table-responsive">
     <table
         class="table table-striped table-bordered table-sm"
-        style="width: 100%">
+        style="width: 80%">
         <thead>
         <tr class="bg-primary text-white head-top">
-            <th scope="col">State</th>
-            <th scope="col">Turn</th>
-            <th scope="col">Player1</th>
-            <th scope="col">Score1</th>
-            <th scope="col">Player2</th>
-            <th scope="col">Score2</th>
-            <th scope="col">Origin</th>
-            <th scope="col">Destination</th>
-            <th scope="col" style="width: 15%;">Board</th>
+            <th scope="col">Log</th>
           </tr>
         </thead>
         <tbody>
         {% for log in data %}
             <tr>
-                <td>{{ log.state }}</td>
-                <td>{{ log.current_player }}</td>
-                <td>{{ log.player_1 }}</td>
-                <td>{{ log.score_1 }}</td>
-                <td>{{ log.player_2 }}</td>
-                <td>{{ log.score_2 }}</td>
-                <td>({{ log.from_row }}, {{ log.from_col }})</td>
-                <td>({{ log.to_row }}, {{ log.to_col }})</td>
-                <td class="text-monospace">{{ log.board }}</td>
+                <td style="white-space: pre; font-size: 12px">{{ log }}</td>
             </tr>
         {% endfor %}
         </tbody>
