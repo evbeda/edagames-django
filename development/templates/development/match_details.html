@@ -9,15 +9,21 @@
         style="width: 80%">
         <thead>
         <tr class="bg-primary text-white head-top">
-            <th scope="col">Log</th>
+            <th scope="col">Logs</th>
           </tr>
         </thead>
         <tbody>
-        {% for log in data %}
+        {% if data %}
+            {% for log in data %}
+                <tr>
+                    <td style="white-space: pre; font-size: 12px">{{ log }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
-                <td style="white-space: pre; font-size: 12px">{{ log }}</td>
+                <td>The logs have been expired</td>
             </tr>
-        {% endfor %}
+        {% endif %}
         </tbody>
     </table>
     </div>
