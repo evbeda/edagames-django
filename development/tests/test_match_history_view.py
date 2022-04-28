@@ -111,9 +111,9 @@ class TestMethodsMatchHistory(TestCase):
             save_match(match)
 
     @parameterized.expand([
-        ('UsuarioTest1', [1, 2]),   # match(1)bot1 vs bot2, match(2)bot1 vs bot3
-        ('UsuarioTest2', [1, 3]),   # match(1)bot1 vs bot2, match(3)bot2 vs bot3
-        ('UsuarioTest3', [2, 3]),   # match(2)bot1 vs bot3, match(3)bot2 vs bot3
+        ('UsuarioTest1', [2, 1]),   # match(1)bot1 vs bot2, match(2)bot1 vs bot3
+        ('UsuarioTest2', [3, 1]),   # match(1)bot1 vs bot2, match(3)bot2 vs bot3
+        ('UsuarioTest3', [3, 2]),   # match(2)bot1 vs bot3, match(3)bot2 vs bot3
     ])
     def test_should_return_the_matches_played_by_a_user_requested(
         self,
