@@ -6,7 +6,7 @@
     <div class="table-responsive">
     <table
         class="table table-striped table-bordered table-sm"
-        style="width: 80%">
+        style="width: 100%">
         <thead>
         <tr class="bg-primary text-white head-top">
             <th scope="col">Log</th>
@@ -21,6 +21,9 @@
         </tbody>
     </table>
     </div>
+    {% if not data %}
+    <div class="text-center">There are no logs to display</div>
+    {% endif %}
     <div class="form-row">
         <span class="mx-auto">
             {% if prev_page %}

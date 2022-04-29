@@ -31,6 +31,9 @@
         {% endfor %}
       </tbody>
     </table>
+    {% if not object_list %}
+    <div class="text-center">There are no matches to display</div>
+    {% endif %}
   </div>
 </div>
 <hr>
