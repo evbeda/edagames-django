@@ -1,5 +1,6 @@
 from django import forms
-from auth_app.models import Bot
+
+from tournaments.models import TournamentRegistration
 
 
 class TournamentForm(forms.Form):
@@ -8,8 +9,8 @@ class TournamentForm(forms.Form):
     bots = forms.ChoiceField(label='Bots', widget=forms.HiddenInput(), choices=[], required=False)
 
     def setup_bots_choices(self):
-        bots = Bot.objects.all()
-        self.fields['bots'].choices = enumerate([bot.name for bot in bots])
+        users_registration = TournamentRegistration.objects.all().order_by('user__email')
+        self.fields['bots'].choices = enumerate([registration.user.email for registration in users_registration])
 
 
 class TournamentGeneratorForm(forms.Form):
