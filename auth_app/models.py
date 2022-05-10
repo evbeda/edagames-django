@@ -31,7 +31,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Email', unique=True)
-    username = models.CharField(max_length=25, unique=True)
+    username = models.CharField(max_length=50, unique=True)
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -54,7 +54,7 @@ class BotManager(models.Manager):
 
 
 class Bot(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=50)
     token = models.CharField(max_length=200, default='')
     user = models.ForeignKey(
         User,
