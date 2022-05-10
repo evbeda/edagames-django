@@ -6,7 +6,9 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin,
 )
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
@@ -207,3 +209,22 @@ class TournamentResultsView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         return sort_position_table(get_tournament_results(self.kwargs.get('pk')))
+
+
+@require_http_methods(["POST"])
+def delete_tournament(request, pk):
+    try:
+        tournament = Tournament.objects.get(id=pk)
+        tournament.delete()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            'Tournament successfully removed'
+        )
+    except Tournament.DoesNotExist:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            'The tournament does not exists'
+        )
+    return redirect('tournaments:tournaments_pending')
