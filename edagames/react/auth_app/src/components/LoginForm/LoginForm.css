@@ -1,0 +1,37 @@
+@import url('../../index.css');
+
+.container{
+    background-color: var(--primary-color);
+    width: 30%;
+    font-family: var(--font-family);
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-top: 10%;
+    gap:50px;
+}
+.image{
+    width: 300px;
+    height: 250px;
+}
+.title{
+    font-size: var(--title-font-size);
+    color: var(--primary-text-color);
+}
+
+.button_login{
+    height: 30px;
+    font-size: var(--font-size);
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-text-color);
+    background-color:rgba(251, 251, 251, 0);
+    border:none;
+    cursor: pointer;
+}
+.button_login > .icons {
+    padding: 0 5px;
+    margin: 0 5px 0 10px;
+}

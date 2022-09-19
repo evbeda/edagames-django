@@ -68,7 +68,10 @@ ROOT_URLCONF = 'edagames.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'react/auth_app/build'),
+            'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -157,7 +160,6 @@ SOCIAL_AUTH_PIPELINE = (
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
-STATICFILES_DIRS = ['static']
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -177,3 +179,9 @@ MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
 # Server
 SERVER_URL = get_env_variable('SERVER_URL')
 SERVER_PORT = get_env_variable('SERVER_PORT')
+
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'react/auth_app/build/static'),
+    'static',
+]

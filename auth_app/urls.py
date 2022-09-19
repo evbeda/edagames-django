@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import Home, Registration, Profile, FAQ
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
@@ -8,6 +9,11 @@ urlpatterns = [
         '',
         Home.as_view(template_name='auth_app/home.html'),
         name='home',
+    ),
+    path(
+        'login/react/',
+        TemplateView.as_view(template_name = 'index.html'),
+        name='login',
     ),
     path(
         'login/',
@@ -24,3 +30,4 @@ urlpatterns = [
     path('profile/', Profile.as_view(template_name='auth_app/profile.html'), name='profile'),
     path('faq/', FAQ.as_view(template_name='auth_app/faq.html'), name='faq'),
 ]
+
