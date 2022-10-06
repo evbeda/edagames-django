@@ -28,3 +28,6 @@ def get_my_bots(user_online, online_bots):
     bot_names = [bot.name for bot in queryset]
 
     return enumerate(set(bot_names) & set(online_bots))
+
+def get_my_games():
+    return enumerate(['wumpus', 'quoridor'])

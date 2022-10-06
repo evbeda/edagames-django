@@ -6,11 +6,14 @@ from typing import List
 def send_challenge(
     challenger: str,
     challenged: List[str],
+    game_name: str,
     tournament_id: str = '',
+
 ):
     data = {
         "challenger": challenger,
         "challenged": challenged,
+        "game_name": game_name,
         "tournament_id": tournament_id,
     }
     return requests.post(

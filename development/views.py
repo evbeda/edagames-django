@@ -39,12 +39,14 @@ class ChallengeView(FormView):
     def form_valid(self, form):
         option1 = int(form.cleaned_data['bot1'])
         option2 = int(form.cleaned_data['bot2'])
+        option3 = int(form.cleaned_data['bot3'])
         bot1 = dict(form.fields['bot1'].choices)[option1]
         bot2 = dict(form.fields['bot2'].choices)[option2]
-
+        bot3 = dict(form.fields['bot3'].choices)[option3]
         response = send_challenge(
             challenger=f"{bot1}",
             challenged=[f"{bot2}"],
+            game_name=f"{bot3}",
             tournament_id="",
         )
         if response.status_code == 200:

@@ -3,6 +3,7 @@ from .bot_handler import (
     get_users_data,
     get_online_bots,
     get_my_bots,
+    get_my_games
 )
 from auth_app.models import Bot
 import re
@@ -18,10 +19,11 @@ class ChallengeForm(forms.Form):
         )
         self.fields['bot1'].choices = my_bots
         self.fields['bot2'].choices = online_bots
+        self.fields['bot3'].choices = get_my_games()
 
     bot1 = forms.ChoiceField(label='MyBots', widget=forms.Select, choices=[])
     bot2 = forms.ChoiceField(label='Online Bots', widget=forms.Select, choices=[])
-
+    bot3 = forms.ChoiceField(label='game', widget=forms.Select, choices=[])  
 
 class BotForm(forms.ModelForm):
     name = forms.CharField(required=True)
