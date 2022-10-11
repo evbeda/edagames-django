@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import os
-from environment import get_env_variable
+from environment import load_env_var
 from django.contrib.messages import constants as message_constants
-
+import boto3
+import base64
+from botocore.exceptions import ClientError
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env_variable('SECRET_KEY')
+SECRET_KEY = load_env_var('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -89,15 +91,38 @@ AUTHENTICATION_BACKENDS = (
 WSGI_APPLICATION = 'edagames.wsgi.application'
 
 
+# get secret
+def get_secret(db_secret_name):
+
+    secret_name = db_secret_name
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+   
+    secret_value_response = client.get_secret_value(
+        SecretId=secret_name
+    )
+
+    return secret_value_response
+
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+secret_value = get_secret(load_env_var('DB_SECRET_NAME'))
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': get_env_variable('DJANGO_DB_NAME'),
-        'USER': get_env_variable('DJANGO_DB_USER'),
-        'PASSWORD': get_env_variable('DJANGO_DB_PASSWORD'),
-        'HOST': get_env_variable('DJANGO_DB_HOST'),
+        'ENGINE': secret_value["engine"],
+        'NAME': secret_value["dbClusterIdentifier"],
+        'USER': secret_value["username"],
+        'PASSWORD': secret_value["password"],
+        'HOST': secret_value["host"],
+        'PORT': secret_value["port"]
     }
 }
 
@@ -164,8 +189,8 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = get_env_variable('SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY')
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = get_env_variable('SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET')
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = load_env_var('SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY')
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = load_env_var('SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET')
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_emailaddress', 'r_liteprofile']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['emailAddress', 'formatted-name']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
@@ -177,5 +202,5 @@ SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
 MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
 
 # Server
-SERVER_URL = get_env_variable('SERVER_URL')
-SERVER_PORT = get_env_variable('SERVER_PORT')
+SERVER_URL = load_env_var('SERVER_URL')
+SERVER_PORT = load_env_var('SERVER_PORT')
