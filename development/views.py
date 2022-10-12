@@ -11,6 +11,7 @@ from .common.match_utils import (
     get_matches_of_connected_user,
     get_matches_results,
 )
+from .common.match_result_text import generate_text
 from development.forms import ChallengeForm
 from development.server_requests import (
     get_logs,
@@ -81,6 +82,7 @@ class MatchDetailsView(DetailView):
         context['data'] = response['details']
         context['prev_page'] = response['prev']
         context['next_page'] = response['next']
+        context['text'] = generate_text(response['details'])
         return context
 
 

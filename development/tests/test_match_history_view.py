@@ -13,7 +13,7 @@ from development.models import (
 )
 from development.views import (
     get_matches_of_connected_user,
-    get_matches_results
+    get_matches_results,
 )
 
 

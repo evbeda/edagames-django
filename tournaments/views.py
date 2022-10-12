@@ -119,7 +119,7 @@ class CreateTournamentView(StaffRequiredMixin, FormView):
         data.append(form.cleaned_data['tournament'])
         data.append(form.cleaned_data['bots_selected'])
         data.append(form.cleaned_data['bots'])
-        return(data)
+        return (data)
 
 
 class TournamentGeneratorView(StaffRequiredMixin, FormView):
