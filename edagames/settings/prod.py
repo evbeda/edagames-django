@@ -127,7 +127,7 @@ secret_value = json.loads(get_secret(get_env_variable('DB_SECRET_NAME')))
 
 DATABASES = {
     'default': {
-        'ENGINE': secret_value["engine"],
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': secret_value["dbClusterIdentifier"],
         'USER': secret_value["username"],
         'PASSWORD': secret_value["password"],
