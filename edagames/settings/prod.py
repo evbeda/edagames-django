@@ -15,6 +15,7 @@ from django.contrib.messages import constants as message_constants
 import boto3
 import base64
 from botocore.exceptions import ClientError
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -122,7 +123,7 @@ def get_secret(db_secret_name):
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-secret_value = get_secret(get_env_variable('DB_SECRET_NAME'))
+secret_value = json.loads(get_secret(get_env_variable('DB_SECRET_NAME')))
 
 DATABASES = {
     'default': {
