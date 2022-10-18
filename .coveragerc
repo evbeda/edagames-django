@@ -9,6 +9,7 @@ omit =
     */__init__.py
     */migrations/*
     */apps.py
+    */models.py
 
 [report]
 exclude_lines =
