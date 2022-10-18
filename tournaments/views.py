@@ -12,6 +12,9 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
+from tournaments.models import Championship, FinalTournamentRegistration
+from auth_app.models import User
+
 
 from auth_app.models import Bot
 from development.models import Challenge
@@ -28,6 +31,7 @@ from tournaments.server_requests import (
     start_tournament,
 )
 from tournaments.forms import (
+    FinalTournamentGeneratorForm,
     TournamentForm,
     TournamentGeneratorForm,
 )
@@ -228,3 +232,69 @@ def delete_tournament(request, pk):
             'The tournament does not exists'
         )
     return redirect('tournaments:tournaments_pending')
+
+
+class CreateFinalTournamentView(StaffRequiredMixin, FormView):
+    form_class = FinalTournamentGeneratorForm
+    success_url = reverse_lazy('tournaments:tournaments_pending')
+    template_name = 'tournaments/final_tournament_generator.html'
+
+    def create_final_tournament(self, championship: Championship, final_tournament: Tournament, max_bot_finalist):
+        tournaments_participants = _register_bots_to_final_tournament(championship, max_bot_finalist)
+        tournament_registrations = [FinalTournamentRegistration.objects.create(user=user, championship=championship) for user in tournaments_participants]
+        shuffle(tournament_registrations)
+        bots = [
+            Bot.objects.get(user=tournament_registration.user, name=tournament_registration.user.email)
+            for tournament_registration
+            in tournament_registrations
+        ]
+        challenges = combinations(bots, 2)
+        for bot_challenger, bots_challenged in challenges:
+            challenge = Challenge.objects.create(
+                bot_challenger=bot_challenger,
+                tournament=final_tournament,
+            )
+            challenge.bots_challenged.add(bots_challenged)
+
+    def form_valid(self, form):
+        final_tournament_name = form.cleaned_data['final_tournament_name']
+        championship_name = form.cleaned_data['championship_name']
+        championship = Championship.objects.get(name=championship_name)
+        final_tournament = Tournament.objects.get(pk=championship.final_tournament)
+        if not Tournament.objects.filter(name=final_tournament_name).exclude(status=Tournament.TOURNAMENT_FINISH_STATUS):
+            self.create_final_tournament(championship, final_tournament, championship.tournament_bots)
+        else:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'It is not possible to create this record, a tournament already exists with the name '
+                '{}. Try a new name'.format(final_tournament_name)
+            )
+            return super().form_invalid(form)
+        return super().form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        registrations = FinalTournamentRegistration.objects.all()
+        context['registrations'] = registrations
+        context['registrations_count'] = len(registrations)
+        return context
+    
+def _register_bots_to_final_tournament(champ: Championship, max_bot_finalist: int):
+    # get the tournaments
+    tournaments_list = Tournament.objects.filter(championship=champ.pk)
+    # get list of all bots that have been in the tournaments
+    bot_that_participated = [
+        sort_position_table(
+            get_tournament_results(tournament_id)
+        ) for tournament_id in tournaments_list
+        ]
+    # get the first n bots and register them to the final
+    top_bots = bot_that_participated[:max_bot_finalist]
+    finalist_bots = [bot[0] for bot in top_bots]
+    finalist_users = []
+    for bot in finalist_bots:
+        user = User.objects.get(email=bot)
+        finalist_users.append(user)
+    return finalist_bots
+    

@@ -2,6 +2,7 @@ from django.urls import (
     path,
 )
 from .views import (
+    CreateFinalTournamentView,
     CreateTournamentView,
     delete_tournament,
     PendingTournamentListView,
@@ -48,5 +49,10 @@ urlpatterns = [
         'tournament_registration/',
         RegistrationTournamentView.as_view(),
         name='tournament_registration',
+    ),
+    path(
+        'create_final_tournament/',
+        CreateFinalTournamentView.as_view(),
+        name='create_final_tournament',
     ),
 ]
