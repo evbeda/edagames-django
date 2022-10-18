@@ -2,7 +2,18 @@
 
 {% block page_content %}
 <div class="container-fluid">
+    {% if data %}
+    <h1>Match details 
+        <input 
+        class="btn btn-primary" 
+        type="submit" 
+        value="Download as .txt" 
+        onclick="download('my_match.txt')" />
+    </h1>
+    {% endif %}
+    {% if not data %}
     <h1>Match details</h1>
+    {% endif %}
     <div class="table-responsive">
     <table
         class="table table-striped table-bordered table-sm"
@@ -34,6 +45,22 @@
             {% endif %}
         </span>
     </div>
+    <script>
+        var dataStr = "{{ text }}";
+        dataStr = dataStr.replaceAll("&#39;","'")
+        dataStr = dataStr.replaceAll("&quot;",'"')
+
+        function download(filename) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=unicode,' + encodeURIComponent(dataStr));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+    </script>
 </div>
 
 

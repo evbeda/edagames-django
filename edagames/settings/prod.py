@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from environment import get_env_variable
 from django.contrib.messages import constants as message_constants
-
+import boto3
+import base64
+from botocore.exceptions import ClientError
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -89,15 +92,47 @@ AUTHENTICATION_BACKENDS = (
 WSGI_APPLICATION = 'edagames.wsgi.application'
 
 
+# get secret
+def get_secret(db_secret_name):
+
+    secret_name = db_secret_name
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        raise e
+
+    # Decrypts secret using the associated KMS key.
+    # Depending on whether the secret is a string or binary, one of these fields will be populated.
+    if 'SecretString' in get_secret_value_response:
+        secret_value_response = get_secret_value_response['SecretString']
+    else:
+        secret_value_response = base64.b64decode(get_secret_value_response['SecretBinary'])
+
+    return secret_value_response
+
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+secret_value = json.loads(get_secret(get_env_variable('DB_SECRET_NAME')))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': get_env_variable('DJANGO_DB_NAME'),
-        'USER': get_env_variable('DJANGO_DB_USER'),
-        'PASSWORD': get_env_variable('DJANGO_DB_PASSWORD'),
-        'HOST': get_env_variable('DJANGO_DB_HOST'),
+        'NAME': secret_value["dbname"],
+        'USER': secret_value["username"],
+        'PASSWORD': secret_value["password"],
+        'HOST': secret_value["host"],
+        'PORT': secret_value["port"]
     }
 }
 
