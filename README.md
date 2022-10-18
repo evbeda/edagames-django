@@ -84,3 +84,11 @@ services:
             - "50051:50051"
 
 ```
+### How to run the test
+in the same pwd as the manage.py run
+```
+python3 manage.py test
+```
+
+### Problems that you could have
+1 - If you are having problems installing mysql-client go and follow the steps on https://pypi.org/project/mysqlclient/
