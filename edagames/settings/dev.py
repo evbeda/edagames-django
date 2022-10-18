@@ -177,3 +177,22 @@ MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
 # Server
 SERVER_URL = get_env_variable('SERVER_URL')
 SERVER_PORT = get_env_variable('SERVER_PORT')
+
+# TO DO: MAKE WORK NOSE TO RUN A COVERAGE IN DJANGO
+# INSTALLED_APPS = (
+#     # ...
+#     'django_nose',
+#     # ?'django.contrib.contenttypes.models.ContentType',
+#     # ?'development.apps.ChallangeConfig',
+
+
+# )
+
+# # Use nose to run all tests
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# # Tell nose to measure coverage on the 'foo' and 'bar' apps
+# NOSE_ARGS = [
+#     '--with-coverage',
+#     '--cover-package=development,tournaments',
+# ]
