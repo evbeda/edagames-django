@@ -2,6 +2,19 @@ from auth_app.models import User
 from django.db import models
 
 
+class Championship(models.Model):
+    name = models.CharField(max_length=30)
+    tournament_bots = models.IntegerField(default=0)
+    final_tournament = models.OneToOneField(
+        'tournaments.Tournament',
+        on_delete=models.CASCADE,
+        related_name='final_tournament'
+    )
+
+    def __str__(self):
+        return f'{self.name} ({self.id})'
+
+
 class Tournament(models.Model):
     TOURNAMENT_PENDING_STATUS = 'pending'
     TOURNAMENT_ACTIVE_STATUS = 'active'
@@ -18,6 +31,12 @@ class Tournament(models.Model):
         max_length=8,
         choices=TOURNAMENT_STATUS,
         default=TOURNAMENT_PENDING_STATUS,
+    )
+    championship = models.ForeignKey(
+        Championship,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):

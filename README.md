@@ -89,6 +89,10 @@ in the same pwd as the manage.py run
 ```
 python3 manage.py test
 ```
+if you want to see the coverage and generate a html coverage
+```
+coverage run manage.py test && pipenv run coverage xml && pipenv run coverage report -m
+```
 
 ### Problems that you could have
 1 - If you are having problems installing mysql-client go and follow the steps on https://pypi.org/project/mysqlclient/
