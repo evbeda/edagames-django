@@ -52,3 +52,15 @@ class TournamentRegistration(models.Model):
 
     def __str__(self):
         return f'{self.user.email} ({self.id})'
+
+
+class FinalTournamentRegistration(TournamentRegistration):
+    championship = models.ForeignKey(
+        Championship,
+        on_delete=models.CASCADE,
+        null=False,
+        related_name="championship"
+    )
+
+    def __str__(self):
+        return f'{self.user.email}, {self.championship.name} ({self.id})'

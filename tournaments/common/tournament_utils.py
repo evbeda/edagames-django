@@ -1,4 +1,6 @@
 from collections import defaultdict
+from itertools import combinations
+from random import shuffle
 from typing import List
 
 from django.db.models import (
@@ -11,7 +13,9 @@ from development.constants import (
     TIE,
     WIN,
 )
-from development.models import MatchMembers
+from auth_app.models import Bot, User
+from development.models import Challenge, MatchMembers
+from tournaments.models import Championship, FinalTournamentRegistration, Tournament
 
 
 def get_tournament_results(tournament_id: int) -> List[dict]:
@@ -84,3 +88,46 @@ def convert_dict_to_tuples(table):
             match_result["total_score"],
         ) for bot_name, match_result in table.items()
     ]
+
+
+def register_bots_to_final_tournament(champ: Championship, max_bot_finalist: int):
+    # get the tournaments
+    tournaments_list = Tournament.objects.filter(championship=champ.pk)
+    # get list of all bots that have been in the tournaments
+    bot_that_participated = []
+    for tournament in tournaments_list:
+        bot_that_participated.append(
+            sort_position_table(
+                get_tournament_results(
+                    tournament.id)))
+    # get the first n bots and register them to the final
+    top_bots = bot_that_participated[0][:max_bot_finalist]
+    finalist_users = []
+    for bot in top_bots:
+        user = User.objects.get(email=bot[0])
+        finalist_users.append(user)
+    return finalist_users
+
+
+def create_registrations_and_challenges_for_final_tournament(
+        championship: Championship,
+        final_tournament: Tournament,
+        max_bot_finalist):
+
+    tournaments_participants = register_bots_to_final_tournament(championship, max_bot_finalist)
+    tournament_registrations = [
+        FinalTournamentRegistration.objects.create(
+            user=user, championship=championship) for user in tournaments_participants]
+    shuffle(tournament_registrations)
+    bots = [
+        Bot.objects.get(user=tournament_registration.user, name=tournament_registration.user.email)
+        for tournament_registration
+        in tournament_registrations
+    ]
+    challenges = combinations(bots, 2)
+    for bot_challenger, bots_challenged in challenges:
+        challenge = Challenge.objects.create(
+            bot_challenger=bot_challenger,
+            tournament=final_tournament,
+        )
+        challenge.bots_challenged.add(bots_challenged)

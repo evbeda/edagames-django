@@ -16,10 +16,13 @@ from django.views.generic.list import ListView
 from auth_app.models import Bot
 from development.models import Challenge
 from tournaments.common.tournament_utils import (
+    create_registrations_and_challenges_for_final_tournament,
     get_tournament_results,
     sort_position_table,
 )
 from tournaments.models import (
+    Championship,
+    FinalTournamentRegistration,
     Tournament,
     TournamentRegistration,
 )
@@ -29,6 +32,7 @@ from tournaments.server_requests import (
 )
 from tournaments.forms import (
     ChampionshipGeneratorForm,
+    FinalTournamentGeneratorForm,
     TournamentForm,
     TournamentGeneratorForm,
 )
@@ -235,3 +239,46 @@ def delete_tournament(request, pk):
             'The tournament does not exists'
         )
     return redirect('tournaments:tournaments_pending')
+
+
+class FinalTournamentView(StaffRequiredMixin, FormView):
+    form_class = FinalTournamentGeneratorForm
+    success_url = reverse_lazy('tournaments:tournaments_pending')
+    template_name = 'tournaments/final_tournament.html'
+
+    def get_form(self, form_class=None):
+        if self.request.method == 'POST':
+            form = FinalTournamentGeneratorForm(data=self.request.POST)
+        else:
+            form = FinalTournamentGeneratorForm()
+        form.setup_championship_choice()
+        return form
+
+    def form_valid(self, form):
+        championship_option = int(form.cleaned_data['championship_name'])
+        championship_name = dict(form.fields['championship_name'].choices)[championship_option]
+        championship = Championship.objects.get(name=championship_name)
+        final_tournament = Tournament.objects.get(pk=championship.final_tournament.pk)
+        final_tournament_name = final_tournament.name
+        if Tournament.objects.filter(name=final_tournament_name).exclude(status=Tournament.TOURNAMENT_FINISH_STATUS):
+            create_registrations_and_challenges_for_final_tournament(
+                championship,
+                final_tournament,
+                championship.tournament_bots
+            )
+        else:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'It is not possible to create this record'
+                '{}. Try a new name'.format(final_tournament_name)
+            )
+            return super().form_invalid(form)
+        return super().form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        registrations = FinalTournamentRegistration.objects.all()
+        context['registrations'] = registrations
+        context['registrations_count'] = len(registrations)
+        return context

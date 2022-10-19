@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block page_content %}
+
+<div class="container">
+    <h2>Final Tournament</h2>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {% bootstrap_form form %}
+            <p>Finalist users ({{registrations_count}})</p>
+            <ul class="list-group">
+                {% for registration in registrations %}
+                <li class="list-group-item">{{registration.user.username}}</li>
+                {% endfor %}
+            </ul>
+        <br></br>
+        <input class="btn btn-primary" type="submit" value="Next">
+    </form>
+</div>
+{% endblock page_content %}

@@ -1,4 +1,5 @@
 from django import forms
+from tournaments.common.form_utils import get_championships
 
 from tournaments.models import TournamentRegistration
 
@@ -22,3 +23,11 @@ class ChampionshipGeneratorForm(forms.Form):
     championship_name = forms.CharField(label='championship name', required=True)
     finalist_users_per_tournament = forms.IntegerField(label='finalist users per tournament', required=True)
     max_players = forms.IntegerField(label='max players per tournament', required=True)
+
+
+class FinalTournamentGeneratorForm(forms.Form):
+    championship_name = forms.ChoiceField(label='Championship', widget=forms.Select(), choices=[])
+
+    def setup_championship_choice(self):
+        championships = get_championships()
+        self.fields['championship_name'].choices = championships
