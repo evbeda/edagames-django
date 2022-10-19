@@ -3,23 +3,20 @@ let index = 0;
 const KEYSUSER = ["action","direction","from_col","from_row","game_id","turn_token"];
 const KEYSUSERTIMEOUT = ["event","player"];
 const SERVERKEY = [
-    "score_2", 
-    "remaining_turns", 
-    "arrows_2", 
-    "side", 
-    "player_1", 
-    "score_1",
-    "from_col",
-    "score_1",
-    "from_col",
-    "direction",
-    "game_id",
-    "board",
-    "player_2",
-    "arrows_1",
-    "from_row",
     "state",
-    "current_player"
+    "remaining_turns", 
+    "arrows_1",
+    "arrows_2",   
+    "direction",
+    "from_col",
+    "from_row",
+    "player_1",
+    "player_2",
+    "score_1",
+    "score_2",
+    "side",
+    "game_id", 
+    "board",
 ]
 const CELL_SIZE = 5
 const LARGE = 17
@@ -29,6 +26,7 @@ const keyBoard = "board";
 const keyData = "data";
 const keyEvent = "event";
 const keyPlayer = "player";
+const CHARACTERPERCELL = /.{1,5}/g;
 
 
 const addLogToArray = (log) =>{
@@ -36,25 +34,16 @@ const addLogToArray = (log) =>{
 }
 
 const modifiDOMElementUser = (key, log = null) =>{
-    switch (key) {
-        case keyAction:
-            document.getElementById(key).innerHTML =  log  ? listOfLogs[index][key] : "";
-            break;
-        case keyPlayer:
-            document.getElementById(key).innerHTML =  (log && listOfLogs[index][key])  ? listOfLogs[index][key] : "";
-            break;
-        case keyEvent:
-            document.getElementById(key).innerHTML =  (log && listOfLogs[index][key])  ? listOfLogs[index][key] : "";
-            break;
-        default:
-            document.getElementById(key).innerHTML = log  ? listOfLogs[index][keyData][key] : "";
-            break;
+    if(key == keyAction || key == keyAction || key == keyAction ){
+        document.getElementById(key).innerHTML =  (log && listOfLogs[index][key])  ? listOfLogs[index][key] : "";
+    }else{
+        document.getElementById(key).innerHTML = log  ? listOfLogs[index][keyData][key] : "";
     }
 }
 
 const modifiDOMElementServer = (key,log = null) =>{
-    if (key == keyBoard && listOfLogs[index][key]){
-        beatiBoard(listOfLogs[index][key] || " ");
+    if (key == keyBoard){
+        listOfLogs[index][key] && beatiBoard(listOfLogs[index][key]);
     }else{
         document.getElementById("server_"+key).innerHTML =  (log && listOfLogs[index][key])  ? listOfLogs[index][key] : "";
     }
@@ -87,7 +76,6 @@ const updateDomElement = () =>{
     SERVERKEY.forEach(key =>{
         modifiDOMElementServer(key,updateServer)
     });
-
 }
 
 const modifyIndex = (operation) => {
@@ -102,23 +90,21 @@ const modifyIndex = (operation) => {
 }
 
 const beatiBoard = (board) =>{
-    let row_index = 16;
-    let colunm_index = 16;
-    let array_board = board.match(/.{1,5}/g);
-    for (let rows = 0; rows <= row_index; rows++) {
-        for (let columns = 0; columns <= colunm_index; columns++) {
-            document.getElementById("row_"+rows+"_col_"+columns).innerHTML = array_board[(rows*17)+columns];
+    let array_board = board.match(CHARACTERPERCELL);
+    const boardToHTML = document.getElementById("containerBoard");
+    boardToHTML.textContent = '';
+    for (let rows = 0; rows <= (LARGE - 1); rows++) {
+        let rowHTML = document.createElement("span");
+        rowHTML.classList.add("rowContainer");
+        for (let columns = 0; columns <= (LARGE - 1); columns++) {
+            let columnHTML = document.createElement("span");
+            columnHTML.classList.add("spaces");
+            let textHTML = document.createTextNode(array_board[(rows*LARGE)+columns]);
+            columnHTML.appendChild(textHTML);
+            rowHTML.appendChild(columnHTML);
         }
+        boardToHTML.appendChild(rowHTML);
     }
-    // board.split('').forEach((char, index) => {
-    //     row += char === " " ? char.replace(" ", "_") : char
-    //     if((index + 1) % ROW_SIZE == 0){
-    //         document.getElementById("row_"+spanIndex).innerHTML = row;
-    //         spanIndex++;
-    //         row =""
-    //     }
-    // });
-    //return currentString
 }
 
 

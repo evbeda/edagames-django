@@ -5,9 +5,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.http import JsonResponse
-
-import json
 
 from auth_app.models import Bot
 from .common.match_utils import (
@@ -88,6 +85,7 @@ class MatchDetailsView(DetailView):
         context['text'] = generate_text(response['details'])
         return context
 
+
 class NewMatchDetailsView(DetailView):
     template_name = 'development/new_match_details.html'
     model = Match
@@ -101,12 +99,11 @@ class NewMatchDetailsView(DetailView):
             NewMatchDetailsView,
             self,
         ).get_context_data(**kwargs)
-        details_for_front= {}
+        details_for_front = {}
         for index, element in enumerate(response['details']):
             details_for_front[str(index)] = element
         context['data'] = response['details']
         return context
-    
 
 
 class MyBotsView(ListView):

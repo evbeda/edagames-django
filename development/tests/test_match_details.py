@@ -108,7 +108,7 @@ class TestMatchDetailsView(TestCase):
 
     @patch('development.views.get_logs')
     @patch('development.views.generate_text')
-    def test_should_shows_pass_data_to_template_when_it_is_received_from_server_in_new_match (
+    def test_should_shows_pass_data_to_template_when_it_is_received_from_server_in_new_match(
         self,
         mocked_get_log,
         mocked_generate_text,
