@@ -73,7 +73,7 @@
                         {% if user.is_staff %}
                         <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tournament</a>
                         <a class="collapse-item" href="{% url 'tournaments:tournament_generator' %}">Generate Tournament</a>
-                        <a class="collapse-item" href="{% url 'tournaments:create_final_tournament' %}">Generate Final Tournament</a>
+                        <a class="collapse-item" href="{% url 'tournaments:create_final_tournament' %}">Final Tournament</a>
                         <a class="collapse-item" href="{% url 'tournaments:tournaments_pending' %}">Pending Tournaments</a>
                         {% endif %}
                         <a class="collapse-item" href="{% url 'tournaments:tournaments_history' %}">Tournaments History</a>

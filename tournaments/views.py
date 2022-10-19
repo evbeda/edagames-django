@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
+import tournaments
 from tournaments.models import Championship, FinalTournamentRegistration
 from auth_app.models import User
 
@@ -257,11 +258,15 @@ class CreateFinalTournamentView(StaffRequiredMixin, FormView):
             challenge.bots_challenged.add(bots_challenged)
 
     def form_valid(self, form):
-        final_tournament_name = form.cleaned_data['final_tournament_name']
-        championship_name = form.cleaned_data['championship_name']
-        championship = Championship.objects.get(name=championship_name)
-        final_tournament = Tournament.objects.get(pk=championship.final_tournament)
-        if not Tournament.objects.filter(name=final_tournament_name).exclude(status=Tournament.TOURNAMENT_FINISH_STATUS):
+        # final_tournament_name = form.cleaned_data['final_tournament_name']
+        # championship_name = form.cleaned_data['championship_name']
+        # championship = Championship.objects.get(name=championship_name)
+        # final_tournament = Tournament.objects.get(pk=championship.final_tournament.pk)
+        championship: Championship = _get_championship_and_final_name()['champ']
+        final_tournament: Tournament = _get_championship_and_final_name()['tournament']
+        final_tournament_name = final_tournament.name
+
+        if Tournament.objects.filter(name=final_tournament_name).exclude(status=Tournament.TOURNAMENT_FINISH_STATUS):
             self.create_final_tournament(championship, final_tournament, championship.tournament_bots)
         else:
             messages.add_message(
@@ -276,8 +281,14 @@ class CreateFinalTournamentView(StaffRequiredMixin, FormView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         registrations = FinalTournamentRegistration.objects.all()
+        championship: Championship = _get_championship_and_final_name()['champ']
+        championship_name = championship.name
+        final_tournament: Tournament = _get_championship_and_final_name()['tournament']
+        final_tournament_name = final_tournament.name
         context['registrations'] = registrations
         context['registrations_count'] = len(registrations)
+        context['championship'] = championship_name
+        context['final_tournament'] = final_tournament_name
         return context
     
 def _register_bots_to_final_tournament(champ: Championship, max_bot_finalist: int):
@@ -294,7 +305,19 @@ def _register_bots_to_final_tournament(champ: Championship, max_bot_finalist: in
     finalist_bots = [bot[0] for bot in top_bots]
     finalist_users = []
     for bot in finalist_bots:
-        user = User.objects.get(email=bot)
+        user = User.objects.get(email=bot[0])
         finalist_users.append(user)
-    return finalist_bots
-    
+    return finalist_users
+
+def _get_championship_and_final_name():
+    champ = Championship.objects.get(tournament_bots=5)
+    tournament = Tournament.objects.get(championship=champ.pk)
+    return {
+        "champ": champ,
+        "tournament": tournament,
+    }
+
+# champ = Championship.objects.get(tournament_bots=5)
+# tournament = Tournament.objects.get(championship=champ.pk)
+# form2 = FinalTournamentGeneratorForm()
+# form2.setup_championship_and_tournament_names(champ.name, tournament.name)

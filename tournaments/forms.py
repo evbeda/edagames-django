@@ -22,6 +22,9 @@ class TournamentGeneratorForm(forms.Form):
 
 
 class FinalTournamentGeneratorForm(forms.Form):
-    championship_name = forms.CharField(label="Championship", widget=forms.HiddenInput(), required=True)
-    final_tournament_name = forms.CharField(label="Final tournament", widget=forms.HiddenInput(), required=True)
-        
+    championship_name = forms.CharField(label="Championship", disabled=True,  widget=forms.HiddenInput(), required=False)
+    final_tournament_name = forms.CharField(label="Final tournament", disabled=True,  widget=forms.HiddenInput(), required=False)
+    
+    # def setup_championship_and_tournament_names(self, championship_name, final_tournament_name):
+    #     self.fields['championship_name'] = championship_name
+    #     self.fields['final_tournament_name'] = final_tournament_name
