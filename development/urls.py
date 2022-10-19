@@ -6,6 +6,7 @@ from development.views import (
     MatchDetailsView,
     MatchListView,
     MyBotsView,
+    NewMatchDetailsView
 )
 from development import views_api
 
@@ -26,6 +27,11 @@ urlpatterns = [
         'match_details/<int:pk>',
         MatchDetailsView.as_view(),
         name='match_details',
+    ),
+    path(
+        'new_match_details/<int:pk>',
+        NewMatchDetailsView.as_view(),
+        name='new_match_details',
     ),
     path(
         'mybots',

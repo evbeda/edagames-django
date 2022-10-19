@@ -1,0 +1,46 @@
+.loggerPage{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.columns{
+    column-count:1;
+    list-style: none;
+}
+
+.buttonContainer{
+    margin: 0 0 20px 0 ;
+}
+
+.boardRow{
+    display: flex;
+    flex-flow: column;
+    width: 70%;
+}
+
+.cointainer_rows{
+    width: 30%;
+}
+
+
+.titlesColumns{
+    margin: 20px 0 0 0;
+}
+
+.containerBoard{
+    display: flex;
+    flex-flow: column;
+}
+.rowContainer{
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+}
+
+.spaces{
+   min-width: 52px;
+   text-align: center;
+}
+
+
