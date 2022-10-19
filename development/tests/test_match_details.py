@@ -105,3 +105,28 @@ class TestMatchDetailsView(TestCase):
             response.context_data['data'],
             "testing"
         )
+
+    @patch('development.views.get_logs')
+    @patch('development.views.generate_text')
+    def test_should_shows_pass_data_to_template_when_it_is_received_from_server_in_new_match (
+        self,
+        mocked_get_log,
+        mocked_generate_text,
+    ):
+        return_value = {
+            "details": "testing",
+            "prev": None,
+            "next": "asdqweu12391823uiwjkdnsamd"
+        }
+        return_value = {
+            "details": "testing",
+            "prev": None,
+            "next": "asdqweu12391823uiwjkdnsamd"
+        }
+        mocked_get_log.return_value = return_value
+        mocked_generate_text.return_value = return_value
+        response = self.client.get(f'/new_match_details/{self.user1.id}?page=1')
+        self.assertEquals(
+            response.context_data['data'],
+            "testing"
+        )
