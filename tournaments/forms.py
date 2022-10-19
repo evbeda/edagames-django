@@ -1,10 +1,9 @@
 from distutils.filelist import findall
 from django import forms
-from tournaments.models import Championship
-from tournaments.models import FinalTournamentRegistration
-from tournaments.models import Tournament
+import tournaments
+from tournaments.common.form_utils import get_championships, get_tournaments_associated_with_championship
 
-from tournaments.models import TournamentRegistration, FinalTournamentRegistration
+from tournaments.models import TournamentRegistration
 
 
 class TournamentForm(forms.Form):
@@ -22,9 +21,12 @@ class TournamentGeneratorForm(forms.Form):
 
 
 class FinalTournamentGeneratorForm(forms.Form):
-    championship_name = forms.CharField(label="Championship", disabled=True,  widget=forms.HiddenInput(), required=False)
-    final_tournament_name = forms.CharField(label="Final tournament", disabled=True,  widget=forms.HiddenInput(), required=False)
-    
-    # def setup_championship_and_tournament_names(self, championship_name, final_tournament_name):
-    #     self.fields['championship_name'] = championship_name
-    #     self.fields['final_tournament_name'] = final_tournament_name
+
+    def setup_championship_choice(self):
+        championships = get_championships()
+        final_tournaments = get_tournaments_associated_with_championship()
+        self.fields['championship_name'].choices = championships
+        self.fields['final_tournament_name'].choices = final_tournaments
+
+    championship_name = forms.ChoiceField(label='Championship', widget=forms.Select, choices=[])
+    final_tournament_name = forms.ChoiceField(label='Final tournament', widget=forms.Select, choices=[])
