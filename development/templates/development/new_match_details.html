@@ -1,0 +1,425 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container-fluid">
+    {% if not data %}
+    <h1>Match details</h1>
+    {% endif %}
+    {% if data %}
+    <h1>Match details</h1>
+    {% for log in data %}
+                <script>
+                addLogToArray(JSON.parse(`{{log|safe}}`.replaceAll(`'`,`"`).replaceAll(`"{`,"{").replaceAll(`}"`,"}")))
+                </script>
+            {% endfor %}
+    {% endif %}
+    {% if not data %}
+    <div>There are no logs to display</div>
+    {% endif %}
+    {% if data %}
+    <div class="buttonContainer">
+        <button class="btn btn-primary" onclick="modifyIndex('-')"><<<<<</button>
+        <button class="btn btn-primary" onclick="modifyIndex('+')">>>>>></button>
+    </div>
+    <section class="loggerPage">
+        <div class="cointainer_rows">
+            <div class="columns">
+                <h3 class="titlesColumns">User Message</h3>
+                <li>TimeOut : <a id="event"></a></li>
+                <li>Action : <a id="action"></a></li>
+                <li>Direction: <a id="direction"></a></li>
+                <li>From_col: <a id="from_col"></a></li>
+                <li>From_row: <a id="from_row"></a></li>
+                <li>Game_id: <a id="game_id"></a></li>
+                <li>Turn_token: <a id="turn_token"></a></li>
+                <li>Player: <a id="player"></a></li>
+                <h3 class="titlesColumns">Server Response</h3>
+                <li>Valid: <a id="server_state"></a><a></a></li>
+                <li>Remaining Turns: <a id="server_remaining_turns"></a><a></a></li>
+                <li>Arrows Player 1:  <a id="server_arrows_1"></a></li>	
+                <li>Arrows Player 2:  <a id="server_arrows_2"></a></li>
+                <li>Current_player: <a id="server_current_player"></a></li>
+                <li>Direction: <a id="server_direction"></a></li>			
+                <li>From_col: <a id="server_from_col"></a></li>
+                <li>From_row: <a id="server_from_row"></a></li>
+                <li>Player 1: <a id="server_player_1"></a></li>
+                <li>Player 2: <a id="server_player_2"></a></li>
+                <li>Score player 1: <a id="server_score_1"></a></li>
+                <li>Score player 2: <a id="server_score_2"></a></li>
+                <li>Side: <a id="server_side"></a></li>
+                <li>Game Id: <a id="server_game_id"></a></li>
+            </div>        
+        </div>
+        <div class="boardRow" >
+            <h3>Board</h3>
+            <div id="server_board"></div>
+            <section class="containerBoard">
+                <div class="rowContainer">
+                    <div class="spaces">     </div>
+                    <div class="spaces">| 0 |</div>
+                    <div class="spaces">| 1 |</div>
+                    <div class="spaces">| 2 |</div>
+                    <div class="spaces">| 3 |</div>
+                    <div class="spaces">| 4 |</div>
+                    <div class="spaces">| 5 |</div>
+                    <div class="spaces">| 6 |</div>
+                    <div class="spaces">| 7 |</div>
+                    <div class="spaces">| 8 |</div>
+                    <div class="spaces">| 9 |</div>
+                    <div class="spaces">|10 |</div>
+                    <div class="spaces">|11 |</div>
+                    <div class="spaces">|12 |</div>
+                    <div class="spaces">|13 |</div>
+                    <div class="spaces">|14 |</div>
+                    <div class="spaces">|15 |</div>
+                    <div class="spaces">|16 |</div> 
+                </div>
+                <div class="rowContainer" id="row_0">
+                    <div class="spaces">  0 |</div>
+                    <div class="spaces" id="row_0_col_0"></div>
+                    <div class="spaces" id="row_0_col_1"></div>
+                    <div class="spaces" id="row_0_col_2"></div>
+                    <div class="spaces" id="row_0_col_3"></div>
+                    <div class="spaces" id="row_0_col_4"></div>
+                    <div class="spaces" id="row_0_col_5"></div>
+                    <div class="spaces" id="row_0_col_6"></div>
+                    <div class="spaces" id="row_0_col_7"></div>
+                    <div class="spaces" id="row_0_col_8"></div>
+                    <div class="spaces" id="row_0_col_9"></div>
+                    <div class="spaces" id="row_0_col_10"></div>
+                    <div class="spaces" id="row_0_col_11"></div>
+                    <div class="spaces" id="row_0_col_12"></div>
+                    <div class="spaces" id="row_0_col_13"></div>
+                    <div class="spaces" id="row_0_col_14"></div>
+                    <div class="spaces" id="row_0_col_15"></div>
+                    <div class="spaces" id="row_0_col_16"></div> 
+                </div>
+                <div class="rowContainer" id="row_1">
+                    <div class="spaces">  1 |</div>
+                    <div class="spaces" id="row_1_col_0"></div>
+                    <div class="spaces" id="row_1_col_1"></div>
+                    <div class="spaces" id="row_1_col_2"></div>
+                    <div class="spaces" id="row_1_col_3"></div>
+                    <div class="spaces" id="row_1_col_4"></div>
+                    <div class="spaces" id="row_1_col_5"></div>
+                    <div class="spaces" id="row_1_col_6"></div>
+                    <div class="spaces" id="row_1_col_7"></div>
+                    <div class="spaces" id="row_1_col_8"></div>
+                    <div class="spaces" id="row_1_col_9"></div>
+                    <div class="spaces" id="row_1_col_10"></div>
+                    <div class="spaces" id="row_1_col_11"></div>
+                    <div class="spaces" id="row_1_col_12"></div>
+                    <div class="spaces" id="row_1_col_13"></div>
+                    <div class="spaces" id="row_1_col_14"></div>
+                    <div class="spaces" id="row_1_col_15"></div>
+                    <div class="spaces" id="row_1_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_2">
+                    <div class="spaces">  2 |</div>
+                    <div class="spaces" id="row_2_col_0"></div>
+                    <div class="spaces" id="row_2_col_1"></div>
+                    <div class="spaces" id="row_2_col_2"></div>
+                    <div class="spaces" id="row_2_col_3"></div>
+                    <div class="spaces" id="row_2_col_4"></div>
+                    <div class="spaces" id="row_2_col_5"></div>
+                    <div class="spaces" id="row_2_col_6"></div>
+                    <div class="spaces" id="row_2_col_7"></div>
+                    <div class="spaces" id="row_2_col_8"></div>
+                    <div class="spaces" id="row_2_col_9"></div>
+                    <div class="spaces" id="row_2_col_10"></div>
+                    <div class="spaces" id="row_2_col_11"></div>
+                    <div class="spaces" id="row_2_col_12"></div>
+                    <div class="spaces" id="row_2_col_13"></div>
+                    <div class="spaces" id="row_2_col_14"></div>
+                    <div class="spaces" id="row_2_col_15"></div>
+                    <div class="spaces" id="row_2_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_3">
+                    <div class="spaces">  3 |</div>
+                    <div class="spaces" id="row_3_col_0"></div>
+                    <div class="spaces" id="row_3_col_1"></div>
+                    <div class="spaces" id="row_3_col_2"></div>
+                    <div class="spaces" id="row_3_col_3"></div>
+                    <div class="spaces" id="row_3_col_4"></div>
+                    <div class="spaces" id="row_3_col_5"></div>
+                    <div class="spaces" id="row_3_col_6"></div>
+                    <div class="spaces" id="row_3_col_7"></div>
+                    <div class="spaces" id="row_3_col_8"></div>
+                    <div class="spaces" id="row_3_col_9"></div>
+                    <div class="spaces" id="row_3_col_10"></div>
+                    <div class="spaces" id="row_3_col_11"></div>
+                    <div class="spaces" id="row_3_col_12"></div>
+                    <div class="spaces" id="row_3_col_13"></div>
+                    <div class="spaces" id="row_3_col_14"></div>
+                    <div class="spaces" id="row_3_col_15"></div>
+                    <div class="spaces" id="row_3_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_4">
+                    <div class="spaces">  4 |</div>
+                    <div class="spaces" id="row_4_col_0"></div>
+                    <div class="spaces" id="row_4_col_1"></div>
+                    <div class="spaces" id="row_4_col_2"></div>
+                    <div class="spaces" id="row_4_col_3"></div>
+                    <div class="spaces" id="row_4_col_4"></div>
+                    <div class="spaces" id="row_4_col_5"></div>
+                    <div class="spaces" id="row_4_col_6"></div>
+                    <div class="spaces" id="row_4_col_7"></div>
+                    <div class="spaces" id="row_4_col_8"></div>
+                    <div class="spaces" id="row_4_col_9"></div>
+                    <div class="spaces" id="row_4_col_10"></div>
+                    <div class="spaces" id="row_4_col_11"></div>
+                    <div class="spaces" id="row_4_col_12"></div>
+                    <div class="spaces" id="row_4_col_13"></div>
+                    <div class="spaces" id="row_4_col_14"></div>
+                    <div class="spaces" id="row_4_col_15"></div>
+                    <div class="spaces" id="row_4_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_5">
+                    <div class="spaces">  5 |</div>
+                    <div class="spaces" id="row_5_col_0"></div>
+                    <div class="spaces" id="row_5_col_1"></div>
+                    <div class="spaces" id="row_5_col_2"></div>
+                    <div class="spaces" id="row_5_col_3"></div>
+                    <div class="spaces" id="row_5_col_4"></div>
+                    <div class="spaces" id="row_5_col_5"></div>
+                    <div class="spaces" id="row_5_col_6"></div>
+                    <div class="spaces" id="row_5_col_7"></div>
+                    <div class="spaces" id="row_5_col_8"></div>
+                    <div class="spaces" id="row_5_col_9"></div>
+                    <div class="spaces" id="row_5_col_10"></div>
+                    <div class="spaces" id="row_5_col_11"></div>
+                    <div class="spaces" id="row_5_col_12"></div>
+                    <div class="spaces" id="row_5_col_13"></div>
+                    <div class="spaces" id="row_5_col_14"></div>
+                    <div class="spaces" id="row_5_col_15"></div>
+                    <div class="spaces" id="row_5_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_6">
+                    <div class="spaces">  6 |</div>
+                    <div class="spaces" id="row_6_col_0"></div>
+                    <div class="spaces" id="row_6_col_1"></div>
+                    <div class="spaces" id="row_6_col_2"></div>
+                    <div class="spaces" id="row_6_col_3"></div>
+                    <div class="spaces" id="row_6_col_4"></div>
+                    <div class="spaces" id="row_6_col_5"></div>
+                    <div class="spaces" id="row_6_col_6"></div>
+                    <div class="spaces" id="row_6_col_7"></div>
+                    <div class="spaces" id="row_6_col_8"></div>
+                    <div class="spaces" id="row_6_col_9"></div>
+                    <div class="spaces" id="row_6_col_10"></div>
+                    <div class="spaces" id="row_6_col_11"></div>
+                    <div class="spaces" id="row_6_col_12"></div>
+                    <div class="spaces" id="row_6_col_13"></div>
+                    <div class="spaces" id="row_6_col_14"></div>
+                    <div class="spaces" id="row_6_col_15"></div>
+                    <div class="spaces" id="row_6_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_7">
+                    <div class="spaces">  7 |</div>
+                    <div class="spaces" id="row_7_col_0"></div>
+                    <div class="spaces" id="row_7_col_1"></div>
+                    <div class="spaces" id="row_7_col_2"></div>
+                    <div class="spaces" id="row_7_col_3"></div>
+                    <div class="spaces" id="row_7_col_4"></div>
+                    <div class="spaces" id="row_7_col_5"></div>
+                    <div class="spaces" id="row_7_col_6"></div>
+                    <div class="spaces" id="row_7_col_7"></div>
+                    <div class="spaces" id="row_7_col_8"></div>
+                    <div class="spaces" id="row_7_col_9"></div>
+                    <div class="spaces" id="row_7_col_10"></div>
+                    <div class="spaces" id="row_7_col_11"></div>
+                    <div class="spaces" id="row_7_col_12"></div>
+                    <div class="spaces" id="row_7_col_13"></div>
+                    <div class="spaces" id="row_7_col_14"></div>
+                    <div class="spaces" id="row_7_col_15"></div>
+                    <div class="spaces" id="row_7_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_8">
+                    <div class="spaces">  8 |</div>
+                    <div class="spaces" id="row_8_col_0"></div>
+                    <div class="spaces" id="row_8_col_1"></div>
+                    <div class="spaces" id="row_8_col_2"></div>
+                    <div class="spaces" id="row_8_col_3"></div>
+                    <div class="spaces" id="row_8_col_4"></div>
+                    <div class="spaces" id="row_8_col_5"></div>
+                    <div class="spaces" id="row_8_col_6"></div>
+                    <div class="spaces" id="row_8_col_7"></div>
+                    <div class="spaces" id="row_8_col_8"></div>
+                    <div class="spaces" id="row_8_col_9"></div>
+                    <div class="spaces" id="row_8_col_10"></div>
+                    <div class="spaces" id="row_8_col_11"></div>
+                    <div class="spaces" id="row_8_col_12"></div>
+                    <div class="spaces" id="row_8_col_13"></div>
+                    <div class="spaces" id="row_8_col_14"></div>
+                    <div class="spaces" id="row_8_col_15"></div>
+                    <div class="spaces" id="row_8_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_9">
+                    <div class="spaces">  9 |</div>
+                    <div class="spaces" id="row_9_col_0"></div>
+                    <div class="spaces" id="row_9_col_1"></div>
+                    <div class="spaces" id="row_9_col_2"></div>
+                    <div class="spaces" id="row_9_col_3"></div>
+                    <div class="spaces" id="row_9_col_4"></div>
+                    <div class="spaces" id="row_9_col_5"></div>
+                    <div class="spaces" id="row_9_col_6"></div>
+                    <div class="spaces" id="row_9_col_7"></div>
+                    <div class="spaces" id="row_9_col_8"></div>
+                    <div class="spaces" id="row_9_col_9"></div>
+                    <div class="spaces" id="row_9_col_10"></div>
+                    <div class="spaces" id="row_9_col_11"></div>
+                    <div class="spaces" id="row_9_col_12"></div>
+                    <div class="spaces" id="row_9_col_13"></div>
+                    <div class="spaces" id="row_9_col_14"></div>
+                    <div class="spaces" id="row_9_col_15"></div>
+                    <div class="spaces" id="row_9_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_10">
+                    <div class="spaces"> 10 |</div>
+                    <div class="spaces" id="row_10_col_0"></div>
+                    <div class="spaces" id="row_10_col_1"></div>
+                    <div class="spaces" id="row_10_col_2"></div>
+                    <div class="spaces" id="row_10_col_3"></div>
+                    <div class="spaces" id="row_10_col_4"></div>
+                    <div class="spaces" id="row_10_col_5"></div>
+                    <div class="spaces" id="row_10_col_6"></div>
+                    <div class="spaces" id="row_10_col_7"></div>
+                    <div class="spaces" id="row_10_col_8"></div>
+                    <div class="spaces" id="row_10_col_9"></div>
+                    <div class="spaces" id="row_10_col_10"></div>
+                    <div class="spaces" id="row_10_col_11"></div>
+                    <div class="spaces" id="row_10_col_12"></div>
+                    <div class="spaces" id="row_10_col_13"></div>
+                    <div class="spaces" id="row_10_col_14"></div>
+                    <div class="spaces" id="row_10_col_15"></div>
+                    <div class="spaces" id="row_10_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_11">
+                    <div class="spaces"> 11 |</div>
+                    <div class="spaces" id="row_11_col_0"></div>
+                    <div class="spaces" id="row_11_col_1"></div>
+                    <div class="spaces" id="row_11_col_2"></div>
+                    <div class="spaces" id="row_11_col_3"></div>
+                    <div class="spaces" id="row_11_col_4"></div>
+                    <div class="spaces" id="row_11_col_5"></div>
+                    <div class="spaces" id="row_11_col_6"></div>
+                    <div class="spaces" id="row_11_col_7"></div>
+                    <div class="spaces" id="row_11_col_8"></div>
+                    <div class="spaces" id="row_11_col_9"></div>
+                    <div class="spaces" id="row_11_col_10"></div>
+                    <div class="spaces" id="row_11_col_11"></div>
+                    <div class="spaces" id="row_11_col_12"></div>
+                    <div class="spaces" id="row_11_col_13"></div>
+                    <div class="spaces" id="row_11_col_14"></div>
+                    <div class="spaces" id="row_11_col_15"></div>
+                    <div class="spaces" id="row_11_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_12">
+                    <div class="spaces"> 12 |</div>
+                    <div class="spaces" id="row_12_col_0"></div>
+                    <div class="spaces" id="row_12_col_1"></div>
+                    <div class="spaces" id="row_12_col_2"></div>
+                    <div class="spaces" id="row_12_col_3"></div>
+                    <div class="spaces" id="row_12_col_4"></div>
+                    <div class="spaces" id="row_12_col_5"></div>
+                    <div class="spaces" id="row_12_col_6"></div>
+                    <div class="spaces" id="row_12_col_7"></div>
+                    <div class="spaces" id="row_12_col_8"></div>
+                    <div class="spaces" id="row_12_col_9"></div>
+                    <div class="spaces" id="row_12_col_10"></div>
+                    <div class="spaces" id="row_12_col_11"></div>
+                    <div class="spaces" id="row_12_col_12"></div>
+                    <div class="spaces" id="row_12_col_13"></div>
+                    <div class="spaces" id="row_12_col_14"></div>
+                    <div class="spaces" id="row_12_col_15"></div>
+                    <div class="spaces" id="row_12_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_13">
+                    <div class="spaces"> 13 |</div>
+                    <div class="spaces" id="row_13_col_0"></div>
+                    <div class="spaces" id="row_13_col_1"></div>
+                    <div class="spaces" id="row_13_col_2"></div>
+                    <div class="spaces" id="row_13_col_3"></div>
+                    <div class="spaces" id="row_13_col_4"></div>
+                    <div class="spaces" id="row_13_col_5"></div>
+                    <div class="spaces" id="row_13_col_6"></div>
+                    <div class="spaces" id="row_13_col_7"></div>
+                    <div class="spaces" id="row_13_col_8"></div>
+                    <div class="spaces" id="row_13_col_9"></div>
+                    <div class="spaces" id="row_13_col_10"></div>
+                    <div class="spaces" id="row_13_col_11"></div>
+                    <div class="spaces" id="row_13_col_12"></div>
+                    <div class="spaces" id="row_13_col_13"></div>
+                    <div class="spaces" id="row_13_col_14"></div>
+                    <div class="spaces" id="row_13_col_15"></div>
+                    <div class="spaces" id="row_13_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_14">
+                    <div class="spaces"> 14 |</div>
+                    <div class="spaces" id="row_14_col_0"></div>
+                    <div class="spaces" id="row_14_col_1"></div>
+                    <div class="spaces" id="row_14_col_2"></div>
+                    <div class="spaces" id="row_14_col_3"></div>
+                    <div class="spaces" id="row_14_col_4"></div>
+                    <div class="spaces" id="row_14_col_5"></div>
+                    <div class="spaces" id="row_14_col_6"></div>
+                    <div class="spaces" id="row_14_col_7"></div>
+                    <div class="spaces" id="row_14_col_8"></div>
+                    <div class="spaces" id="row_14_col_9"></div>
+                    <div class="spaces" id="row_14_col_10"></div>
+                    <div class="spaces" id="row_14_col_11"></div>
+                    <div class="spaces" id="row_14_col_12"></div>
+                    <div class="spaces" id="row_14_col_13"></div>
+                    <div class="spaces" id="row_14_col_14"></div>
+                    <div class="spaces" id="row_14_col_15"></div>
+                    <div class="spaces" id="row_14_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_15">
+                    <div class="spaces"> 15 |</div>
+                    <div class="spaces" id="row_15_col_0"></div>
+                    <div class="spaces" id="row_15_col_1"></div>
+                    <div class="spaces" id="row_15_col_2"></div>
+                    <div class="spaces" id="row_15_col_3"></div>
+                    <div class="spaces" id="row_15_col_4"></div>
+                    <div class="spaces" id="row_15_col_5"></div>
+                    <div class="spaces" id="row_15_col_6"></div>
+                    <div class="spaces" id="row_15_col_7"></div>
+                    <div class="spaces" id="row_15_col_8"></div>
+                    <div class="spaces" id="row_15_col_9"></div>
+                    <div class="spaces" id="row_15_col_10"></div>
+                    <div class="spaces" id="row_15_col_11"></div>
+                    <div class="spaces" id="row_15_col_12"></div>
+                    <div class="spaces" id="row_15_col_13"></div>
+                    <div class="spaces" id="row_15_col_14"></div>
+                    <div class="spaces" id="row_15_col_15"></div>
+                    <div class="spaces" id="row_15_col_16"></div>
+                </div>
+                <div class="rowContainer" id="row_16">
+                    <div class="spaces"> 16 |</div>
+                    <div class="spaces" id="row_16_col_0"></div>
+                    <div class="spaces" id="row_16_col_1"></div>
+                    <div class="spaces" id="row_16_col_2"></div>
+                    <div class="spaces" id="row_16_col_3"></div>
+                    <div class="spaces" id="row_16_col_4"></div>
+                    <div class="spaces" id="row_16_col_5"></div>
+                    <div class="spaces" id="row_16_col_6"></div>
+                    <div class="spaces" id="row_16_col_7"></div>
+                    <div class="spaces" id="row_16_col_8"></div>
+                    <div class="spaces" id="row_16_col_9"></div>
+                    <div class="spaces" id="row_16_col_10"></div>
+                    <div class="spaces" id="row_16_col_11"></div>
+                    <div class="spaces" id="row_16_col_12"></div>
+                    <div class="spaces" id="row_16_col_13"></div>
+                    <div class="spaces" id="row_16_col_14"></div>
+                    <div class="spaces" id="row_16_col_15"></div>
+                    <div class="spaces" id="row_16_col_16"></div>
+                </div> 
+            </section>
+        </div>
+    </section>
+        <script>
+            firstView()
+        </script>
+    {% endif %}
+</div>
+{% endblock %}
