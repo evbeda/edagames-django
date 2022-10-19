@@ -16,3 +16,9 @@ class TournamentForm(forms.Form):
 class TournamentGeneratorForm(forms.Form):
     tournament_name = forms.CharField(label='name', required=True)
     max_players = forms.IntegerField(label='maxPlayers', required=True)
+
+
+class ChampionshipCreateForm(forms.Form):
+    championship_name = forms.CharField(label='name', required=True)
+    tournament_bots = forms.IntegerField(label='Finalist Bots per Tournament', required=True)
+    max_players = forms.IntegerField(label='maxPlayers', required=True)

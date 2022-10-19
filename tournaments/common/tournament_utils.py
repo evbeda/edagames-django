@@ -47,6 +47,7 @@ def calculate_match_results_by_player(tournament_id):
         "total_match_lost": 0,
         "total_score": 0,
     })
+    total_key = ""
     for bot_name, match_result, quantity in match_members_results:
         if match_result == WIN:
             total_key = "total_match_won"

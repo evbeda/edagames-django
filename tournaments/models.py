@@ -27,6 +27,12 @@ class Tournament(models.Model):
 
     name = models.CharField(max_length=30)
     date_tournament = models.DateTimeField(auto_now_add=True, verbose_name='Date')
+    championship = models.ForeignKey(
+        Championship,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     status = models.CharField(
         max_length=8,
         choices=TOURNAMENT_STATUS,
