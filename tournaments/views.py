@@ -28,6 +28,7 @@ from tournaments.server_requests import (
     start_tournament,
 )
 from tournaments.forms import (
+    ChampionshipGeneratorForm,
     TournamentForm,
     TournamentGeneratorForm,
 )
@@ -209,6 +210,12 @@ class TournamentResultsView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         return sort_position_table(get_tournament_results(self.kwargs.get('pk')))
+
+
+class ChampionshipCreateView(StaffRequiredMixin, FormView):
+    form_class = ChampionshipGeneratorForm
+    success_url = reverse_lazy('tournaments:tournaments_pending')
+    template_name = 'tournaments/championship_generator.html'
 
 
 @require_http_methods(["POST"])

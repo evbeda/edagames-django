@@ -72,6 +72,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         {% if user.is_staff %}
                         <a class="collapse-item" href="{% url 'tournaments:create_tournament' %}">Create Tournament</a>
+                        <a class="collapse-item" href="{% url 'tournaments:create_championship' %}">Genereate Championship</a>
                         <a class="collapse-item" href="{% url 'tournaments:tournament_generator' %}">Generate Tournament</a>
                         <a class="collapse-item" href="{% url 'tournaments:tournaments_pending' %}">Pending Tournaments</a>
                         {% endif %}

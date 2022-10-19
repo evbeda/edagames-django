@@ -16,3 +16,9 @@ class TournamentForm(forms.Form):
 class TournamentGeneratorForm(forms.Form):
     tournament_name = forms.CharField(label='name', required=True)
     max_players = forms.IntegerField(label='maxPlayers', required=True)
+
+
+class ChampionshipGeneratorForm(forms.Form):
+    championship_name = forms.CharField(label='championship name', required=True)
+    finalist_users_per_tournament = forms.IntegerField(label='finalist users per tournament', required=True)
+    max_players = forms.IntegerField(label='max players per tournament', required=True)

@@ -89,9 +89,9 @@ in the same pwd as the manage.py run
 ```
 python3 manage.py test
 ```
-if you want to see the coverage and generate a html coverage
+if you want to see the coverage and generate a html coverage run
 ```
-coverage run manage.py test && pipenv run coverage xml && pipenv run coverage report -m
+coverage run manage.py test && pipenv run coverage xml && pipenv run coverage report -m && pipenv run coverage html
 ```
 
 ### Problems that you could have
