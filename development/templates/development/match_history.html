@@ -24,7 +24,7 @@
             <td>{{ player.winner }}</td>
             {% if forloop.first %}
             <td>{{ match.match.date_match }}</td>
-            <td><a href="{% url 'development:match_details' pk=match.match.id %}">view</a></td>
+            <td><a href="{% url 'development:new_match_details' pk=match.match.id %}">view</a></td>
             {% endif %}
         </tr>
         {% endfor %}
