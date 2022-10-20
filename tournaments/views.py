@@ -20,6 +20,7 @@ from tournaments.common.tournament_utils import (
     sort_position_table,
 )
 from tournaments.models import (
+    Championship,
     Tournament,
     TournamentRegistration,
 )
@@ -217,17 +218,83 @@ class ChampionshipCreateView(StaffRequiredMixin, FormView):
     success_url = reverse_lazy('tournaments:tournaments_pending')
     template_name = 'tournaments/championship_generator.html'
 
+    def create_championship(self, championship_name, max_players, tournament_bots):
+        tournament_registrations_qs = TournamentRegistration.objects.all()
+        tournament_registrations = list(tournament_registrations_qs)
+        shuffle(tournament_registrations)
+        tournament_count = len(tournament_registrations) // max_players
+        if len(tournament_registrations) % max_players > 0:
+            tournament_count += 1
+        final_tournament = Tournament.objects.create(name=f'{championship_name} FINAL')
+        championship = Championship.objects.create(
+            name=championship_name,
+            final_tournament=final_tournament,
+            tournament_bots=tournament_bots,
+        )
+        final_tournament.championship = championship
+        final_tournament.save()
+        for tournament_index in range(0, tournament_count):
+            tournament = Tournament.objects.create(
+                name=f'{championship_name} #{tournament_index + 1}',
+                championship=championship,
+            )
+            registration_index = tournament_index * max_players
+            bots = [
+                Bot.objects.get(user=tournament_registration.user, name=tournament_registration.user.email)
+                for tournament_registration
+                in tournament_registrations[registration_index: registration_index + max_players]
+            ]
+            challenges = combinations(bots, 2)
+            for bot_challenger, bots_challenged in challenges:
+                challenge = Challenge.objects.create(
+                    bot_challenger=bot_challenger,
+                    tournament=tournament,
+                )
+                challenge.bots_challenged.add(bots_challenged)
+
+    def form_valid(self, form):
+        championship_name = form.cleaned_data['championship_name']
+        if not Championship.objects.filter(name=championship_name).exists():
+            max_players = form.cleaned_data['max_players']
+            tournament_bots = form.cleaned_data['finalist_users_per_tournament']
+            self.create_championship(championship_name, max_players, tournament_bots)
+        else:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'It is not possible to create this record, a championship already exists with the name '
+                '{}. Try a new name'.format(championship_name)
+            )
+            return super().form_invalid(form)
+        return super().form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        registrations = TournamentRegistration.objects.all()
+        context['registrations'] = registrations
+        context['registrations_count'] = len(registrations)
+        return context
+
 
 @require_http_methods(["POST"])
 def delete_tournament(request, pk):
     try:
         tournament = Tournament.objects.get(id=pk)
-        tournament.delete()
-        messages.add_message(
-            request,
-            messages.SUCCESS,
-            'Tournament successfully removed'
-        )
+        if 'FINAL' in tournament.name:
+            delete_championship_and_his_tournaments(tournament, request)
+        elif tournament.championship is not None:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                'Cant delete a tournament that is linked to a FINAL'
+            )
+        else:
+            tournament.delete()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Tournament successfully removed'
+            )
     except Tournament.DoesNotExist:
         messages.add_message(
             request,
@@ -235,3 +302,14 @@ def delete_tournament(request, pk):
             'The tournament does not exists'
         )
     return redirect('tournaments:tournaments_pending')
+
+
+def delete_championship_and_his_tournaments(final_tournament: Tournament, request):
+    list_of_tournaments = list(Tournament.objects.filter(championship=final_tournament.championship))
+    for tournament in list_of_tournaments:
+        tournament.delete()
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        'Championship and his tournaments successfully removed'
+    )
