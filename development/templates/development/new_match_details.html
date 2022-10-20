@@ -9,7 +9,7 @@
     <h1>Match details</h1>
     {% for log in data %}
                 <script>
-                addLogToArray(JSON.parse(`{{log|safe}}`.replaceAll(`'`,`"`).replaceAll(`"{`,"{").replaceAll(`}"`,"}")))
+                addLogToArray(`{{log|safe}}`)
                 </script>
             {% endfor %}
     {% endif %}
