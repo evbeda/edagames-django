@@ -1,0 +1,10 @@
+div[class="row alert"] {
+    display: flex;
+    align-items: flex-end;
+   justify-content: flex-end;
+  }
+  
+  .alert-copy{
+    color:black;
+    display: none;
+  }
