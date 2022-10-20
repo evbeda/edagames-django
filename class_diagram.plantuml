@@ -43,13 +43,20 @@ class Match{
 id: int
 game_id: str
 date: str
-tournament_id: str(None)
+tournament_id: int|null
 }
 
 class Tournament{
 id: int
 name: str
 matches_num: int
+championship_id: int|null
+}
+
+class Championship{
+id: int
+name: str
+final_tournament_id: int|null
 }
 
 User --> Bot
@@ -60,4 +67,6 @@ Bots_challenged --> Challenge
 Bots_in_match --> Match
 Match --> Tournament
 Challenge --> Tournament
+Tournament --> Championship
+Championship --> Tournament
 @enduml
