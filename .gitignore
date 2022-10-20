@@ -138,3 +138,8 @@ senku/.idea/
 
 # Docker
 commands.sh
+
+#Node Modules
+# Dependency directories
+node_modules/
+package-lock.json
