@@ -86,6 +86,26 @@ class MatchDetailsView(DetailView):
         return context
 
 
+class NewMatchDetailsView(DetailView):
+    template_name = 'development/new_match_details.html'
+    model = Match
+
+    def get_context_data(self, **kwargs):
+        response = get_logs(
+            game_id=self.object.game_id,
+            page_token=self.request.GET.get('page'),
+        )
+        context = super(
+            NewMatchDetailsView,
+            self,
+        ).get_context_data(**kwargs)
+        details_for_front = {}
+        for index, element in enumerate(response['details']):
+            details_for_front[str(index)] = element
+        context['data'] = response['details']
+        return context
+
+
 class MyBotsView(ListView):
     table_class = BotTable
     template_name = 'development/my_bots.html'

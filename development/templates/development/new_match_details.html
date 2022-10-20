@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container-fluid">
+    {% if not data %}
+    <h1>Match details</h1>
+    {% endif %}
+    {% if data %}
+    <h1>Match details</h1>
+    {% for log in data %}
+                <script>
+                addLogToArray(`{{log|safe}}`)
+                </script>
+            {% endfor %}
+    {% endif %}
+    {% if not data %}
+    <div>There are no logs to display</div>
+    {% endif %}
+    {% if data %}
+    <div class="buttonContainer">
+        <button class="btn btn-primary" onclick="modifyIndex('-')"><<<<<</button>
+        <button class="btn btn-primary" onclick="modifyIndex('+')">>>>>></button>
+    </div>
+    <section class="loggerPage">
+        <div class="cointainer_rows">
+            <div class="columns">
+                <h3 class="titlesColumns">User Message</h3>
+                <li>TimeOut : <a id="event"></a></li>
+                <li>Action : <a id="action"></a></li>
+                <li>Direction: <a id="direction"></a></li>
+                <li>From_col: <a id="from_col"></a></li>
+                <li>From_row: <a id="from_row"></a></li>
+                <li>Game_id: <a id="game_id"></a></li>
+                <li>Turn_token: <a id="turn_token"></a></li>
+                <li>Player: <a id="player"></a></li>
+                <h3 class="titlesColumns">Server Response</h3>
+                <li>Valid: <a id="server_state"></a><a></a></li>
+                <li>Remaining Turns: <a id="server_remaining_turns"></a><a></a></li>
+                <li>Arrows Player 1:  <a id="server_arrows_1"></a></li>	
+                <li>Arrows Player 2:  <a id="server_arrows_2"></a></li>
+                <li>Direction: <a id="server_direction"></a></li>			
+                <li>From_col: <a id="server_from_col"></a></li>
+                <li>From_row: <a id="server_from_row"></a></li>
+                <li>Player 1: <a id="server_player_1"></a></li>
+                <li>Player 2: <a id="server_player_2"></a></li>
+                <li>Score player 1: <a id="server_score_1"></a></li>
+                <li>Score player 2: <a id="server_score_2"></a></li>
+                <li>Side: <a id="server_side"></a></li>
+                <li>Game Id: <a id="server_game_id"></a></li>
+            </div>        
+        </div>
+        <div class="boardRow" >
+            <h3>Board</h3>
+            <section id="containerBoard" class="containerBoard">
+            </section>
+        </div>
+    </section>
+        <script>
+            firstView()
+        </script>
+    {% endif %}
+</div>
+{% endblock %}
