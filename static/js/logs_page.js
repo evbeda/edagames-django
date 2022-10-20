@@ -27,14 +27,18 @@ const keyData = "data";
 const keyEvent = "event";
 const keyPlayer = "player";
 const CHARACTERPERCELL = /.{1,5}/g;
+const replaceQuotationMarks = [[`'`,`"`],[`"{`,"{"],[`}"`,"}"]]
 
 
-const addLogToArray = (log) =>{
-    listOfLogs.push(log)
+const addLogToArray = (log) =>{   
+    replaceQuotationMarks.forEach((replace)=>{
+        log = log.replaceAll(replace[0],replace[1])
+    })
+    listOfLogs.push(JSON.parse(log))
 }
 
 const modifiDOMElementUser = (key, log = null) =>{
-    if(key == keyAction || key == keyAction || key == keyAction ){
+    if(key == keyAction || key == keyEvent || key == keyPlayer ){
         document.getElementById(key).innerHTML =  (log && listOfLogs[index][key])  ? listOfLogs[index][key] : "";
     }else{
         document.getElementById(key).innerHTML = log  ? listOfLogs[index][keyData][key] : "";
