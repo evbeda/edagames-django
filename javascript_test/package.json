@@ -1,0 +1,14 @@
+{
+  "name": "eda_6_proyect",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "jest --verbose"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^28.1.0"
+  }
+}

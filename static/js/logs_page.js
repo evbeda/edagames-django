@@ -111,5 +111,10 @@ const beatiBoard = (board) =>{
     }
 }
 
-
-
+//export function add variables to test
+// Like a object 
+module.exports = {
+    addLogToArray: addLogToArray,
+    listOfLogs:listOfLogs,
+    updateDomElement:updateDomElement
+};
