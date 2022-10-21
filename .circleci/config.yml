@@ -1,6 +1,25 @@
 version: 2.1
 
 jobs:
+  build-and-test-js:
+    docker:
+      - image: cimg/node:14.18.1
+    working_directory: ~/javascript_test
+    steps:
+      - checkout
+      - run:
+          name: update npm
+          command: "sudo npm install --unsafe-perm -g npm@latest"
+      - run:
+          name: install dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: run space test
+          command: npm test
   build-and-test:
     docker:
       - image: cimg/python:3.8.9
