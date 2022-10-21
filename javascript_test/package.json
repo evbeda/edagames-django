@@ -2,6 +2,7 @@
   "name": "eda_6_proyect",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "test": "jest --verbose"
   },
@@ -9,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^28.1.0"
+    "@babel/preset-env": "^7.19.4",
+    "babel-jest": "^29.2.1",
+    "jest": "^28.1.3"
   }
 }
