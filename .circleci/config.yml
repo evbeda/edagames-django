@@ -121,6 +121,7 @@ workflows:
             - 'edagames'
       - trigger-main-repo-update:
           requires:
+            - build-and-test-js
             - build-and-test
           filters:
             branches:
