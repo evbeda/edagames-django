@@ -20,7 +20,7 @@
               <td width="21%">{{ bot.name }}</td>
               <td width="69%" class="text-break">{{ bot.token}}</td>
               <td width="25%" >
-                <input id="{{bot.token}}" type="button" class="btn btn-primary" value="copy" onclick="copyToClickBoard(`{{bot.token}}`)">
+                <input id="{{bot.token}}" type="button" class="btn btn-primary" value="copy" onclick="changeColor(`{{bot.token}}`);copyToClickBoard(`{{bot.token}}`);">
               </td>
               <td>
                 <form action = "{% url 'development:delete_bot' pk=bot.id %}" method = "post">{% csrf_token %}
