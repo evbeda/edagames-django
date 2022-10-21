@@ -6,16 +6,18 @@
     <div class="pre-scrollable">
     <table 
         class="table table-striped table-bordered table-sm text-center"
-        style="width: 100%">
+        style="width: 100%"
+        id = "tornamentTable"
+        >
         <thead>
         <tr class="bg-primary text-white head-top">
-            <th scope="col">#</th>
-            <th scope="col">Player</th>
-            <th scope="col">Total Match</th>
-            <th scope="col">Total Wins</th>
-            <th scope="col">Total Ties</th>
-            <th scope="col">Total Losses</th>
-            <th scope="col">Total Score</th>
+            <th scope="col" class="title" onclick="sortTable(0)">#</th>
+            <th scope="col" class="title" onclick="sortTable(1)">Player</th>
+            <th scope="col" class="title" onclick="sortTable(2)">Total Match</th>
+            <th scope="col" class="title" onclick="sortTable(3)">Total Wins</th>
+            <th scope="col" class="title" onclick="sortTable(4)">Total Ties</th>
+            <th scope="col" class="title" onclick="sortTable(5)">Total Losses</th>
+            <th scope="col" class="title" onclick="sortTable(6)">Total Score</th>
           </tr>
         </thead>
         <tbody>
