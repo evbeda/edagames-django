@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div class="container">
+  <h1>Championship History</h1> 
+  <div class="pre-scrollable">
+    <table class="table table-striped table-bordered table-sm">
+      <thead>
+        <tr class="bg-primary text-white head-top">
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Final Tournament</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for championship in object_list %}
+        <tr>
+          <td>{{ championship.id }}</td>
+          <td>{{ championship.name }}</td>
+          <td>{{ championship.final_tournament.name }}</td>
+          <td>
+            <form action = "{% url 'tournaments:create_registration' championship_id=championship.id %}" method = "post">
+                {% csrf_token %}
+              <input type="submit" class="btn btn-primary" value="View finalist users">
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if not object_list %}
+    <div class="text-center">There are no championship to display</div>
+  {% endif %}
+</div>       
+
+
+<hr>
+{% endblock %}

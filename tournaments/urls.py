@@ -3,8 +3,11 @@ from django.urls import (
 )
 from .views import (
     ChampionshipCreateView,
+    ChampionshipHistoryView,
     CreateTournamentView,
+    create_registration,
     delete_tournament,
+    FinalistUserView,
     PendingTournamentListView,
     RegistrationTournamentView,
     TournamentGeneratorView,
@@ -55,4 +58,19 @@ urlpatterns = [
         RegistrationTournamentView.as_view(),
         name='tournament_registration',
     ),
+    path(
+        'championship_list',
+        ChampionshipHistoryView.as_view(),
+        name='championship_list',
+    ),
+    path(
+        'finalist_users/<int:pk>',
+        FinalistUserView.as_view(),
+        name='finalist_users',
+    ),
+    path(
+        'create_registration/<int:championship_id>',
+        create_registration,
+        name="create_registration"
+    )
 ]
