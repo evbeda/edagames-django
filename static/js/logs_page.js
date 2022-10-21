@@ -112,9 +112,11 @@ const beatiBoard = (board) =>{
 }
 
 //export function add variables to test
-// Like a object 
-module.exports = {
-    addLogToArray: addLogToArray,
-    listOfLogs:listOfLogs,
-    updateDomElement:updateDomElement
-};
+// Like a object
+//To prevent fails in web comment this. Its necessary to test with jest
+//But how is server side JS produce error in website 
+// module.exports = {
+//     addLogToArray: addLogToArray,
+//     listOfLogs:listOfLogs,
+//     updateDomElement:updateDomElement
+// };
