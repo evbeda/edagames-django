@@ -5,19 +5,17 @@ jobs:
     docker:
       - image: cimg/node:14.18.1
     steps:
-      - checkout:
-          path: ~/javascript_test
+      - checkout
       - run:
+          working_directory: ~/project/javascript_test
           name: update npm
           command: "sudo npm install --unsafe-perm -g npm@latest"
       - run:
+          working_directory: ~/project/javascript_test
           name: install dependencies
           command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
       - run:
+          working_directory: ~/project/javascript_test
           name: run space test
           command: npm test
   build-and-test:
