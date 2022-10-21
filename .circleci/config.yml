@@ -3,11 +3,10 @@ version: 2.1
 jobs:
   build-and-test-js:
     docker:
-      - image: cimg/node:14.18.1
+      - image: cimg/node:16.17.0
     steps:
       - checkout
       - run:
-          working_directory: ~/project/javascript_test
           name: update npm
           command: "sudo npm install --unsafe-perm -g npm@latest"
       - run:
