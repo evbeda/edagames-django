@@ -1,6 +1,22 @@
 version: 2.1
 
 jobs:
+  build-and-test-js:
+    docker:
+      - image: cimg/node:16.17.0
+    steps:
+      - checkout
+      - run:
+          name: update npm
+          command: "sudo npm install --unsafe-perm -g npm@latest"
+      - run:
+          working_directory: ~/project/javascript_test
+          name: install dependencies
+          command: npm install
+      - run:
+          working_directory: ~/project/javascript_test
+          name: run space test
+          command: npm test
   build-and-test:
     docker:
       - image: cimg/python:3.8.9
@@ -91,10 +107,10 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/evbeda/edagames/dispatches \
             -d '{"event_type":"update_django"}'
-
 workflows:
   main:
     jobs:
+      - build-and-test-js
       - build-and-test
       - build-and-upload-image:
           app_name: edagames-django
@@ -105,6 +121,7 @@ workflows:
             - 'edagames'
       - trigger-main-repo-update:
           requires:
+            - build-and-test-js
             - build-and-test
           filters:
             branches:
