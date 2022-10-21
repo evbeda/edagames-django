@@ -1,9 +1,11 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from auth_app.models import Bot
+from development.common.logs_utils import FilterLogs
+from development.constants import ALL_STATES, INVALID_STATE, VALID_STATE
 from development.models import (
     Match,
     MatchMembers,
@@ -81,12 +83,14 @@ class TestMatchDetailsView(TestCase):
         response = self.client.get(f'/match_details/{self.user1.id}?page=1')
         self.assertEquals(response.context_data['object'].id, self.match.id)
 
+    @patch.object(FilterLogs, 'possible_states')
     @patch('development.views.get_logs')
     @patch('development.views.generate_text')
     def test_should_shows_pass_data_to_template_when_it_is_received_from_server(
         self,
         mocked_get_log,
         mocked_generate_text,
+        _,
     ):
         return_value = {
             "details": "testing",
@@ -100,6 +104,7 @@ class TestMatchDetailsView(TestCase):
         }
         mocked_get_log.return_value = return_value
         mocked_generate_text.return_value = return_value
+        _ = MagicMock(return_value=[INVALID_STATE, VALID_STATE, ALL_STATES])
         response = self.client.get(f'/match_details/{self.user1.id}?page=1')
         self.assertEquals(
             response.context_data['data'],

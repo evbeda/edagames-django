@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 from auth_app.models import Bot
+from development.common.logs_utils import FilterLogs
 from .common.match_utils import (
     get_matches_of_connected_user,
     get_matches_results,
@@ -79,10 +80,15 @@ class MatchDetailsView(DetailView):
             MatchDetailsView,
             self,
         ).get_context_data(**kwargs)
-        context['data'] = response['details']
+
+        data = response['details']
+        move_states = FilterLogs(data).possible_states
+
+        context['move_states'] = move_states
+        context['data'] = data
         context['prev_page'] = response['prev']
         context['next_page'] = response['next']
-        context['text'] = generate_text(response['details'])
+        context['text'] = generate_text(data)
         return context
 
 
