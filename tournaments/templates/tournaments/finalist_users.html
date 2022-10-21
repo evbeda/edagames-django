@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block page_content %}
+
+<div class="container">
+    <h2>Final Tournament</h2>
+        <p>Finalist users ({{ object_list|length }})</p>
+        <ul class="list-group">
+            {% for user in object_list %}
+                <li class="list-group-item">{{user}}</li>
+            {% endfor %}
+        </ul>
+    <br></br>
+    <a href="{% url 'tournaments:tournaments_pending' %}"><button class="btn btn-primary" type="submit" value="Next">Next</button></a>
+</div>
+{% endblock page_content %}

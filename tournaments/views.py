@@ -13,14 +13,16 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
-from auth_app.models import Bot
+from auth_app.models import Bot, User
 from development.models import Challenge
 from tournaments.common.tournament_utils import (
+    create_registrations_and_challenges_for_final_tournament,
     get_tournament_results,
     sort_position_table,
 )
 from tournaments.models import (
     Championship,
+    FinalTournamentRegistration,
     Tournament,
     TournamentRegistration,
 )
@@ -276,6 +278,24 @@ class ChampionshipCreateView(StaffRequiredMixin, FormView):
         return context
 
 
+class ChampionshipHistoryView(LoginRequiredMixin, ListView):
+    template_name = 'tournaments/championship_list.html'
+
+    def get_queryset(self):
+        return Championship.objects.all()  # TODO: order the championship by created_date
+
+
+class FinalistUserView(ListView):
+    template_name = 'tournaments/finalist_users.html'
+
+    def get_queryset(self, *args, **kwargs):
+        finalist_users = list(
+            FinalTournamentRegistration.objects.filter(
+                championship=self.kwargs.get('pk')).values("user"))
+        usernames = [User.objects.get(pk=data['user']).email for data in finalist_users]
+        return usernames
+
+
 @require_http_methods(["POST"])
 def delete_tournament(request, pk):
     try:
@@ -313,3 +333,17 @@ def delete_championship_and_his_tournaments(final_tournament: Tournament, reques
         messages.SUCCESS,
         'Championship and his tournaments successfully removed'
     )
+    return redirect('tournaments:tournaments_pending')
+
+
+def create_registration(request, championship_id):
+    if request.method == "POST":
+        championship = Championship.objects.get(pk=championship_id)
+        final_tournament = championship.final_tournament
+        if final_tournament.status == Tournament.TOURNAMENT_PENDING_STATUS:
+            create_registrations_and_challenges_for_final_tournament(
+                championship,
+                final_tournament,
+                championship.tournament_bots
+            )
+        return redirect('tournaments:finalist_users', championship_id)

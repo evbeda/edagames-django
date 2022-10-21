@@ -1,4 +1,5 @@
 from collections import defaultdict
+from itertools import combinations
 from typing import List
 
 from django.db.models import (
@@ -11,7 +12,9 @@ from development.constants import (
     TIE,
     WIN,
 )
-from development.models import MatchMembers
+from auth_app.models import Bot, User
+from development.models import Challenge, MatchMembers
+from tournaments.models import Tournament, Championship, FinalTournamentRegistration
 
 
 def get_tournament_results(tournament_id: int) -> List[dict]:
@@ -84,3 +87,58 @@ def convert_dict_to_tuples(table):
             match_result["total_score"],
         ) for bot_name, match_result in table.items()
     ]
+
+
+def get_finalist_users(champ: Championship, max_bot_finalist: int):
+    # get the tournaments
+    # TODO: filter tournament by finshed status too
+    tournaments_list = Tournament.objects.filter(championship=champ.pk)
+    # get list of all bots that had been in the tournaments
+    bot_that_participated = []
+    for tournament in tournaments_list:
+        bot_that_participated.extend(
+            sort_position_table(
+                get_tournament_results(
+                    tournament.id)))
+
+    # get the first n bots
+    top_bots = bot_that_participated[:max_bot_finalist]
+    finalist_users = []
+    for bot in top_bots:
+        user = User.objects.get(email=bot[0])
+        finalist_users.append(user)
+    return finalist_users
+
+
+def create_registrations_and_challenges_for_final_tournament(
+        championship: Championship,
+        final_tournament: Tournament,
+        max_bot_finalist):
+
+    if final_tournament.status == Tournament.TOURNAMENT_PENDING_STATUS:
+        tournaments_participants = get_finalist_users(championship, max_bot_finalist)
+        tournament_registrations = []
+        for user in tournaments_participants:
+            if not FinalTournamentRegistration.objects.filter(user=user, championship=championship.pk).exists():
+                user_registration = FinalTournamentRegistration.objects.create(
+                    user=user,
+                    championship=championship)
+                tournament_registrations.append(user_registration)
+            else:
+                tournament_registrations.append(
+                    FinalTournamentRegistration.objects.get(
+                        user=user,
+                        championship=championship.pk))
+
+        bots = [
+            Bot.objects.get(user=tournament_registration.user, name=tournament_registration.user.email)
+            for tournament_registration
+            in tournament_registrations
+        ]
+        challenges = combinations(bots, 2)
+        for bot_challenger, bots_challenged in challenges:
+            challenge = Challenge.objects.create(
+                bot_challenger=bot_challenger,
+                tournament=final_tournament,
+            )
+            challenge.bots_challenged.add(bots_challenged)
