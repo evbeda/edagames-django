@@ -1,9 +1,12 @@
+const DIRASC ="asc";
+const DIRDESC = "desc";
+const rowsElements = "TD";
 function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("tornamentTable");
     switching = true;
     // Set the sorting direction to ascending:
-    dir = "asc";
+    dir = DIRDESC;
     /* Make a loop that will continue until
     no switching has been done: */
     while (switching) {
@@ -17,17 +20,17 @@ function sortTable(n) {
         shouldSwitch = false;
         /* Get the two elements you want to compare,
         one from current row and one from the next: */
-        x = rows[i].getElementsByTagName("TD")[n];
-        y = rows[i + 1].getElementsByTagName("TD")[n];
+        x = rows[i].getElementsByTagName(rowsElements)[n];
+        y = rows[i + 1].getElementsByTagName(rowsElements)[n];
         /* Check if the two rows should switch place,
         based on the direction, asc or desc: */
-        if (dir == "asc") {
+        if (dir == DIRASC) {
             if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
             // If so, mark as a switch and break the loop:
             shouldSwitch = true;
             break;
             }
-        } else if (dir == "desc") {
+        } else if (dir == DIRDESC) {
             if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
             // If so, mark as a switch and break the loop:
             shouldSwitch = true;
@@ -45,8 +48,8 @@ function sortTable(n) {
         } else {
         /* If no switching has been done AND the direction is "asc",
         set the direction to "desc" and run the while loop again. */
-        if (switchcount == 0 && dir == "asc") {
-            dir = "desc";
+        if (switchcount == 0 && dir == DIRASC) {
+            dir = DIRDESC;
             switching = true;
         }
         }
