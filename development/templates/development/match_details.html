@@ -4,6 +4,14 @@
 <div class="container-fluid">
     {% if data %}
     <h1>Match details 
+
+        <select class="form-control" name="valid_move" id="valid_move">
+            <optgroup label="Validez">
+                {% for states in move_states %}
+                <option value="{{ states }}">{{ states }}</option>
+                {% endfor %}
+            </optgroup>
+        </select>
         <input 
         class="btn btn-primary" 
         type="submit" 
