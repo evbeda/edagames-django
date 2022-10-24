@@ -1,21 +1,18 @@
 
 from django.test import TestCase
-
-
 from parameterized import parameterized
 
 from development.common.logs_utils import FilterLogs
 from development.constants import (
-    INVALID_STATE,
-    VALID_STATE,
     ALL_STATES,
+    INVALID_STATE,
+    VALID_STATE
 )
-
 from development.tests.log_scenarios import (
     logs_test_for_validating_moves_0,
     logs_test_for_validating_moves_1,
     logs_test_for_validating_moves_2,
-    logs_test_for_validating_moves_3,
+    logs_test_for_validating_moves_3
 )
 
 

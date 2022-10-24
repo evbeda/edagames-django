@@ -1,5 +1,8 @@
 
-from development.constants import INVALID_STATE, VALID_STATE
+from development.constants import (
+    INVALID_STATE,
+    VALID_STATE
+)
 
 
 def mocked_user_action(values_to_update=[]) -> dict:

@@ -4,20 +4,20 @@
 <div class="container-fluid">
     {% if data %}
     <h1>Match details 
-
-        <select class="form-control" name="valid_move" id="valid_move">
-            <optgroup label="Validez">
-                {% for states in move_states %}
-                <option value="{{ states }}">{{ states }}</option>
-                {% endfor %}
-            </optgroup>
-        </select>
-        <input 
-        class="btn btn-primary" 
-        type="submit" 
-        value="Download as .txt" 
-        onclick="download('my_match.txt')" />
     </h1>
+    <label for="id_of_input">Validity</label>
+    <select class="form-control" name="valid_move" id="valid_move">
+        <optgroup label="Validity">
+            {% for states in move_states %}
+            <option value="{{ states }}">{{ states|title }}</option>
+            {% endfor %}
+        </optgroup>
+    </select>
+    <input 
+    class="btn btn-primary" 
+    type="submit" 
+    value="Download as .txt" 
+    onclick="download('my_match.txt')" />
     {% endif %}
     {% if not data %}
     <h1>Match details</h1>
