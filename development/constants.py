@@ -6,3 +6,10 @@ STATE = 'state'
 VALID_STATE = 'valid'
 INVALID_STATE = 'invalid'
 ALL_STATES = 'all'
+
+
+ACTION = 'action'
+MOVE_ACTION = 'MOVE'
+SHOOT_ACTION = 'SHOOT'
+WALL_ACTION = 'WALL'
+ALL_ACTIONS = 'all'

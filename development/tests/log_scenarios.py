@@ -1,7 +1,11 @@
 
 from development.constants import (
+    ACTION,
     INVALID_STATE,
-    VALID_STATE
+    MOVE_ACTION,
+    SHOOT_ACTION,
+    VALID_STATE,
+    WALL_ACTION,
 )
 
 
@@ -108,4 +112,93 @@ logs_test_for_validating_moves_2 = [
 logs_test_for_validating_moves_3 = [
     mocked_user_action(),
 
+]
+
+
+logs_test_for_kind_of_move_0 = [
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+]
+
+logs_test_for_kind_of_move_1 = [
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+]
+
+
+logs_test_for_kind_of_move_2 = [
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+]
+
+logs_test_for_kind_of_move_3 = [
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: MOVE_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: SHOOT_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: WALL_ACTION}]),
+    mocked_game_response(),
+    mocked_user_action([{ACTION: WALL_ACTION}]),
+]
+
+
+logs_test_for_kind_of_move_4 = [
+    mocked_game_response(),
+    mocked_game_response(),
+    mocked_game_response(),
 ]

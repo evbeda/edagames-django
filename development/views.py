@@ -82,9 +82,12 @@ class MatchDetailsView(DetailView):
         ).get_context_data(**kwargs)
 
         data = response['details']
-        move_states = FilterLogs(data).possible_states
+        filter_logs = FilterLogs(data)
+        move_states = filter_logs.possible_states
+        actions_kind = filter_logs.possible_actions
 
         context['move_states'] = move_states
+        context['actions_kind'] = actions_kind
         context['data'] = data
         context['prev_page'] = response['prev']
         context['next_page'] = response['next']

@@ -5,20 +5,46 @@
     {% if data %}
     <h1>Match details 
     </h1>
-    <label for="id_of_input">Validity</label>
-    <select class="form-control" name="valid_move" id="valid_move">
-        <optgroup label="Validity">
-            {% for states in move_states %}
-            <option value="{{ states }}">{{ states|title }}</option>
-            {% endfor %}
-        </optgroup>
-    </select>
-    <input 
-    class="btn btn-primary" 
-    type="submit" 
-    value="Download as .txt" 
-    onclick="download('my_match.txt')" />
+
+    <div class="container">
+        <div class="row">
+
+          <div class="col">
+            <label for="id_of_input">Validity</label>
+            <select class="form-control" name="valid_move" id="valid_move">
+                <optgroup label="Validity">
+                    {% for states in move_states %}
+                    <option value="{{ states }}">{{ states|title }}</option>
+                    {% endfor %}
+                </optgroup>
+            </select>
+          </div>
+          <div class="col">
+            <label for="id_of_input">Kind of action</label>
+            <select class="form-control" name="valid_move" id="valid_move">
+                <optgroup label="Kind of action">
+                    {% for kind in actions_kind %}
+                    <option value="{{ kind }}">{{ kind }}</option>
+                    {% endfor %}
+                </optgroup>
+            </select>
+          </div>
+
+          <div class="col">
+            <br>
+            <input 
+                class="btn btn-primary" 
+                type="submit" 
+                value="Download as .txt" 
+                onclick="download('my_match.txt')" 
+            />
+          </div>
+
+        </div>
+      </div>
+      <br>
     {% endif %}
+
     {% if not data %}
     <h1>Match details</h1>
     {% endif %}
