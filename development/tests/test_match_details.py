@@ -1,14 +1,21 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import (
+    MagicMock,
+    patch
+)
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from auth_app.models import Bot
 from development.common.logs_utils import FilterLogs
-from development.constants import ALL_STATES, INVALID_STATE, VALID_STATE
+from development.constants import (
+    ALL_STATES,
+    INVALID_STATE,
+    VALID_STATE
+)
 from development.models import (
     Match,
-    MatchMembers,
+    MatchMembers
 )
 
 
