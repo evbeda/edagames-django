@@ -1,27 +1,27 @@
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods
-from django.views.generic.edit import FormView
-from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_http_methods
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 
 from auth_app.models import Bot
 from development.common.logs_utils import FilterLogs
-from .common.match_utils import (
-    get_matches_of_connected_user,
-    get_matches_results,
-)
-from .common.match_result_text import generate_text
 from development.forms import ChallengeForm
 from development.server_requests import (
     get_logs,
     send_challenge,
 )
+from .common.match_result_text import generate_text
+from .common.match_utils import (
+    get_matches_of_connected_user,
+    get_matches_results,
+)
 from .encode_jwt import encode_data
+from .forms import BotForm
 from .models import Match
 from .tables import BotTable
-from .forms import BotForm
 
 
 class ChallengeView(FormView):
@@ -43,11 +43,13 @@ class ChallengeView(FormView):
         option2 = int(form.cleaned_data['bot2'])
         bot1 = dict(form.fields['bot1'].choices)[option1]
         bot2 = dict(form.fields['bot2'].choices)[option2]
+        debug_mode = bool(form.cleaned_data['debug_mode'])
 
         response = send_challenge(
             challenger=f"{bot1}",
             challenged=[f"{bot2}"],
             tournament_id="",
+            debug_mode=debug_mode
         )
         if response.status_code == 200:
             messages.add_message(
