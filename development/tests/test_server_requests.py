@@ -1,11 +1,16 @@
+import json
+from unittest.mock import (
+    MagicMock,
+    patch,
+)
+
 from django.test import TestCase
-from unittest.mock import patch
+from parameterized import parameterized
+
 from development.server_requests import (
     get_logs,
     send_challenge,
 )
-import json
-from unittest.mock import MagicMock
 from edagames.settings import (
     SERVER_PORT,
     SERVER_URL,
@@ -14,9 +19,16 @@ from edagames.settings import (
 
 class TestServerRequests(TestCase):
 
-    def test_send_challenge(self):
+    @parameterized.expand(
+        [
+            ('debug_mode_enable', True, ),
+            ('debug_mode_disable', False, ),
+        ]
+    )
+    def test_send_challenge(self, name, debug_mode):
         test_player1 = 'test_player1'
         test_player2 = ['test_player2']
+        debug_mode = debug_mode
         mocked_response = MagicMock(json=lambda x: json.loads(x), spec=["json"])
         with patch(
             'requests.post',
@@ -25,6 +37,7 @@ class TestServerRequests(TestCase):
             send_challenge(
                 test_player1,
                 test_player2,
+                debug_mode=debug_mode,
             )
             request_get_mocked.assert_called_once_with(
                 f'{SERVER_URL}:{SERVER_PORT}/challenge',
@@ -32,6 +45,7 @@ class TestServerRequests(TestCase):
                     'challenger': test_player1,
                     'challenged': test_player2,
                     'tournament_id': '',
+                    'debug_mode': debug_mode,
                 }
             )
 
