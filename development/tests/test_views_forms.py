@@ -1,14 +1,18 @@
-from auth_app.models import User, Bot
+from unittest.mock import patch
+
+from django.http import HttpResponse
 from django.test import RequestFactory, TestCase
+from parameterized import parameterized
+
 from ..views import (
     AddBotView,
     ChallengeView,
     MatchListView,
     MyBotsView,
 )
+
+from auth_app.models import User, Bot
 from ..forms import ChallengeForm
-from unittest.mock import patch
-from django.http import HttpResponse
 
 
 class TestView(TestCase):
@@ -31,11 +35,17 @@ class TestView(TestCase):
         response = ChallengeView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
+    @parameterized.expand(
+        [
+            ('with_debug_mode_enable', True,),
+            ('with_debug_mode_disable', False,),
+        ]
+    )
     @patch('development.views.messages')
     @patch('requests.post')
-    def test_form_valid(self, post_patched, messages_patched):
+    def test_form_valid(self, name, debug_mode, post_patched, messages_patched):
         post_patched.return_value = HttpResponse(status=200)
-        form = ChallengeForm({'bot1': '0', 'bot2': '1'})
+        form = ChallengeForm({'bot1': '0', 'bot2': '1', 'debug_mode': debug_mode})
         form.fields['bot1'].choices = [(0, 'bot1')]
         form.fields['bot2'].choices = [(0, 'bot1'), (1, 'bot2')]
         form.is_valid()

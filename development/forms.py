@@ -1,11 +1,13 @@
-from django import forms
-from .bot_handler import (
-    get_users_data,
-    get_online_bots,
-    get_my_bots,
-)
-from auth_app.models import Bot
 import re
+
+from auth_app.models import Bot
+from django import forms
+
+from .bot_handler import (
+    get_my_bots,
+    get_online_bots,
+    get_users_data,
+)
 
 
 class ChallengeForm(forms.Form):
@@ -21,6 +23,7 @@ class ChallengeForm(forms.Form):
 
     bot1 = forms.ChoiceField(label='MyBots', widget=forms.Select, choices=[])
     bot2 = forms.ChoiceField(label='Online Bots', widget=forms.Select, choices=[])
+    debug_mode = forms.BooleanField(label='Debug Mode', required=False, initial=False,)
 
 
 class BotForm(forms.ModelForm):
