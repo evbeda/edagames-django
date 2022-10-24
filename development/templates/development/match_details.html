@@ -10,7 +10,7 @@
         <div class="row">
 
           <div class="col">
-            <label for="id_of_input">Validity</label>
+            <label for="valid_move">Validity</label>
             <select class="form-control" name="valid_move" id="valid_move">
                 <optgroup label="Validity">
                     {% for states in move_states %}
@@ -20,11 +20,11 @@
             </select>
           </div>
           <div class="col">
-            <label for="id_of_input">Kind of action</label>
-            <select class="form-control" name="valid_move" id="valid_move">
+            <label for="action_kind">Kind of action</label>
+            <select class="form-control" name="valid_move" id="action_kind">
                 <optgroup label="Kind of action">
                     {% for kind in actions_kind %}
-                    <option value="{{ kind }}">{{ kind }}</option>
+                    <option value="{{ kind }}">{{ kind|title }}</option>
                     {% endfor %}
                 </optgroup>
             </select>

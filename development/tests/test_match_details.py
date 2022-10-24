@@ -1,19 +1,25 @@
 from unittest.mock import (
-    MagicMock,
-    patch
+    patch,
+    PropertyMock,
 )
 
-from unittest.mock import PropertyMock, patch
-from parameterized import parameterized
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from parameterized import parameterized
 
 from auth_app.models import Bot
 from development.common.logs_utils import FilterLogs
-from development.constants import ALL_ACTIONS, ALL_STATES, INVALID_STATE, MOVE_ACTION, SHOOT_ACTION, VALID_STATE
+from development.constants import (
+    ALL_ACTIONS,
+    ALL_STATES,
+    INVALID_STATE,
+    MOVE_ACTION,
+    SHOOT_ACTION,
+    VALID_STATE,
+)
 from development.models import (
     Match,
-    MatchMembers
+    MatchMembers,
 )
 
 
@@ -94,8 +100,8 @@ class TestMatchDetailsView(TestCase):
     @patch.object(FilterLogs, 'possible_actions', new_callable=PropertyMock)
     def test_should_shows_pass_data_to_template_when_it_is_received_from_server(
         self,
-        mokced_possible_action,
-        mokced_possible_states,
+        mocked_possible_action,
+        mocked_possible_states,
         mocked_generate_text,
         mocked_get_log,
     ):
@@ -156,15 +162,14 @@ class TestMatchDetailsView(TestCase):
         self,
         possible_states,
         possible_actions,
-
-        mokced_possible_action,
-        mokced_possible_states,
+        mocked_possible_action,
+        mocked_possible_states,
         mocked_generate_text,
         mocked_get_log,
     ):
 
-        mokced_possible_action.return_value = possible_actions
-        mokced_possible_states.return_value = possible_states
+        mocked_possible_action.return_value = possible_actions
+        mocked_possible_states.return_value = possible_states
 
         response = self.client.get(f'/match_details/{self.user1.id}?page=1')
 
