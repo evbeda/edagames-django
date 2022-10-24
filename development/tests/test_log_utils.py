@@ -6,13 +6,26 @@ from development.common.logs_utils import FilterLogs
 from development.constants import (
     ALL_STATES,
     INVALID_STATE,
-    VALID_STATE
+    VALID_STATE,
+    ALL_ACTIONS,
+    INVALID_STATE,
+    MOVE_ACTION,
+    SHOOT_ACTION,
+    VALID_STATE,
+    ALL_STATES,
+    WALL_ACTION,
 )
 from development.tests.log_scenarios import (
     logs_test_for_validating_moves_0,
     logs_test_for_validating_moves_1,
     logs_test_for_validating_moves_2,
-    logs_test_for_validating_moves_3
+    logs_test_for_validating_moves_3,
+    logs_test_for_validating_moves_3,
+    logs_test_for_kind_of_move_0,
+    logs_test_for_kind_of_move_1,
+    logs_test_for_kind_of_move_2,
+    logs_test_for_kind_of_move_3,
+    logs_test_for_kind_of_move_4,
 )
 
 
@@ -40,3 +53,16 @@ class TestFilterLogs(TestCase):
         self.assertEqual(
             sorted(possible_states),
             sorted(expected_possible_states))
+
+    @parameterized.expand([
+        (logs_test_for_kind_of_move_0, [MOVE_ACTION, ALL_ACTIONS]),
+        (logs_test_for_kind_of_move_1, [SHOOT_ACTION, ALL_ACTIONS]),
+        (logs_test_for_kind_of_move_2, [MOVE_ACTION, SHOOT_ACTION, ALL_ACTIONS]),
+        (logs_test_for_kind_of_move_3, [MOVE_ACTION, SHOOT_ACTION, WALL_ACTION, ALL_ACTIONS]),
+        (logs_test_for_kind_of_move_4, [ALL_ACTIONS]),
+    ])
+    def test_getting_possible_log_action(self, data, expected_possible_actions):
+        possible_actions = FilterLogs(data).possible_actions
+        self.assertEqual(
+            sorted(possible_actions),
+            sorted(expected_possible_actions))
