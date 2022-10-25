@@ -1,58 +1,42 @@
-const ASCKey = "asc";
-const DESCKey = "desc";
-const RowElement = "TD";
+const tableId = "tornamentTable";
+let cPrev = -1;
 
-function sortTable(n) {
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("tornamentTable");
-    switching = true;
-    // Set the sorting direction to ascending:
-    dir = ASCKey;
-    /* Make a loop that will continue until
-    no switching has been done: */
-    while (switching) {
-        // Start by saying: no switching is done:
-        switching = false;
-        rows = table.rows;
-        /* Loop through all table rows (except the
-        first, which contains table headers): */
-        for (i = 1; i < (rows.length - 1); i++) {
-        // Start by saying there should be no switching:
-        shouldSwitch = false;
-        /* Get the two elements you want to compare,
-        one from current row and one from the next: */
-        x = rows[i].getElementsByTagName(RowElement)[n];
-        y = rows[i + 1].getElementsByTagName(RowElement)[n];
-        /* Check if the two rows should switch place,
-        based on the direction, asc or desc: */
-        if (dir == ASCKey) {
-            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-            // If so, mark as a switch and break the loop:
-            shouldSwitch = true;
-            break;
+function sortTable(c) {
+    rows = document.getElementById(tableId).rows.length; // num of rows
+    columns = document.getElementById(tableId).rows[0].cells.length; // num of columns
+    arrTable = [...Array(rows)].map(e => Array(columns)); // create an empty 2d array
+    for (ro=0; ro<rows; ro++) { // cycle through rows
+        for (co=0; co<columns; co++) { // cycle through columns
+            // assign the value in each row-column to a 2d array by row-column
+            element = document.getElementById(tableId).rows[ro].cells[co].innerHTML
+            arrTable[ro][co] = Number(element) || element;
+        }
+    }
+
+    th = arrTable.shift(); // remove the header row from the array, and save it
+    
+    if (c !== cPrev) { // different column is clicked, so sort by the new column
+        arrTable.sort(
+            function (a, b) {
+                if (a[c] === b[c]) {
+                    return 0;
+                } else {
+                    return (a[c] < b[c]) ? -1 : 1;
+                }
             }
-        } else if (dir == DESCKey) {
-            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            // If so, mark as a switch and break the loop:
-            shouldSwitch = true;
-            break;
-            }
-        }
-        }
-        if (shouldSwitch) {
-        /* If a switch has been marked, make the switch
-        and mark that a switch has been done: */
-        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-        switching = true;
-        // Each time a switch is done, increase this count by 1:
-        switchcount ++;
-        } else {
-        /* If no switching has been done AND the direction is "asc",
-        set the direction to "desc" and run the while loop again. */
-        if (switchcount == 0 && dir == ASCKey) {
-            dir = DESCKey;
-            switching = true;
-        }
+        );
+    } else { // if the same column is clicked then reverse the array
+        arrTable.reverse();
+    }
+    
+    cPrev = c; // save in previous c
+
+    arrTable.unshift(th); // put the header back in to the array
+
+    // cycle through rows-columns placing values from the array back into the html table
+    for (ro=0; ro<rows; ro++) {
+        for (co=0; co<columns; co++) {
+            document.getElementById(tableId).rows[ro].cells[co].innerHTML = arrTable[ro][co];
         }
     }
 }
