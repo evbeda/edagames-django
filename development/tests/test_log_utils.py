@@ -17,30 +17,30 @@ from development.tests.log_scenarios import (
     logs_test_for_kind_of_move_and_shoot_actions,
     logs_test_for_kind_of_move_shoot_and_wall_actions,
     logs_test_for_kind_of_move_without_actions,
-    logs_test_for_validating_moves_0,
-    logs_test_for_validating_moves_1,
-    logs_test_for_validating_moves_2,
-    logs_test_for_validating_moves_3,
+    logs_test_for_validating_moves_only_valid_states,
+    logs_test_for_validating_moves_valid_and_invalid_state,
+    logs_test_for_validating_moves_only_invalid_states,
+    logs_test_for_validating_moves_without_log_state,
 )
 
 
 class TestFilterLogs(TestCase):
 
     @parameterized.expand([
-        (logs_test_for_validating_moves_0,),
-        (logs_test_for_validating_moves_1,),
-        (logs_test_for_validating_moves_2,),
-        (logs_test_for_validating_moves_3,),
+        (logs_test_for_validating_moves_only_valid_states,),
+        (logs_test_for_validating_moves_valid_and_invalid_state,),
+        (logs_test_for_validating_moves_only_invalid_states,),
+        (logs_test_for_validating_moves_without_log_state,),
     ])
     def test_correct_FilterLogs_intance_creation(self, data):
         filter_logs = FilterLogs(data)
         self.assertEqual(filter_logs.logs, data)
 
     @parameterized.expand([
-        (logs_test_for_validating_moves_0, [VALID_STATE, ALL_STATES]),
-        (logs_test_for_validating_moves_1, [VALID_STATE, INVALID_STATE, ALL_STATES]),
-        (logs_test_for_validating_moves_2, [INVALID_STATE, ALL_STATES]),
-        (logs_test_for_validating_moves_3, [ALL_STATES]),
+        (logs_test_for_validating_moves_only_valid_states, [VALID_STATE, ALL_STATES]),
+        (logs_test_for_validating_moves_valid_and_invalid_state, [VALID_STATE, INVALID_STATE, ALL_STATES]),
+        (logs_test_for_validating_moves_only_invalid_states, [INVALID_STATE, ALL_STATES]),
+        (logs_test_for_validating_moves_without_log_state, [ALL_STATES]),
     ])
     def test_getting_possible_log_actions_states(self, data, expected_possible_states):
         possible_states = FilterLogs(data).possible_states

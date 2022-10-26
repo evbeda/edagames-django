@@ -48,7 +48,7 @@ def mocked_game_response(values_to_update=[]) -> dict:
     return mocked_response
 
 
-logs_test_for_validating_moves_0 = [
+logs_test_for_validating_moves_only_valid_states = [
     mocked_user_action(),
     mocked_game_response([{'state': VALID_STATE}]),
     mocked_user_action(),
@@ -69,7 +69,7 @@ logs_test_for_validating_moves_0 = [
 ]
 
 
-logs_test_for_validating_moves_1 = [
+logs_test_for_validating_moves_valid_and_invalid_state = [
     mocked_user_action(),
     mocked_game_response([{'state': VALID_STATE}]),
     mocked_user_action(),
@@ -89,7 +89,7 @@ logs_test_for_validating_moves_1 = [
     mocked_user_action(),
 ]
 
-logs_test_for_validating_moves_2 = [
+logs_test_for_validating_moves_only_invalid_states = [
     mocked_user_action(),
     mocked_game_response([{'state': INVALID_STATE}]),
     mocked_user_action(),
@@ -110,7 +110,7 @@ logs_test_for_validating_moves_2 = [
 ]
 
 
-logs_test_for_validating_moves_3 = [
+logs_test_for_validating_moves_without_log_state = [
     mocked_user_action(),
 ]
 
