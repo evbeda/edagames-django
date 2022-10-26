@@ -96,15 +96,20 @@ def get_finalist_users(champ: Championship, max_bot_finalist: int):
     # get list of all bots that had been in the tournaments
     bot_that_participated = []
     for tournament in tournaments_list:
-        bot_that_participated.extend(
+        if 'FINAL' in tournament.name:
+            continue
+        bot_that_participated.append(
             sort_position_table(
                 get_tournament_results(
                     tournament.id)))
 
     # get the first n bots
-    top_bots = bot_that_participated[:max_bot_finalist]
+    finalist = []
+    for bots_per_tournament in bot_that_participated:
+        for x in range(max_bot_finalist):
+            finalist.append(tuple(bots_per_tournament[x]))
     finalist_users = []
-    for bot in top_bots:
+    for bot in finalist:
         user = User.objects.get(email=bot[0])
         finalist_users.append(user)
     return finalist_users
