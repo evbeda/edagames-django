@@ -127,8 +127,12 @@ class TestMatchDetailsView(TestCase):
 
     @patch('development.views.get_logs')
     @patch('development.views.generate_text')
+    @patch.object(FilterLogs, 'possible_states', new_callable=PropertyMock)
+    @patch.object(FilterLogs, 'possible_actions', new_callable=PropertyMock)
     def test_should_shows_pass_data_to_template_when_it_is_received_from_server_in_new_match(
         self,
+        mocked_possible_action,
+        mocked_possible_states,
         mocked_get_log,
         mocked_generate_text,
     ):
