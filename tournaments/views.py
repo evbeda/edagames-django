@@ -13,7 +13,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
-from auth_app.models import Bot, User
+from auth_app.models import Bot
 from development.models import Challenge
 from tournaments.common.tournament_utils import (
     create_registrations_and_challenges_for_final_tournament,
@@ -282,18 +282,20 @@ class ChampionshipHistoryView(LoginRequiredMixin, ListView):
     template_name = 'tournaments/championship_list.html'
 
     def get_queryset(self):
-        return Championship.objects.all()  # TODO: order the championship by created_date
+        return Championship.objects.all().order_by("-final_tournament")
 
 
 class FinalistUserView(ListView):
     template_name = 'tournaments/finalist_users.html'
 
     def get_queryset(self, *args, **kwargs):
-        finalist_users = list(
-            FinalTournamentRegistration.objects.filter(
-                championship=self.kwargs.get('pk')).values("user"))
-        usernames = [User.objects.get(pk=data['user']).email for data in finalist_users]
-        return usernames
+        final_registrations = (
+            FinalTournamentRegistration
+            .objects
+            .filter(championship=self.kwargs.get('pk'))
+            .select_related("user", "championship")
+        )
+        return final_registrations
 
 
 @require_http_methods(["POST"])

@@ -120,17 +120,13 @@ def create_registrations_and_challenges_for_final_tournament(
         tournaments_participants = get_finalist_users(championship, max_bot_finalist)
         tournament_registrations = []
         for user in tournaments_participants:
-            # TournamentRegistration.objects.filter(id=user.id).delete()
-            if not FinalTournamentRegistration.objects.filter(user=user, championship=championship.pk).exists():
-                user_registration = FinalTournamentRegistration.objects.create(
-                    user=user,
-                    championship=championship)
-                tournament_registrations.append(user_registration)
-            else:
-                tournament_registrations.append(
-                    FinalTournamentRegistration.objects.get(
-                        user=user,
-                        championship=championship.pk))
+            user_registration, created = FinalTournamentRegistration.objects.get_or_create(
+                user=user,
+                championship=championship,
+                defaults={
+                    'user': user,
+                    'championship': championship})
+            tournament_registrations.append(user_registration)
 
         bots = [
             Bot.objects.get(user=tournament_registration.user, name=tournament_registration.user.email)
