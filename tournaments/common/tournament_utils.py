@@ -92,24 +92,20 @@ def convert_dict_to_tuples(table):
 def get_finalist_users(champ: Championship, max_bot_finalist: int):
     # get the tournaments
     # TODO: filter tournament by finshed status too
-    tournaments_list = Tournament.objects.filter(championship=champ.pk)
+    tournaments_list = Tournament.objects.filter(championship=champ.pk).exclude(name__contains="FINAL")
+    print(tournaments_list)
     # get list of all bots that had been in the tournaments
     bot_that_participated = []
     for tournament in tournaments_list:
-        if 'FINAL' in tournament.name:
-            continue
-        bot_that_participated.append(
+        floating_list = []
+        floating_list.extend(
             sort_position_table(
                 get_tournament_results(
                     tournament.id)))
-
-    # get the first n bots
-    finalist = []
-    for bots_per_tournament in bot_that_participated:
-        for x in range(max_bot_finalist):
-            finalist.append(tuple(bots_per_tournament[x]))
+        del floating_list[len(floating_list) - max_bot_finalist + 1:]
+        bot_that_participated.extend(floating_list)
     finalist_users = []
-    for bot in finalist:
+    for bot in bot_that_participated:
         user = User.objects.get(email=bot[0])
         finalist_users.append(user)
     return finalist_users
@@ -124,6 +120,7 @@ def create_registrations_and_challenges_for_final_tournament(
         tournaments_participants = get_finalist_users(championship, max_bot_finalist)
         tournament_registrations = []
         for user in tournaments_participants:
+            # TournamentRegistration.objects.filter(id=user.id).delete()
             if not FinalTournamentRegistration.objects.filter(user=user, championship=championship.pk).exists():
                 user_registration = FinalTournamentRegistration.objects.create(
                     user=user,

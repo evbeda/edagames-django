@@ -194,7 +194,7 @@ class TestFinalistUserView(TestCase):
         self.user.is_staff = True
         self.client.force_login(self.user)
         self.view = FinalistUserView()
-        self.final_tournament = Tournament.objects.create(name="final-test-3")
+        self.final_tournament = Tournament.objects.create(name="FINAL-test-3")
         self.championship = Championship.objects.create(
             name="champ-test-3",
             tournament_bots=3,
