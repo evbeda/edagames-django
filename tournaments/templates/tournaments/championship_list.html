@@ -10,6 +10,7 @@
           <th scope="col">Name</th>
           <th scope="col">Final Tournament</th>
           <th scope="col"></th>
+          <th scope="col">Date</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,7 @@
               <input type="submit" class="btn btn-primary" value="View finalist users">
             </form>
           </td>
+          <td>{{ championship.final_tournament.date_tournament }}</td>
         </tr>
         {% endfor %}
       </tbody>
