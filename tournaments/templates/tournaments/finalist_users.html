@@ -4,11 +4,11 @@
 {% block page_content %}
 
 <div class="container">
-    <h2>Final Tournament</h2>
+    <h2>Final Tournament - {{ object_list.0.championship }}</h2>
         <p>Finalist users ({{ object_list|length }})</p>
         <ul class="list-group">
-            {% for user in object_list %}
-                <li class="list-group-item">{{user}}</li>
+            {% for data in object_list %}
+                <li class="list-group-item">{{ data.user.email }}</li>
             {% endfor %}
         </ul>
     <br></br>

@@ -9,8 +9,8 @@
           <th scope="col">#</th>
           <th scope="col">Name</th>
           <th scope="col">Final Tournament</th>
-          <th scope="col"></th>
           <th scope="col">Date</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
@@ -19,13 +19,13 @@
           <td>{{ championship.id }}</td>
           <td>{{ championship.name }}</td>
           <td>{{ championship.final_tournament.name }}</td>
+          <td>{{ championship.final_tournament.date_tournament }}</td>
           <td>
             <form action = "{% url 'tournaments:create_registration' championship_id=championship.id %}" method = "post">
                 {% csrf_token %}
               <input type="submit" class="btn btn-primary" value="View finalist users">
             </form>
           </td>
-          <td>{{ championship.final_tournament.date_tournament }}</td>
         </tr>
         {% endfor %}
       </tbody>

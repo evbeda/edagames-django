@@ -8,7 +8,7 @@ class Championship(models.Model):
     final_tournament = models.OneToOneField(
         'tournaments.Tournament',
         on_delete=models.CASCADE,
-        related_name='final_tournament'
+        related_name='championship_final'
     )
 
     def __str__(self):
@@ -54,12 +54,17 @@ class TournamentRegistration(models.Model):
         return f'{self.user.email} ({self.id})'
 
 
-class FinalTournamentRegistration(TournamentRegistration):
+class FinalTournamentRegistration(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="final_tournament_registration"
+    )
     championship = models.ForeignKey(
         Championship,
         on_delete=models.CASCADE,
-        null=False,
-        related_name="championship"
+        related_name="final_tournament_registration"
     )
 
     def __str__(self):
