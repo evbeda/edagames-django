@@ -8,15 +8,18 @@ from django.views.generic.list import ListView
 
 from auth_app.models import Bot
 from development.common.logs_utils import FilterLogs
+from .common.match_utils import (
+    get_matches_of_connected_user,
+    get_matches_results,
+)
+from .common.match_result_text import (
+    generate_text,
+    generate_text_str
+)
 from development.forms import ChallengeForm
 from development.server_requests import (
     get_logs,
     send_challenge,
-)
-from .common.match_result_text import generate_text
-from .common.match_utils import (
-    get_matches_of_connected_user,
-    get_matches_results,
 )
 from .encode_jwt import encode_data
 from .forms import BotForm
@@ -87,13 +90,12 @@ class MatchDetailsView(DetailView):
         filter_logs = FilterLogs(data)
         move_states = filter_logs.possible_states
         actions_kind = filter_logs.possible_actions
-
         context['move_states'] = move_states
         context['actions_kind'] = actions_kind
         context['data'] = data
         context['prev_page'] = response['prev']
         context['next_page'] = response['next']
-        context['text'] = generate_text(data)
+        context['text'] = generate_text_str(data)
         return context
 
 
@@ -113,7 +115,17 @@ class NewMatchDetailsView(DetailView):
         details_for_front = {}
         for index, element in enumerate(response['details']):
             details_for_front[str(index)] = element
+
+        data = response['details']
+        filter_logs = FilterLogs(data)
+        move_states = filter_logs.possible_states
+        actions_kind = filter_logs.possible_actions
+
+        context['move_states'] = move_states
+        context['actions_kind'] = actions_kind
         context['data'] = response['details']
+        context['text'] = generate_text(data)
+
         return context
 
 

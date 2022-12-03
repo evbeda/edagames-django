@@ -13,7 +13,8 @@ class FilterLogs:
 
     @property
     def possible_states(self) -> list:
-        possible_states = [log[STATE] for log in self.logs if STATE in log.keys()]
+        possible_states = [log[STATE] for log in self.logs
+                           if STATE in log.keys() and log[STATE] != "gameover"]
         possible_states.append(ALL_STATES)
         return list(set(possible_states))
 

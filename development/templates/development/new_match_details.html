@@ -8,15 +8,60 @@
     {% if data %}
     <h1>Match details</h1>
     {% for log in data %}
-                <script>
-                addLogToArray(`{{log|safe}}`)
-                </script>
-            {% endfor %}
+        <script>
+        addLogToArray(`{{log|safe}}`)
+        </script>
+    {% endfor %}
     {% endif %}
     {% if not data %}
     <div>There are no logs to display</div>
     {% endif %}
     {% if data %}
+      <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Download
+        </button>
+      </p>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <label for="valid_move">Validity</label>
+                  <select class="form-control" name="valid_move" id="valid_move">
+                    <optgroup label="Validity">
+                        {% for states in move_states %}
+                          <option value="{{ states }}">{{ states|title }}</option>
+                        {% endfor %}
+                    </optgroup>
+                  </select>
+              </div>
+              <div class="col">
+                <label for="action_kind">Kind of action</label>
+                  <select class="form-control" name="action_kind" id="action_kind">
+                    <optgroup label="Kind of action">
+                        {% for kind in actions_kind %}
+                        <option value="{{ kind }}">{{ kind|title }}</option>
+                        {% endfor %}
+                    </optgroup ptgroup>
+                  </select>
+              </div>
+
+              <div class="col">
+                <br>
+                  <input
+                        class="btn btn-primary"
+                        type="submit"
+                        value="Download as .txt"
+                        onclick="getLogsFiltered()"
+                    />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
     <div class="buttonContainer">
         <button class="btn btn-primary" onclick="modifyIndex('-')"><<<<<</button>
         <button class="btn btn-primary" onclick="modifyIndex('+')">>>>>></button>
@@ -56,7 +101,9 @@
         </div>
     </section>
         <script>
+            let textArray = {{ text|safe }};
             firstView()
+
         </script>
     {% endif %}
 </div>
