@@ -123,17 +123,11 @@ def get_secret(db_secret_name):
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-secret_value = json.loads(get_secret(get_env_variable('DB_SECRET_NAME')))
+# secret_value = json.loads(get_secret(get_env_variable('DB_SECRET_NAME')))
+import dj_database_url
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': secret_value["dbname"],
-        'USER': secret_value["username"],
-        'PASSWORD': secret_value["password"],
-        'HOST': secret_value["host"],
-        'PORT': secret_value["port"]
-    }
+    'default': dj_database_url.config(default=get_env_variable('EDAGAME_POSTGRES_URL'))
 }
 
 # Password validation
