@@ -89,7 +89,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-WSGI_APPLICATION = 'edagames.wsgi.application'
+WSGI_APPLICATION = 'edagames.wsgi.app'
 
 
 # get secret
