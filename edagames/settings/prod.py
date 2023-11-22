@@ -129,6 +129,11 @@ import dj_database_url
 DATABASES = {
     'default': dj_database_url.config(default=get_env_variable('EDAGAME_POSTGRES_URL'))
 }
+DATABASES['default']['OPTIONS'] = {
+        'sslmode': 'require'
+        # 'options': 'endpoint=ep-replace-this-12345679',
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
