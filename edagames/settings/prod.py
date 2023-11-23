@@ -130,8 +130,8 @@ DATABASES = {
     'default': dj_database_url.config(default=get_env_variable('EDAGAME_POSTGRES_URL'))
 }
 DATABASES['default']['OPTIONS'] = {
-        'sslmode': 'require'
-        # 'options': 'endpoint=ep-replace-this-12345679',
+        'sslmode': 'require',
+        'options': 'endpoint=' + get_env_variable('EDAGAME_POSTGRES_ENDPOINT'),
     }
 
 
