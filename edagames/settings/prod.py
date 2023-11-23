@@ -30,7 +30,10 @@ SECRET_KEY = get_env_variable('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',
+    'localhost',
+    '127.0.0.1',
+    'django',
+    '.vercel.app',
 ]
 
 
@@ -65,6 +68,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'edagames.urls'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 TEMPLATES = [
     {
