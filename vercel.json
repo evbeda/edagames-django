@@ -12,19 +12,18 @@
       "src": "build_files.sh",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "static"
+        "distDir": "staticfiles_build"
       }
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "edagames/wsgi.py"
     }
-  ],
-  "rewrites": [
-    {"source": "/static/(.*)", "destination": "/static/$1"},
-    {"source": "/media/(.*)", "destination": "/media/$1"},
-    {"source": "/(.*)", "destination": "/index.html"}
   ]
 }
