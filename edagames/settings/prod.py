@@ -16,6 +16,7 @@ import boto3
 import base64
 from botocore.exceptions import ClientError
 import json
+from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -73,13 +74,20 @@ ROOT_URLCONF = 'edagames.urls'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 STATIC_URL = 'static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [
-    BASE_DIR, "static",
-    # '/var/www/static/',
-]
-MEDIA_URL = '/media/'
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
+# STATIC_ROOT = BASE_DIR / 'static'
+# MEDIA_URL = '/media/'
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+# Configures the staticfiles directory to serve
+# static files from /static/ on our deployment
+STATIC_ROOT = os.path.join(
+    BASE_DIR,
+    'staticfiles', 'static')
 
 TEMPLATES = [
     {
