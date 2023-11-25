@@ -16,9 +16,11 @@ import boto3
 import base64
 from botocore.exceptions import ClientError
 import json
+from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -55,6 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,48 +95,51 @@ AUTHENTICATION_BACKENDS = (
 WSGI_APPLICATION = 'edagames.wsgi.application'
 
 
-# get secret
-def get_secret(db_secret_name):
+# get secret from AWS
+# def get_secret(db_secret_name):
 
-    secret_name = db_secret_name
-    region_name = "us-east-1"
+#     secret_name = db_secret_name
+#     region_name = "us-east-1"
 
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        raise e
+#     # Create a Secrets Manager client
+#     session = boto3.session.Session()
+#     client = session.client(
+#         service_name='secretsmanager',
+#         region_name=region_name
+#     )
+#     try:
+#         get_secret_value_response = client.get_secret_value(
+#             SecretId=secret_name
+#         )
+#     except ClientError as e:
+#         raise e
 
-    # Decrypts secret using the associated KMS key.
-    # Depending on whether the secret is a string or binary, one of these fields will be populated.
-    if 'SecretString' in get_secret_value_response:
-        secret_value_response = get_secret_value_response['SecretString']
-    else:
-        secret_value_response = base64.b64decode(get_secret_value_response['SecretBinary'])
+#     # Decrypts secret using the associated KMS key.
+#     # Depending on whether the secret is a string or binary, one of these fields will be populated.
+#     if 'SecretString' in get_secret_value_response:
+#         secret_value_response = get_secret_value_response['SecretString']
+#     else:
+#         secret_value_response = base64.b64decode(get_secret_value_response['SecretBinary'])
 
-    return secret_value_response
+#     return secret_value_response
 
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-secret_value = json.loads(get_secret(get_env_variable('DB_SECRET_NAME')))
+# secret_value = json.loads(get_secret(get_env_variable('DB_SECRET_NAME')))
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': secret_value["dbname"],
+#         'USER': secret_value["username"],
+#         'PASSWORD': secret_value["password"],
+#         'HOST': secret_value["host"],
+#         'PORT': secret_value["port"]
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': secret_value["dbname"],
-        'USER': secret_value["username"],
-        'PASSWORD': secret_value["password"],
-        'HOST': secret_value["host"],
-        'PORT': secret_value["port"]
-    }
+    'default': dj_database_url.config(default=get_env_variable('DATABASE_URL'))
 }
 
 # Password validation
@@ -190,7 +196,21 @@ SOCIAL_AUTH_PIPELINE = (
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = "static/"
+
+STORAGES = {
+    # Enable WhiteNoise's GZip and Brotli compression of static assets:
+    # https://whitenoise.readthedocs.io/en/latest/django.html#add-compression-and-caching-support
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# Don't store the original (un-hashed filename) version of static files, to reduce slug size:
+# https://whitenoise.readthedocs.io/en/latest/django.html#WHITENOISE_KEEP_ONLY_HASHED_FILES
+WHITENOISE_KEEP_ONLY_HASHED_FILES = True
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 STATICFILES_DIRS = ['static']
