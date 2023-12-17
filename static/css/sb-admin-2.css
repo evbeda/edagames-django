@@ -11594,7 +11594,7 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("/static/img/edagames.jpeg");
+  background: url("/static/img/code_challenge.png");
   background-position: center;
   background-size: cover;
 }

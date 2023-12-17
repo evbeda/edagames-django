@@ -55,6 +55,7 @@ def get_match_players(match_id, match_members):
         {
             'name': match_member.bot.name,
             'score': match_member.score,
+            'winner': match_member.match_result > 0,
             'match_result': match_member.match_result,
         }
         for match_member in match_members

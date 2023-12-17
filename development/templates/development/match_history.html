@@ -21,7 +21,7 @@
         <tr>
             <td>{{ player.name }}</td>
             <td>{{ player.score }}</td>
-            <td>{{ player.winner }}</td>
+            <td>{{ player.winner }} ({{ player.match_result }})</td>
             {% if forloop.first %}
             <td>{{ match.match.date_match }}</td>
             <td><a href="{% url 'development:new_match_details' pk=match.match.id %}">view</a></td>

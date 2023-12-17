@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
-        return "@{}".format(self.username)
+        return "@{} - {}".format(self.username, self.email)
 
 
 class BotManager(models.Manager):
@@ -62,3 +62,6 @@ class Bot(models.Model):
         null=True
     )
     objects = BotManager()
+
+    def __str__(self):
+        return "[{}] - {} :: {}".format(str(self.user), self.name, self.token)
