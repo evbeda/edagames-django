@@ -11,7 +11,7 @@ from development.common.match_utils import save_match
 @csrf_exempt
 def match_list(request):
     """
-    Recieve data from server and validate data for Math class
+    Recieve data from server and validate data for Match class
 
     Parameters
     -------
@@ -28,6 +28,8 @@ def match_list(request):
     """
     if request.method == 'POST':
         dic_data = JSONParser().parse(request)
+        import logging
+        logging.warn(f"POST match {dic_data}")
         serializer_match = MatchSerializer(data=dic_data)
         if serializer_match.is_valid():
             save_match(serializer_match.validated_data)

@@ -17,6 +17,9 @@ def send_challenge(
         "tournament_id": tournament_id,
         "debug_mode": debug_mode,
     }
+    import logging
+    logging.warn(f"send_challenge {data}")
+
     return requests.post(
         f'{settings.SERVER_URL}:{settings.SERVER_PORT}/challenge',
         json=data,
