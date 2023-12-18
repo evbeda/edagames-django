@@ -19,6 +19,8 @@ def start_tournament(
         'tournament_id': str(tournament_id),
         'challenges': challenges,
     }
+    import logging
+    logging.warn(f"start_tournament {data}")
     return requests.post(
         f'{settings.SERVER_URL}:{settings.SERVER_PORT}/tournament',
         json=data,
