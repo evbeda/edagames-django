@@ -53,8 +53,8 @@ class TestViewsAuthenticated(TestCase):
     def test_registration(self):
         self.assertEqual(len(get_user_model().objects.all()), 1)
         data = {
-            'username': 'Eda',
-            'email': 'edagames@evenbrite.com',
+            'username': 'CC',
+            'email': 'cc@email.com',
             'password1': 'AdGjLqEtUo',
             'password2': 'AdGjLqEtUo',
         }
@@ -64,7 +64,7 @@ class TestViewsAuthenticated(TestCase):
             302,
         )
         self.assertEqual(len(get_user_model().objects.all()), 2)
-        self.assertEqual(get_user_model().objects.last().username, 'Eda')
+        self.assertEqual(get_user_model().objects.last().username, 'CC')
 
 
 class TestRegisterForm(TestCase):
@@ -72,8 +72,8 @@ class TestRegisterForm(TestCase):
     @parameterized.expand([
         (
             {
-                'username': 'Eda',
-                'email': 'edagames@evenbrite.com',
+                'username': 'CC',
+                'email': 'cc@email.com',
                 'password1': 'AdGjLqEtUo',
                 'password2': 'AdGjLqEtUo',
             },
@@ -81,7 +81,7 @@ class TestRegisterForm(TestCase):
         ),
         (
             {
-                'username': 'Eda',
+                'username': 'CC',
                 'password1': 'AdGjLqEtUo',
                 'password2': 'AdGjLqEtUo',
             },
