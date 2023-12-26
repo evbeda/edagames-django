@@ -11,6 +11,7 @@
           <th scope="col">#</th>
           <th scope="col">Name</th>
           <th scope="col">Date</th>
+          <th scope="col">Matches</th>
           <th scope="col"></th>
           <th scope="col"></th>
         </tr>
@@ -21,6 +22,11 @@
           <td>{{ tournament.id }}</td>
           <td>{{ tournament.name }}</td>
           <td>{{ tournament.date_tournament }}</td>
+          <td>
+          {% for challenge_bots in tournament.challenges_bots %}
+            <b>{{ challenge_bots.0 }}</b> vs <b>{{ challenge_bots.1 }}</b><br/>
+          {% endfor %}
+          </td>
           <td>
           <form method="POST" action="./?tournament={{tournament.id}}" class="post-form">
             {% csrf_token %}

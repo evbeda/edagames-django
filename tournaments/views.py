@@ -190,6 +190,18 @@ class PendingTournamentListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Tournament.objects.filter(status=Tournament.TOURNAMENT_PENDING_STATUS).order_by("-date_tournament")
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        for tournament in self.object_list:
+            challenges = Challenge.objects.filter(tournament_id=tournament.id)
+            tournament.challenges_bots = []
+            for challenge in challenges:
+                bots_selected = [challenge.bot_challenger.name]
+                for bots_challenge in challenge.bots_challenged.all():
+                    bots_selected.append(bots_challenge.name)
+                tournament.challenges_bots.append(bots_selected)
+        return context
+
     def post(self, *args, **kwargs):
         if 'tournament' in self.request.GET:
             tournament_id = int(self.request.GET['tournament'])
