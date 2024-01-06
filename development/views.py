@@ -1,3 +1,4 @@
+import json
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -93,7 +94,8 @@ class MatchDetailsView(DetailView):
         context['data'] = data
         context['prev_page'] = response['prev']
         context['next_page'] = response['next']
-        context['text'] = generate_text(data)
+        # context['text'] = generate_text(data)
+        context['text'] = json.dumps(data)
         return context
 
 
