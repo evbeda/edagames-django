@@ -1,5 +1,6 @@
 import json
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
@@ -23,9 +24,10 @@ from .encode_jwt import encode_data
 from .forms import BotForm
 from .models import Match
 from .tables import BotTable
+from auth_app.models import UserProfile
 
 
-class ChallengeView(FormView):
+class ChallengeView(LoginRequiredMixin, FormView):
     form_class = ChallengeForm
     success_url = reverse_lazy('development:challenge')
     template_name = 'development/challenge.html'
@@ -62,7 +64,7 @@ class ChallengeView(FormView):
         return super().form_valid(form)
 
 
-class MatchListView(ListView):
+class MatchListView(LoginRequiredMixin, ListView):
     template_name = 'development/match_history.html'
 
     def get_queryset(self):
@@ -70,7 +72,7 @@ class MatchListView(ListView):
         return get_matches_results(matches)
 
 
-class MatchDetailsView(DetailView):
+class MatchDetailsView(LoginRequiredMixin, DetailView):
     template_name = 'development/match_details.html'
     model = Match
 
@@ -99,7 +101,7 @@ class MatchDetailsView(DetailView):
         return context
 
 
-class NewMatchDetailsView(DetailView):
+class NewMatchDetailsView(LoginRequiredMixin, DetailView):
     template_name = 'development/new_match_details.html'
     model = Match
 
@@ -119,18 +121,19 @@ class NewMatchDetailsView(DetailView):
         return context
 
 
-class MyBotsView(ListView):
+class MyBotsView(LoginRequiredMixin, ListView):
     table_class = BotTable
     template_name = 'development/my_bots.html'
-
-    def __init__(self, *args, **kwargs):
-        super(MyBotsView, self).__init__(*args, **kwargs)
 
     def get_queryset(self):
         return Bot.objects.filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_profile_exists'] = UserProfile.objects.filter(user=self.request.user).exists()
+        return context
 
-class AddBotView(FormView):
+class AddBotView(LoginRequiredMixin, FormView):
     form_class = BotForm
     success_url = reverse_lazy('development:mybots')
     template_name = 'development/add_bot.html'

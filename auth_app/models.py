@@ -7,6 +7,7 @@ from django.db import models
 from django.utils import timezone
 
 from development.encode_jwt import encode_data
+from . import REGIONS
 
 
 class UserManager(BaseUserManager):
@@ -41,6 +42,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return "@{} - {}".format(self.username, self.email)
+
+
+class UserProfile(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    country = models.CharField(max_length=100)
+    region = models.CharField(max_length=100, choices=REGIONS)
+    city_zone = models.CharField(max_length=100)
+    birthday = models.DateTimeField(blank=True, null=True)
+    linkedin_profile = models.CharField(max_length=100)
+    github_username = models.CharField(max_length=100)
+    education_background = models.CharField(max_length=100)
+    english_level = models.CharField(max_length=50)
+    intro = models.TextField(max_length=1000)
 
 
 class BotManager(models.Manager):

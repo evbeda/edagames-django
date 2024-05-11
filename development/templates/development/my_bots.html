@@ -3,6 +3,11 @@
 {% block page_content %}    
 <div class="container">
     <h1>My Bots</h1>
+{% if not user_profile_exists %}
+    <div  class="alert alert-danger">
+      <a href="{% url 'auth:profile' %}">Please create your Profile</a>
+    </div>
+{% else %}
     <div class="pre-scrollable">
         <table 
             class="table table-striped table-bordered table-sm">
@@ -37,7 +42,7 @@
     <div class="col-12">
         <a class="btn btn-primary" href="{% url 'development:addbot' %}">Add new</a>
     </div>
+{% endif %}
  </div>
-
 
 {% endblock %}

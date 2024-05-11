@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
 
 {% block page_content %}
 {% if not object %}
@@ -29,12 +31,18 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ object.username }}</td>
-                    <td>{{ object.email }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
                 </tr>
             </tbody>
         </table>
       </div>
+
+    <form class="post-form" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary" value="Update">
+    </form>
  </div>
 {% endif %}
 {% endblock %}

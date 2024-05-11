@@ -1,10 +1,15 @@
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import (
+    FormView,
+    UpdateView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
 
 from .forms import UserRegisterForm
+from .models import UserProfile
+import requests
 
 
 class Home(LoginRequiredMixin, generic.TemplateView):
@@ -22,9 +27,32 @@ class Registration(FormView):
         return super().form_valid(form)
 
 
-class Profile(LoginRequiredMixin, DetailView):
+class Profile(LoginRequiredMixin, UpdateView):
+    fields = [
+        'country',
+        'region',
+        'city_zone',
+        'birthday',
+        'linkedin_profile',
+        'github_username',
+        'education_background',
+        'english_level',
+        'intro',
+    ]
+    success_url = reverse_lazy('auth:home')
     def get_object(self):
-        return self.request.user
+        try:
+            return UserProfile.objects.get(user=self.request.user)
+        except UserProfile.DoesNotExist:
+            return UserProfile(
+                user=self.request.user,
+                country='Argentina',
+            )
+
+    def get_context_data(self, **kwargs):
+        """Insert the form into the context dict."""
+        kwargs['user'] = self.request.user
+        return super().get_context_data(**kwargs)
 
 
 class FAQ(LoginRequiredMixin, generic.TemplateView):
