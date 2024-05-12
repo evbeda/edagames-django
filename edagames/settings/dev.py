@@ -149,6 +149,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
     'auth_app.pipeline.create_bot',
+    'auth_app.pipeline.fill_user',
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -164,7 +165,7 @@ LOGOUT_URL = 'logout'
 
 SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = get_env_variable('SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY')
 SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = get_env_variable('SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET')
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_emailaddress', 'r_liteprofile']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_emailaddress', 'r_liteprofile'] #, 'r_basicprofile']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['emailAddress', 'formatted-name']
 SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
     ('formatted-name', 'username'),
