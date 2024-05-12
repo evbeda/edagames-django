@@ -32,7 +32,6 @@ class Profile(LoginRequiredMixin, UpdateView):
         'country',
         'region',
         'city_zone',
-        'birthday',
         'linkedin_profile',
         'github_username',
         'education_background',

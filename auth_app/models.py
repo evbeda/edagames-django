@@ -54,7 +54,7 @@ class UserProfile(models.Model):
     country = models.CharField(max_length=100)
     region = models.CharField(max_length=100, choices=REGIONS)
     city_zone = models.CharField(max_length=100)
-    birthday = models.DateTimeField(blank=True, null=True)
+    # birthday = models.DateTimeField(blank=True, null=True)
     linkedin_profile = models.CharField(max_length=100)
     github_username = models.CharField(max_length=100)
     education_background = models.CharField(max_length=100)
