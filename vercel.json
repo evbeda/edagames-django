@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "edagames/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "edagames/wsgi.py"
+    }
+  ]
+}
